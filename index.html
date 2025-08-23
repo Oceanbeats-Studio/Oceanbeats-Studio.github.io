@@ -123,9 +123,11 @@
   <main>
     <!-- Latest YouTube Video -->
     <section id="videos">
-      <h2>🎥 Latest Video</h2>
-      <iframe src="https://www.youtube.com/embed/bTFoyaRCaxc" 
-              frameborder="0" allowfullscreen></iframe>
+      <h2>🎥 Latest Upload</h2>
+      <div id="latest-video"><p>Loading latest video...</p></div>
+
+      <h2 style="margin-top:2em;">📱 Latest Short</h2>
+      <div id="latest-short"><p>Loading latest short...</p></div>
     </section>
 
     <!-- Songs -->
@@ -164,6 +166,41 @@
   <footer>
     © 2025 Oceanbeats Studio • All Rights Reserved
   </footer>
+
+  <!-- JavaScript to fetch latest YouTube video + short -->
+  <script>
+    async function loadLatestVideos() {
+      try {
+        const channelId = "UCY8hfNmsry6kxG1_DPChxqw"; // your channel ID
+        const rssUrl = `https://www.youtube.com/feeds/videos.xml?channel_id=${channelId}`;
+        const response = await fetch(rssUrl);
+        const text = await response.text();
+
+        const parser = new DOMParser();
+        const xml = parser.parseFromString(text, "text/xml");
+
+        // Get first 2 uploads (latest + next latest)
+        const videoIds = [...xml.getElementsByTagName("yt:videoId")]
+          .slice(0,2)
+          .map(node => node.textContent);
+
+        // Show latest upload
+        document.getElementById("latest-video").innerHTML =
+          `<iframe src="https://www.youtube.com/embed/${videoIds[0]}" 
+                   frameborder="0" allowfullscreen></iframe>`;
+
+        // Show next latest (often your most recent short)
+        document.getElementById("latest-short").innerHTML =
+          `<iframe src="https://www.youtube.com/embed/${videoIds[1]}" 
+                   frameborder="0" allowfullscreen></iframe>`;
+      } catch (e) {
+        document.getElementById("latest-video").innerHTML =
+          "<p>Could not load videos.</p>";
+      }
+    }
+
+    loadLatestVideos();
+  </script>
 
 </body>
 </html>
