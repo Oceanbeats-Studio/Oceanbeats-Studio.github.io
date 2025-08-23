@@ -1,175 +1,124 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Oceanbeats Studio</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
   <style>
-    body {
-      margin: 0;
-      font-family: 'Poppins', sans-serif;
-      background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
-      color: #fff;
+    :root{
+      --glass: rgba(255,255,255,.08);
+      --accentA:#00eaff; --accentB:#0088aa; --accentC:#ff2edf; --accentD:#aa0066;
+      --text:#fff; --sub:#ffeaa7;
+      --shadow: rgba(0,0,0,.5);
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0; font-family:Poppins,system-ui,-apple-system,Segoe UI,Roboto,Arial;
+      background: linear-gradient(135deg,#0f2027,#203a43,#2c5364);
+      color:var(--text);
     }
 
-    header {
-      display: flex; align-items: center; justify-content: space-between;
-      padding: 1em 2em;
-      background: rgba(0,0,0,0.6); backdrop-filter: blur(6px);
+    header{
+      position:sticky; top:0; z-index:10;
+      display:flex; align-items:center; justify-content:space-between;
+      padding:12px 24px; background:rgba(0,0,0,.55); backdrop-filter: blur(6px);
+      border-bottom:1px solid rgba(255,255,255,.06);
     }
-    header img { height: 50px; width: 50px; border-radius: 50%; margin-right: 10px; }
-    .brand { display: flex; align-items: center; font-size: 1.4em; font-weight: bold; color: #00eaff; }
-    nav a { color: #fff; margin-left: 1.5em; text-decoration: none; font-weight: 500; }
-    nav a:hover { color: #ff2edf; }
+    .brand{display:flex; align-items:center; gap:10px; font-weight:700; color:var(--accentA)}
+    .brand img{width:44px;height:44px;border-radius:50%}
+    nav a{color:#fff; text-decoration:none; margin-left:16px; font-weight:600}
+    nav a:hover{color:var(--accentC)}
 
-    .hero { text-align: center; padding: 4em 2em; background: url('assets/sakura_bg.jpg') no-repeat center/cover; }
-    .hero h1 { font-size: 2.8em; color: #ffeaa7; text-shadow: 0 0 20px #ff2edf; }
+    .hero{
+      text-align:center; padding:64px 20px;
+      background: url('assets/sakura_bg.jpg') center/cover no-repeat;
+      border-bottom:1px solid rgba(255,255,255,.06);
+    }
+    .hero h1{font-size:42px; margin:.2em 0; color:var(--sub); text-shadow:0 0 18px var(--accentC)}
+    .hero p{opacity:.95; max-width:720px; margin:8px auto 0}
 
-    section h2 { text-align: center; font-size: 2em; color: #ffeaa7; margin: 1em 0; }
+    section h2{ text-align:center; font-size:28px; color:var(--sub); margin:28px 0 8px }
 
-    /* Shorts + Videos Side by Side */
-    .video-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 2em;
-      padding: 1em 2em;
+    .video-grid{
+      display:grid; grid-template-columns:1fr 1fr; gap:28px; padding:20px;
+      max-width:1200px; margin:0 auto;
     }
-    .floating-card {
-      background: rgba(255,255,255,0.08); backdrop-filter: blur(12px);
-      padding: 1em; border-radius: 16px;
-      text-align: center;
-      box-shadow: 0 8px 25px rgba(0,0,0,0.5);
-      animation: floaty 4s ease-in-out infinite;
+    .floating-card{
+      background:var(--glass); backdrop-filter: blur(12px);
+      padding:16px; border-radius:16px; text-align:center;
+      box-shadow:0 10px 26px var(--shadow);
+      animation:floaty 4.5s ease-in-out infinite;
+      border:1px solid rgba(255,255,255,.06);
     }
-    @keyframes floaty { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-12px)} }
-    .floating-card h3 { margin: 0.5em 0; color: #ffeaa7; font-size: 1.05em; }
-    iframe { width: 100%; height: 200px; border-radius: 12px; }
+    @keyframes floaty{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+    .floating-card h3{margin:.5em 0; color:var(--sub); font-size:16px}
+    iframe{width:100%; height:220px; border-radius:12px}
 
-    /* Round Buttons */
-    .controls {
-      margin-top: 1em; display: flex; justify-content: center; gap: 1.2em;
+    .controls{
+      margin-top:12px; display:flex; justify-content:center; gap:18px;
     }
-    .controls button {
-      width: 55px; height: 55px;
-      border-radius: 50%; border: none;
-      font-size: 1.3em; font-weight: bold;
-      background: radial-gradient(circle, #00eaff, #0088aa);
-      box-shadow: 0 0 15px rgba(0,234,255,0.7);
-      color: #111; cursor: pointer;
-      transition: transform 0.3s ease, background 0.3s ease, box-shadow 0.3s ease;
+    .controls button{
+      width:56px; height:56px; border-radius:50%; border:none;
+      font-size:20px; font-weight:800; cursor:pointer; color:#111;
+      background:radial-gradient(circle,var(--accentA),var(--accentB));
+      box-shadow:0 0 14px rgba(0,234,255,.6);
+      transition:.25s transform,.25s background,.25s box-shadow;
     }
-    .controls button:hover {
-      transform: scale(1.2) rotate(10deg);
-      background: radial-gradient(circle, #ff2edf, #aa0066);
-      color: #fff; box-shadow: 0 0 20px rgba(255,46,223,0.9);
-    }
-    .controls button:active { transform: scale(0.95) rotate(-5deg); }
-
-    /* Songs Carousel */
-    #songsGrid {
-      display: flex;
-      overflow-x: auto;
-      gap: 1em;
-      padding: 2em;
-      scroll-behavior: smooth;
-    }
-    #songsGrid::-webkit-scrollbar {
-      height: 8px;
-    }
-    #songsGrid::-webkit-scrollbar-thumb {
-      background: #00eaff;
-      border-radius: 4px;
-    }
-    .song-card {
-      min-width: 280px;
-      flex: 0 0 auto;
-      display: flex;
-      align-items: center;
-      background: rgba(255,255,255,0.08);
-      backdrop-filter: blur(10px);
-      border-radius: 16px;
-      padding: 0.8em 1em;
-      box-shadow: 0 6px 15px rgba(0,0,0,0.5);
-    }
-    .song-card img {
-      width: 60px; height: 60px; border-radius: 12px;
-      margin-right: 1em;
-    }
-    .song-info { flex: 1; }
-    .song-info h3 {
-      margin: 0;
-      font-size: 0.95em;
-      color: #ffeaa7;
-    }
-    .play-btn {
-      padding: 0.6em 1.2em;
-      border: none;
-      border-radius: 25px;
-      background: linear-gradient(135deg,#00eaff,#0088aa);
-      color: #111;
-      font-weight: bold;
-      cursor: pointer;
-      box-shadow: 0 0 12px rgba(0,234,255,0.6);
-      transition: 0.3s;
-    }
-    .play-btn:hover {
-      background: linear-gradient(135deg,#ff2edf,#aa0066);
-      color: #fff;
-      transform: scale(1.1);
-    }
-    .player {
-      display: none;
-      width: 100%;
-      margin-top: 0.5em;
-    }
-    .player iframe {
-      width: 100%;
-      height: 80px;
-      border-radius: 12px;
+    .controls button:hover{
+      transform:scale(1.15) rotate(10deg);
+      background:radial-gradient(circle,var(--accentC),var(--accentD));
+      color:#fff; box-shadow:0 0 20px rgba(255,46,223,.85);
     }
 
-    footer { background: #111; text-align: center; padding: 1.5em; color: #aaa; margin-top: 3em; }
+    #about p{max-width:700px; margin:0 auto 30px; padding:0 18px; text-align:center}
+    footer{background:#0b0b0b; text-align:center; padding:18px; color:#aaa; border-top:1px solid rgba(255,255,255,.06); margin-top:28px}
 
-    @media(max-width:900px) {
-      .video-grid { grid-template-columns: 1fr; }
-    }
+    @media (max-width:900px){ .video-grid{grid-template-columns:1fr} }
   </style>
 </head>
 <body>
   <header>
-    <div class="brand"><img src="assets/logo.png"> Oceanbeats Studio</div>
+    <div class="brand">
+      <img src="assets/logo.png" alt="Oceanbeats Logo" onerror="this.style.display='none'">
+      Oceanbeats Studio
+    </div>
     <nav>
       <a href="#shorts">Shorts</a>
       <a href="#videos">Videos</a>
-      <a href="#songs">Songs</a>
+      <a href="#music">Music</a>
       <a href="#about">About</a>
     </nav>
   </header>
 
   <div class="hero">
     <h1>Feel the Love. Hear the Vibe.</h1>
-    <p>Your destination for anime-inspired music & emotional soundtracks</p>
+    <p>Your destination for anime-inspired music & emotional soundtracks.</p>
   </div>
 
   <main>
-    <!-- Shorts + Videos side by side -->
+    <!-- Shorts + Videos -->
     <section>
       <div class="video-grid">
         <!-- Shorts -->
-        <div class="floating-card">
+        <div class="floating-card" id="shorts">
           <h2>📱 Shorts</h2>
-          <iframe id="shortsFrame" src="https://www.youtube.com/embed?list=UUY8hfNmsry6kxG1_DPChxqw&index=1" frameborder="0" allowfullscreen></iframe>
+          <iframe id="shortsFrame"
+                  src="https://www.youtube.com/embed?list=UUY8hfNmsry6kxG1_DPChxqw&index=1"
+                  frameborder="0" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>
           <h3 id="shortsTitle">Short 1</h3>
           <div class="controls">
             <button onclick="prevShort()">⏮</button>
             <button onclick="nextShort()">⏭</button>
           </div>
         </div>
+
         <!-- Videos -->
-        <div class="floating-card">
+        <div class="floating-card" id="videos">
           <h2>🎬 Videos</h2>
-          <iframe id="videosFrame" src="https://www.youtube.com/embed?list=UUY8hfNmsry6kxG1_DPChxqw&index=2" frameborder="0" allowfullscreen></iframe>
+          <iframe id="videosFrame"
+                  src="https://www.youtube.com/embed?list=UUY8hfNmsry6kxG1_DPChxqw&index=2"
+                  frameborder="0" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>
           <h3 id="videosTitle">Video 1</h3>
           <div class="controls">
             <button onclick="prevVideo()">⏮</button>
@@ -179,18 +128,30 @@
       </div>
     </section>
 
-    <!-- Songs below -->
-    <section id="songs">
-      <h2>🎶 All Songs</h2>
-      <div id="songsGrid"></div>
+    <!-- Music -->
+    <section id="music">
+      <h2>🎶 Music (Auto-updating)</h2>
+      <div class="floating-card" style="max-width:900px;margin:auto;">
+        <!-- Shrunk playlist embed = audio bar -->
+        <iframe
+          src="https://www.youtube.com/embed/videoseries?list=UUY8hfNmsry6kxG1_DPChxqw&rel=0&modestbranding=1&iv_load_policy=3"
+          frameborder="0"
+          allow="autoplay; encrypted-media"
+          allowfullscreen
+          style="width:100%; height:80px; border-radius:12px;">
+        </iframe>
+        <p style="opacity:.8; margin-top:.5em; font-size:.9em">
+          🔄 This auto-updates with every new upload — works like an audio playlist.
+        </p>
+      </div>
     </section>
 
     <!-- About -->
     <section id="about">
       <h2>💡 About</h2>
-      <p style="max-width:600px;margin:auto;text-align:center;">
-        Oceanbeats Studio captures the emotional world of anime love through music and visuals.  
-        Every note, every scene, every heartbeat — crafted with 💙 to touch your soul.  
+      <p>
+        Oceanbeats Studio captures the emotional world of anime love through music and visuals.
+        Every note, every scene, every heartbeat — crafted with 💙 to touch your soul.
       </p>
     </section>
   </main>
@@ -198,113 +159,35 @@
   <footer>© 2025 Oceanbeats Studio • All Rights Reserved</footer>
 
   <script>
-    const API_KEY = "YOUR_API_KEY"; // Replace with your YouTube Data API key
     const channelId = "UCY8hfNmsry6kxG1_DPChxqw";
 
-    // Shorts navigation
     let shortsIndex = 1;
-    function nextShort() {
+    function nextShort(){
       shortsIndex = (shortsIndex % 6) + 1;
-      document.getElementById("shortsFrame").src = `https://www.youtube.com/embed?list=UU${channelId.substring(2)}&index=${shortsIndex}`;
+      document.getElementById("shortsFrame").src =
+        `https://www.youtube.com/embed?list=UU${channelId.substring(2)}&index=${shortsIndex}`;
       document.getElementById("shortsTitle").innerText = `Short ${shortsIndex}`;
     }
-    function prevShort() {
+    function prevShort(){
       shortsIndex = (shortsIndex - 2 + 6) % 6 + 1;
-      document.getElementById("shortsFrame").src = `https://www.youtube.com/embed?list=UU${channelId.substring(2)}&index=${shortsIndex}`;
+      document.getElementById("shortsFrame").src =
+        `https://www.youtube.com/embed?list=UU${channelId.substring(2)}&index=${shortsIndex}`;
       document.getElementById("shortsTitle").innerText = `Short ${shortsIndex}`;
     }
 
-    // Videos navigation
     let videosIndex = 1;
-    function nextVideo() {
+    function nextVideo(){
       videosIndex = (videosIndex % 6) + 1;
-      document.getElementById("videosFrame").src = `https://www.youtube.com/embed?list=UU${channelId.substring(2)}&index=${videosIndex}`;
+      document.getElementById("videosFrame").src =
+        `https://www.youtube.com/embed?list=UU${channelId.substring(2)}&index=${videosIndex}`;
       document.getElementById("videosTitle").innerText = `Video ${videosIndex}`;
     }
-    function prevVideo() {
+    function prevVideo(){
       videosIndex = (videosIndex - 2 + 6) % 6 + 1;
-      document.getElementById("videosFrame").src = `https://www.youtube.com/embed?list=UU${channelId.substring(2)}&index=${videosIndex}`;
+      document.getElementById("videosFrame").src =
+        `https://www.youtube.com/embed?list=UU${channelId.substring(2)}&index=${videosIndex}`;
       document.getElementById("videosTitle").innerText = `Video ${videosIndex}`;
     }
-
-    // Songs
-    let players = {};
-    let ytApiLoaded = false;
-
-    async function fetchSongs() {
-      let res = await fetch(`https://www.googleapis.com/youtube/v3/search?key=${API_KEY}&channelId=${channelId}&part=snippet,id&order=date&maxResults=15`);
-      let data = await res.json();
-      let grid = document.getElementById("songsGrid");
-      grid.innerHTML = "";
-      data.items.forEach((v, i) => {
-        if (v.id.videoId) {
-          const playerId = `songPlayer${i}`;
-          grid.innerHTML += `
-            <div class="song-card">
-              <img src="${v.snippet.thumbnails.default.url}" alt="${v.snippet.title}">
-              <div class="song-info">
-                <h3>${v.snippet.title}</h3>
-                <div class="player"><div id="${playerId}"></div></div>
-              </div>
-              <button onclick="playSong('${v.id.videoId}', '${playerId}', this)" class="play-btn">▶ Play</button>
-            </div>
-          `;
-        }
-      });
-      loadYTAPI();
-    }
-
-    function loadYTAPI() {
-      if (ytApiLoaded) return;
-      let tag = document.createElement("script");
-      tag.src = "https://www.youtube.com/iframe_api";
-      document.body.appendChild(tag);
-      ytApiLoaded = true;
-    }
-
-    function onYouTubeIframeAPIReady() {
-      document.querySelectorAll("#songsGrid .player div[id^='songPlayer']").forEach(div => {
-        let player = new YT.Player(div.id, {
-          height: "80",
-          width: "100%",
-          videoId: "",
-          playerVars: { autoplay: 0 },
-          events: {
-            'onStateChange': (event) => {
-              if (event.data === YT.PlayerState.ENDED) {
-                const card = event.target.getIframe().closest(".song-card");
-                card.querySelector(".player").style.display = "none";
-                card.querySelector(".play-btn").innerText = "▶ Play";
-                event.target.stopVideo();
-              }
-            }
-          }
-        });
-        players[div.id] = player;
-      });
-    }
-
-    function playSong(videoId, playerId, btn) {
-      Object.values(players).forEach(p => { try { p.stopVideo(); } catch(e){} });
-      document.querySelectorAll("#songsGrid .player").forEach(p => p.style.display = "none");
-      document.querySelectorAll("#songsGrid .play-btn").forEach(b => b.innerText = "▶ Play");
-
-      const card = btn.closest(".song-card");
-      const playerDiv = card.querySelector(".player");
-      const player = players[playerId];
-
-      if (playerDiv.style.display === "none") {
-        playerDiv.style.display = "block";
-        btn.innerText = "⏹ Stop";
-        player.loadVideoById(videoId);
-      } else {
-        playerDiv.style.display = "none";
-        btn.innerText = "▶ Play";
-        player.stopVideo();
-      }
-    }
-
-    fetchSongs();
   </script>
 </body>
 </html>
