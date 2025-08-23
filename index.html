@@ -14,180 +14,131 @@
     }
 
     header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
+      display: flex; align-items: center; justify-content: space-between;
       padding: 1em 2em;
-      background: rgba(0,0,0,0.6);
-      backdrop-filter: blur(6px);
+      background: rgba(0,0,0,0.6); backdrop-filter: blur(6px);
     }
-
-    header img {
-      height: 50px;
-      width: 50px;
-      border-radius: 50%;
-      margin-right: 10px;
-    }
-
-    .brand {
-      display: flex;
-      align-items: center;
-      font-size: 1.4em;
-      font-weight: bold;
-      color: #00eaff;
-      letter-spacing: 1px;
-    }
-
-    nav a {
-      color: #fff;
-      margin-left: 1.5em;
-      text-decoration: none;
-      font-weight: 500;
-    }
+    header img { height: 50px; width: 50px; border-radius: 50%; margin-right: 10px; }
+    .brand { display: flex; align-items: center; font-size: 1.4em; font-weight: bold; color: #00eaff; }
+    nav a { color: #fff; margin-left: 1.5em; text-decoration: none; font-weight: 500; }
     nav a:hover { color: #ff2edf; }
 
-    .hero {
-      text-align: center;
-      padding: 4em 2em;
-      background: url('assets/sakura_bg.jpg') no-repeat center/cover;
-      box-shadow: inset 0 0 200px rgba(0,0,0,0.6);
-    }
-    .hero h1 {
-      font-size: 2.8em;
-      color: #ffeaa7;
-      text-shadow: 0 0 20px #ff2edf;
-    }
+    .hero { text-align: center; padding: 4em 2em; background: url('assets/sakura_bg.jpg') no-repeat center/cover; }
+    .hero h1 { font-size: 2.8em; color: #ffeaa7; text-shadow: 0 0 20px #ff2edf; }
 
-    main { padding: 3em 2em; }
+    section h2 { text-align: center; font-size: 2em; color: #ffeaa7; margin: 1em 0; }
 
-    section h2 {
-      text-align: center;
-      font-size: 2em;
-      color: #ffeaa7;
-      margin-bottom: 1em;
-    }
-
-    /* Video Split Layout */
-    .video-split {
+    /* Shorts + Videos Side by Side */
+    .video-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 2em;
+      padding: 1em 2em;
     }
-
-    .video-window {
-      position: relative;
-      background: rgba(255,255,255,0.08);
-      backdrop-filter: blur(12px);
-      border-radius: 16px;
-      padding: 1em;
-      box-shadow: 0 8px 25px rgba(0,0,0,0.5);
+    .floating-card {
+      background: rgba(255,255,255,0.08); backdrop-filter: blur(12px);
+      padding: 1em; border-radius: 16px;
       text-align: center;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.5);
+      animation: floaty 4s ease-in-out infinite;
     }
+    @keyframes floaty { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-12px)} }
+    .floating-card h3 { margin: 0.5em 0; color: #ffeaa7; font-size: 1.05em; }
+    iframe { width: 100%; height: 200px; border-radius: 12px; }
 
-    .video-window iframe {
-      width: 100%;
-      height: 300px;
-      border-radius: 12px;
-    }
-
-    /* Engaging Round Buttons */
+    /* Round Buttons */
     .controls {
-      margin-top: 1em;
-      display: flex;
-      justify-content: center;
-      gap: 1.2em;
+      margin-top: 1em; display: flex; justify-content: center; gap: 1.2em;
     }
-
     .controls button {
-      width: 55px;
-      height: 55px;
-      border-radius: 50%;
-      border: none;
-      font-size: 1.3em;
-      font-weight: bold;
-      color: #111;
+      width: 55px; height: 55px;
+      border-radius: 50%; border: none;
+      font-size: 1.3em; font-weight: bold;
       background: radial-gradient(circle, #00eaff, #0088aa);
       box-shadow: 0 0 15px rgba(0,234,255,0.7);
-      cursor: pointer;
-      transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
+      color: #111; cursor: pointer;
+      transition: transform 0.3s ease, background 0.3s ease, box-shadow 0.3s ease;
     }
-
     .controls button:hover {
       transform: scale(1.2) rotate(10deg);
       background: radial-gradient(circle, #ff2edf, #aa0066);
-      color: #fff;
-      box-shadow: 0 0 20px rgba(255,46,223,0.9);
+      color: #fff; box-shadow: 0 0 20px rgba(255,46,223,0.9);
     }
+    .controls button:active { transform: scale(0.95) rotate(-5deg); }
 
-    .controls button:active {
-      transform: scale(0.95) rotate(-5deg);
-    }
-
-    /* Music Floating Cards */
-    .audio-grid {
+    /* Songs Carousel */
+    #songsGrid {
       display: flex;
-      flex-wrap: wrap;
-      gap: 2em;
-      justify-content: center;
+      overflow-x: auto;
+      gap: 1em;
+      padding: 2em;
+      scroll-behavior: smooth;
     }
-
+    #songsGrid::-webkit-scrollbar {
+      height: 8px;
+    }
+    #songsGrid::-webkit-scrollbar-thumb {
+      background: #00eaff;
+      border-radius: 4px;
+    }
     .song-card {
+      min-width: 280px;
+      flex: 0 0 auto;
+      display: flex;
+      align-items: center;
       background: rgba(255,255,255,0.08);
       backdrop-filter: blur(10px);
-      padding: 1em;
       border-radius: 16px;
-      max-width: 220px;
-      box-shadow: 0 8px 20px rgba(0,0,0,0.4);
-      text-align: center;
-      animation: floaty 4s ease-in-out infinite;
+      padding: 0.8em 1em;
+      box-shadow: 0 6px 15px rgba(0,0,0,0.5);
     }
-
-    .song-card:nth-child(2) { animation-delay: 1s; }
-    .song-card:nth-child(3) { animation-delay: 2s; }
-
-    @keyframes floaty {
-      0%, 100% { transform: translateY(0px); }
-      50% { transform: translateY(-12px); }
-    }
-
     .song-card img {
-      width: 100%;
-      border-radius: 12px;
-      margin-bottom: 0.6em;
+      width: 60px; height: 60px; border-radius: 12px;
+      margin-right: 1em;
     }
-
-    .song-card p {
-      margin: 0.3em 0;
-      font-weight: 600;
+    .song-info { flex: 1; }
+    .song-info h3 {
+      margin: 0;
+      font-size: 0.95em;
       color: #ffeaa7;
     }
-
-    audio {
+    .play-btn {
+      padding: 0.6em 1.2em;
+      border: none;
+      border-radius: 25px;
+      background: linear-gradient(135deg,#00eaff,#0088aa);
+      color: #111;
+      font-weight: bold;
+      cursor: pointer;
+      box-shadow: 0 0 12px rgba(0,234,255,0.6);
+      transition: 0.3s;
+    }
+    .play-btn:hover {
+      background: linear-gradient(135deg,#ff2edf,#aa0066);
+      color: #fff;
+      transform: scale(1.1);
+    }
+    .player {
+      display: none;
       width: 100%;
       margin-top: 0.5em;
     }
-
-    footer {
-      background: #111;
-      text-align: center;
-      padding: 1.5em;
-      color: #aaa;
-      margin-top: 3em;
+    .player iframe {
+      width: 100%;
+      height: 80px;
+      border-radius: 12px;
     }
 
-    @media(max-width: 900px) {
-      .video-split { grid-template-columns: 1fr; }
+    footer { background: #111; text-align: center; padding: 1.5em; color: #aaa; margin-top: 3em; }
+
+    @media(max-width:900px) {
+      .video-grid { grid-template-columns: 1fr; }
     }
   </style>
 </head>
 <body>
-
-  <!-- Header -->
   <header>
-    <div class="brand">
-      <img src="assets/logo.png" alt="Oceanbeats Logo">
-      Oceanbeats Studio
-    </div>
+    <div class="brand"><img src="assets/logo.png"> Oceanbeats Studio</div>
     <nav>
       <a href="#shorts">Shorts</a>
       <a href="#videos">Videos</a>
@@ -196,101 +147,164 @@
     </nav>
   </header>
 
-  <!-- Hero -->
   <div class="hero">
     <h1>Feel the Love. Hear the Vibe.</h1>
     <p>Your destination for anime-inspired music & emotional soundtracks</p>
   </div>
 
   <main>
-    <!-- Shorts + Videos -->
-    <section id="videos">
-      <h2>📺 Latest Uploads</h2>
-      <div class="video-split">
-        
-        <!-- Shorts Window -->
-        <div class="video-window">
-          <h3>📱 Shorts</h3>
+    <!-- Shorts + Videos side by side -->
+    <section>
+      <div class="video-grid">
+        <!-- Shorts -->
+        <div class="floating-card">
+          <h2>📱 Shorts</h2>
           <iframe id="shortsFrame" src="https://www.youtube.com/embed?list=UUY8hfNmsry6kxG1_DPChxqw&index=1" frameborder="0" allowfullscreen></iframe>
+          <h3 id="shortsTitle">Short 1</h3>
           <div class="controls">
             <button onclick="prevShort()">⏮</button>
             <button onclick="nextShort()">⏭</button>
           </div>
         </div>
-
-        <!-- Videos Window -->
-        <div class="video-window">
-          <h3>🎬 Videos</h3>
-          <iframe id="videosFrame" src="https://www.youtube.com/embed?list=UUY8hfNmsry6kxG1_DPChxqw&index=5" frameborder="0" allowfullscreen></iframe>
+        <!-- Videos -->
+        <div class="floating-card">
+          <h2>🎬 Videos</h2>
+          <iframe id="videosFrame" src="https://www.youtube.com/embed?list=UUY8hfNmsry6kxG1_DPChxqw&index=2" frameborder="0" allowfullscreen></iframe>
+          <h3 id="videosTitle">Video 1</h3>
           <div class="controls">
             <button onclick="prevVideo()">⏮</button>
             <button onclick="nextVideo()">⏭</button>
           </div>
         </div>
-
       </div>
     </section>
 
-    <!-- Songs Section -->
+    <!-- Songs below -->
     <section id="songs">
-      <h2>🎶 Listen to My Music</h2>
-      <div class="audio-grid">
-        <div class="song-card">
-          <img src="assets/couple1.jpg" alt="Ocean Breeze">
-          <p>Ocean Breeze</p>
-          <audio controls src="assets/song1.mp3"></audio>
-        </div>
-        <div class="song-card">
-          <img src="assets/under_tree.jpg" alt="Midnight Memories">
-          <p>Midnight Memories</p>
-          <audio controls src="assets/song2.mp3"></audio>
-        </div>
-        <div class="song-card">
-          <img src="assets/couple1.jpg" alt="Ocean Kiss">
-          <p>Ocean Kiss</p>
-          <audio controls src="assets/ocean_kiss.mp3"></audio>
-        </div>
-      </div>
+      <h2>🎶 All Songs</h2>
+      <div id="songsGrid"></div>
     </section>
 
     <!-- About -->
     <section id="about">
       <h2>💡 About</h2>
-      <p style="max-width: 600px; margin: auto; text-align: center;">
+      <p style="max-width:600px;margin:auto;text-align:center;">
         Oceanbeats Studio captures the emotional world of anime love through music and visuals.  
         Every note, every scene, every heartbeat — crafted with 💙 to touch your soul.  
       </p>
     </section>
   </main>
 
-  <!-- Footer -->
-  <footer>
-    © 2025 Oceanbeats Studio • All Rights Reserved
-  </footer>
+  <footer>© 2025 Oceanbeats Studio • All Rights Reserved</footer>
 
   <script>
+    const API_KEY = "YOUR_API_KEY"; // Replace with your YouTube Data API key
+    const channelId = "UCY8hfNmsry6kxG1_DPChxqw";
+
     // Shorts navigation
     let shortsIndex = 1;
     function nextShort() {
-      shortsIndex++;
-      document.getElementById("shortsFrame").src = `https://www.youtube.com/embed?list=UUY8hfNmsry6kxG1_DPChxqw&index=${shortsIndex}`;
+      shortsIndex = (shortsIndex % 6) + 1;
+      document.getElementById("shortsFrame").src = `https://www.youtube.com/embed?list=UU${channelId.substring(2)}&index=${shortsIndex}`;
+      document.getElementById("shortsTitle").innerText = `Short ${shortsIndex}`;
     }
     function prevShort() {
-      if (shortsIndex > 1) shortsIndex--;
-      document.getElementById("shortsFrame").src = `https://www.youtube.com/embed?list=UUY8hfNmsry6kxG1_DPChxqw&index=${shortsIndex}`;
+      shortsIndex = (shortsIndex - 2 + 6) % 6 + 1;
+      document.getElementById("shortsFrame").src = `https://www.youtube.com/embed?list=UU${channelId.substring(2)}&index=${shortsIndex}`;
+      document.getElementById("shortsTitle").innerText = `Short ${shortsIndex}`;
     }
 
     // Videos navigation
-    let videosIndex = 5;
+    let videosIndex = 1;
     function nextVideo() {
-      videosIndex++;
-      document.getElementById("videosFrame").src = `https://www.youtube.com/embed?list=UUY8hfNmsry6kxG1_DPChxqw&index=${videosIndex}`;
+      videosIndex = (videosIndex % 6) + 1;
+      document.getElementById("videosFrame").src = `https://www.youtube.com/embed?list=UU${channelId.substring(2)}&index=${videosIndex}`;
+      document.getElementById("videosTitle").innerText = `Video ${videosIndex}`;
     }
     function prevVideo() {
-      if (videosIndex > 1) videosIndex--;
-      document.getElementById("videosFrame").src = `https://www.youtube.com/embed?list=UUY8hfNmsry6kxG1_DPChxqw&index=${videosIndex}`;
+      videosIndex = (videosIndex - 2 + 6) % 6 + 1;
+      document.getElementById("videosFrame").src = `https://www.youtube.com/embed?list=UU${channelId.substring(2)}&index=${videosIndex}`;
+      document.getElementById("videosTitle").innerText = `Video ${videosIndex}`;
     }
-  </script>
 
+    // Songs
+    let players = {};
+    let ytApiLoaded = false;
+
+    async function fetchSongs() {
+      let res = await fetch(`https://www.googleapis.com/youtube/v3/search?key=${API_KEY}&channelId=${channelId}&part=snippet,id&order=date&maxResults=15`);
+      let data = await res.json();
+      let grid = document.getElementById("songsGrid");
+      grid.innerHTML = "";
+      data.items.forEach((v, i) => {
+        if (v.id.videoId) {
+          const playerId = `songPlayer${i}`;
+          grid.innerHTML += `
+            <div class="song-card">
+              <img src="${v.snippet.thumbnails.default.url}" alt="${v.snippet.title}">
+              <div class="song-info">
+                <h3>${v.snippet.title}</h3>
+                <div class="player"><div id="${playerId}"></div></div>
+              </div>
+              <button onclick="playSong('${v.id.videoId}', '${playerId}', this)" class="play-btn">▶ Play</button>
+            </div>
+          `;
+        }
+      });
+      loadYTAPI();
+    }
+
+    function loadYTAPI() {
+      if (ytApiLoaded) return;
+      let tag = document.createElement("script");
+      tag.src = "https://www.youtube.com/iframe_api";
+      document.body.appendChild(tag);
+      ytApiLoaded = true;
+    }
+
+    function onYouTubeIframeAPIReady() {
+      document.querySelectorAll("#songsGrid .player div[id^='songPlayer']").forEach(div => {
+        let player = new YT.Player(div.id, {
+          height: "80",
+          width: "100%",
+          videoId: "",
+          playerVars: { autoplay: 0 },
+          events: {
+            'onStateChange': (event) => {
+              if (event.data === YT.PlayerState.ENDED) {
+                const card = event.target.getIframe().closest(".song-card");
+                card.querySelector(".player").style.display = "none";
+                card.querySelector(".play-btn").innerText = "▶ Play";
+                event.target.stopVideo();
+              }
+            }
+          }
+        });
+        players[div.id] = player;
+      });
+    }
+
+    function playSong(videoId, playerId, btn) {
+      Object.values(players).forEach(p => { try { p.stopVideo(); } catch(e){} });
+      document.querySelectorAll("#songsGrid .player").forEach(p => p.style.display = "none");
+      document.querySelectorAll("#songsGrid .play-btn").forEach(b => b.innerText = "▶ Play");
+
+      const card = btn.closest(".song-card");
+      const playerDiv = card.querySelector(".player");
+      const player = players[playerId];
+
+      if (playerDiv.style.display === "none") {
+        playerDiv.style.display = "block";
+        btn.innerText = "⏹ Stop";
+        player.loadVideoById(videoId);
+      } else {
+        playerDiv.style.display = "none";
+        btn.innerText = "▶ Play";
+        player.stopVideo();
+      }
+    }
+
+    fetchSongs();
+  </script>
 </body>
 </html>
