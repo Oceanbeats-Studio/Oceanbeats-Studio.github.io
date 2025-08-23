@@ -4,150 +4,87 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Oceanbeats Studio</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
   <style>
     body {
       margin: 0;
-      font-family: 'Segoe UI', sans-serif;
-      background: #0d1b2a;
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
       color: #fff;
     }
     header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
+      display: flex; align-items: center; justify-content: space-between;
       padding: 1em 2em;
-      background: rgba(0,0,0,0.7);
+      background: rgba(0,0,0,0.6); backdrop-filter: blur(6px);
     }
-    header img {
-      height: 50px;
-      width: 50px;
-      border-radius: 50%;
-      margin-right: 10px;
-    }
-    .brand {
-      display: flex;
-      align-items: center;
-      font-size: 1.4em;
-      font-weight: bold;
-      color: #00d9ff;
-    }
-    nav a {
-      color: #fff;
-      margin-left: 1.5em;
-      text-decoration: none;
-      font-weight: 500;
-    }
-    nav a:hover {
-      color: #00d9ff;
-    }
-    .hero {
-      text-align: center;
-      padding: 4em 2em;
-      background: url('assets/sakura_bg.jpg') no-repeat center/cover;
-    }
-    .hero h1 {
-      font-size: 2.5em;
-      margin-bottom: 0.5em;
-      color: #ffeaa7;
-    }
-    main {
-      padding: 2em;
-    }
-    section {
-      margin-bottom: 4em;
+    header img { height: 50px; width: 50px; border-radius: 50%; margin-right: 10px; }
+    .brand { display: flex; align-items: center; font-size: 1.4em; font-weight: bold; color: #00eaff; }
+    nav a { color: #fff; margin-left: 1.5em; text-decoration: none; font-weight: 500; }
+    nav a:hover { color: #ff2edf; }
+
+    .hero { text-align: center; padding: 4em 2em; background: url('assets/sakura_bg.jpg') no-repeat center/cover; }
+    .hero h1 { font-size: 2.8em; color: #ffeaa7; text-shadow: 0 0 20px #ff2edf; }
+
+    section h2 { text-align: center; font-size: 2em; color: #ffeaa7; margin: 1em 0; }
+
+    /* Grid Layout */
+    .video-split { display: grid; grid-template-columns: 1fr 1fr; gap: 2em; }
+    .video-window {
+      background: rgba(255,255,255,0.08); padding: 1em;
+      border-radius: 16px; box-shadow: 0 8px 25px rgba(0,0,0,0.5);
       text-align: center;
     }
-    section h2 {
-      font-size: 2em;
-      margin-bottom: 1em;
-      color: #ffeaa7;
-    }
-    .video-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-      gap: 1.5em;
-      justify-items: center;
-    }
-    .video-card iframe {
-      width: 100%;
-      max-width: 350px;
-      height: 200px;
-      border-radius: 10px;
-    }
-    .audio-grid {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 2em;
-      justify-content: center;
-    }
+    .video-list { display: flex; flex-direction: column; gap: 1em; max-height: 350px; overflow-y: auto; }
+    .video-item iframe { width: 100%; height: 200px; border-radius: 12px; }
+
+    /* Floating Song Cards */
+    .audio-grid { display: flex; flex-wrap: wrap; gap: 2em; justify-content: center; }
     .song-card {
-      background: rgba(255,255,255,0.08);
-      padding: 1em;
-      border-radius: 12px;
-      max-width: 220px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+      background: rgba(255,255,255,0.08); backdrop-filter: blur(10px);
+      padding: 1em; border-radius: 16px; max-width: 220px;
+      text-align: center; animation: floaty 4s ease-in-out infinite;
     }
-    .song-card img {
-      width: 100%;
-      border-radius: 10px;
-      margin-bottom: 0.5em;
-    }
-    audio {
-      width: 100%;
-      margin-top: 0.5em;
-    }
-    footer {
-      background: #111;
-      text-align: center;
-      padding: 1.2em;
-      color: #aaa;
-      font-size: 0.9em;
-    }
+    .song-card:nth-child(2) { animation-delay: 1s; }
+    .song-card:nth-child(3) { animation-delay: 2s; }
+    @keyframes floaty { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-12px)} }
+    .song-card img { width: 100%; border-radius: 12px; margin-bottom: 0.6em; }
+    .song-card p { margin: 0.3em 0; font-weight: 600; color: #ffeaa7; }
+    .song-card iframe { width: 100%; height: 0; display: none; } /* hide video */
+    .song-card audio { width: 100%; margin-top: 0.5em; }
+
+    footer { background: #111; text-align: center; padding: 1.5em; color: #aaa; margin-top: 3em; }
+    @media(max-width:900px){.video-split{grid-template-columns:1fr}}
   </style>
 </head>
 <body>
-
-  <!-- Header -->
   <header>
-    <div class="brand">
-      <img src="assets/logo.png" alt="Oceanbeats Logo">
-      Oceanbeats Studio
-    </div>
+    <div class="brand"><img src="assets/logo.png"> Oceanbeats Studio</div>
     <nav>
+      <a href="#shorts">Shorts</a>
       <a href="#videos">Videos</a>
       <a href="#songs">Songs</a>
       <a href="#about">About</a>
     </nav>
   </header>
 
-  <!-- Hero Section -->
   <div class="hero">
     <h1>Feel the Love. Hear the Vibe.</h1>
     <p>Your destination for anime-inspired music & emotional soundtracks</p>
   </div>
 
   <main>
-    <!-- Latest YouTube Uploads -->
     <section id="videos">
-      <h2>🎥 Latest Uploads (Videos + Shorts)</h2>
-      <div class="video-grid">
-        <div class="video-card">
-          <iframe src="https://www.youtube.com/embed?list=UUY8hfNmsry6kxG1_DPChxqw&index=1" frameborder="0" allowfullscreen></iframe>
+      <h2>📺 Latest Uploads</h2>
+      <div class="video-split">
+        <!-- Shorts -->
+        <div class="video-window">
+          <h3>📱 Shorts</h3>
+          <div class="video-list" id="shortsList"></div>
         </div>
-        <div class="video-card">
-          <iframe src="https://www.youtube.com/embed?list=UUY8hfNmsry6kxG1_DPChxqw&index=2" frameborder="0" allowfullscreen></iframe>
-        </div>
-        <div class="video-card">
-          <iframe src="https://www.youtube.com/embed?list=UUY8hfNmsry6kxG1_DPChxqw&index=3" frameborder="0" allowfullscreen></iframe>
-        </div>
-        <div class="video-card">
-          <iframe src="https://www.youtube.com/embed?list=UUY8hfNmsry6kxG1_DPChxqw&index=4" frameborder="0" allowfullscreen></iframe>
-        </div>
-        <div class="video-card">
-          <iframe src="https://www.youtube.com/embed?list=UUY8hfNmsry6kxG1_DPChxqw&index=5" frameborder="0" allowfullscreen></iframe>
-        </div>
-        <div class="video-card">
-          <iframe src="https://www.youtube.com/embed?list=UUY8hfNmsry6kxG1_DPChxqw&index=6" frameborder="0" allowfullscreen></iframe>
+        <!-- Videos -->
+        <div class="video-window">
+          <h3>🎬 Videos</h3>
+          <div class="video-list" id="videosList"></div>
         </div>
       </div>
     </section>
@@ -155,39 +92,66 @@
     <!-- Songs -->
     <section id="songs">
       <h2>🎶 Listen to My Music</h2>
-      <div class="audio-grid">
-        <div class="song-card">
-          <img src="assets/couple1.jpg" alt="Ocean Breeze">
-          <p>Ocean Breeze</p>
-          <audio controls src="assets/song1.mp3"></audio>
-        </div>
-        <div class="song-card">
-          <img src="assets/under_tree.jpg" alt="Midnight Memories">
-          <p>Midnight Memories</p>
-          <audio controls src="assets/song2.mp3"></audio>
-        </div>
-        <div class="song-card">
-          <img src="assets/couple1.jpg" alt="Ocean Kiss">
-          <p>Ocean Kiss</p>
-          <audio controls src="assets/ocean_kiss.mp3"></audio>
-        </div>
-      </div>
+      <div class="audio-grid" id="songsGrid"></div>
     </section>
 
     <!-- About -->
     <section id="about">
       <h2>💡 About</h2>
-      <p style="max-width: 600px; margin: auto;">
+      <p style="max-width:600px;margin:auto;text-align:center;">
         Oceanbeats Studio captures the emotional world of anime love through music and visuals.  
         Every note, every scene, every heartbeat — crafted with 💙 to touch your soul.  
       </p>
     </section>
   </main>
 
-  <!-- Footer -->
-  <footer>
-    © 2025 Oceanbeats Studio • All Rights Reserved
-  </footer>
+  <footer>© 2025 Oceanbeats Studio • All Rights Reserved</footer>
 
+  <script>
+    const API_KEY = "YOUR_API_KEY";  // <--- put your YouTube API key here
+    const channelId = "UCY8hfNmsry6kxG1_DPChxqw";
+
+    async function fetchYouTube(section, maxResults, filterFn, renderFn) {
+      let url = `https://www.googleapis.com/youtube/v3/search?key=${API_KEY}&channelId=${channelId}&part=snippet,id&order=date&maxResults=${maxResults}`;
+      let res = await fetch(url);
+      let data = await res.json();
+      data.items.filter(filterFn).slice(0,6).forEach(renderFn);
+    }
+
+    // Render Shorts
+    fetchYouTube("shorts", 10,
+      v => v.id.videoId && v.snippet.title.toLowerCase().includes("short"),
+      v => {
+        document.getElementById("shortsList").innerHTML += `
+          <div class="video-item">
+            <iframe src="https://www.youtube.com/embed/${v.id.videoId}" frameborder="0" allowfullscreen></iframe>
+            <p>${v.snippet.title}</p>
+          </div>`;
+      });
+
+    // Render Videos
+    fetchYouTube("videos", 10,
+      v => v.id.videoId && !v.snippet.title.toLowerCase().includes("short"),
+      v => {
+        document.getElementById("videosList").innerHTML += `
+          <div class="video-item">
+            <iframe src="https://www.youtube.com/embed/${v.id.videoId}" frameborder="0" allowfullscreen></iframe>
+            <p>${v.snippet.title}</p>
+          </div>`;
+      });
+
+    // Render Songs
+    fetchYouTube("songs", 15,
+      v => v.id.videoId && v.snippet.title.toLowerCase().includes("song"),
+      v => {
+        document.getElementById("songsGrid").innerHTML += `
+          <div class="song-card">
+            <img src="${v.snippet.thumbnails.medium.url}" alt="${v.snippet.title}">
+            <p>${v.snippet.title}</p>
+            <iframe src="https://www.youtube.com/embed/${v.id.videoId}" frameborder="0"></iframe>
+            <audio controls src="https://www.youtube.com/watch?v=${v.id.videoId}"></audio>
+          </div>`;
+      });
+  </script>
 </body>
 </html>
