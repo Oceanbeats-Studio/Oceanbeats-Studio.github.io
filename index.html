@@ -71,6 +71,21 @@
       color:#fff; box-shadow:0 0 20px rgba(255,46,223,.85);
     }
 
+    /* Music card style */
+    .music-card{
+      background:var(--glass); backdrop-filter: blur(12px);
+      border-radius:16px; padding:20px; text-align:center;
+      box-shadow:0 10px 26px var(--shadow);
+      border:1px solid rgba(255,255,255,.06);
+      max-width:700px; margin:0 auto;
+      animation:floaty 6s ease-in-out infinite;
+    }
+    .music-card img{
+      width:100%; border-radius:12px; margin-bottom:12px;
+    }
+    .music-card h3{color:var(--sub); font-size:18px; margin:.3em 0}
+    .music-note{font-size:15px; color:var(--accentA); margin-top:10px; opacity:.9}
+
     #about p{max-width:700px; margin:0 auto 30px; padding:0 18px; text-align:center}
     footer{background:#0b0b0b; text-align:center; padding:18px; color:#aaa; border-top:1px solid rgba(255,255,255,.06); margin-top:28px}
 
@@ -130,19 +145,21 @@
 
     <!-- Music -->
     <section id="music">
-      <h2>🎶 Music (Auto-updating)</h2>
-      <div class="floating-card" style="max-width:900px;margin:auto;">
-        <!-- Shrunk playlist embed = audio bar -->
-        <iframe
-          src="https://www.youtube.com/embed/videoseries?list=UUY8hfNmsry6kxG1_DPChxqw&rel=0&modestbranding=1&iv_load_policy=3"
-          frameborder="0"
-          allow="autoplay; encrypted-media"
-          allowfullscreen
-          style="width:100%; height:80px; border-radius:12px;">
-        </iframe>
-        <p style="opacity:.8; margin-top:.5em; font-size:.9em">
-          🔄 This auto-updates with every new upload — works like an audio playlist.
-        </p>
+      <h2>🎶 Music</h2>
+      <div class="music-card">
+        <img src="assets/music_cover.jpg" id="musicThumb" alt="Music Cover">
+        <h3 id="musicTitle">Loading...</h3>
+        <div class="controls">
+          <button onclick="prevTrack()">⏮</button>
+          <button onclick="toggleMusic()" id="playPauseBtn">▶</button>
+          <button onclick="nextTrack()">⏭</button>
+        </div>
+        <div class="music-note">🔄 Auto-updates with your latest uploads</div>
+      </div>
+
+      <!-- Hidden YouTube playlist player -->
+      <div style="display:none">
+        <div id="hiddenPlayer"></div>
       </div>
     </section>
 
@@ -158,9 +175,11 @@
 
   <footer>© 2025 Oceanbeats Studio • All Rights Reserved</footer>
 
+  <script src="https://www.youtube.com/iframe_api"></script>
   <script>
     const channelId = "UCY8hfNmsry6kxG1_DPChxqw";
 
+    /* Shorts navigation */
     let shortsIndex = 1;
     function nextShort(){
       shortsIndex = (shortsIndex % 6) + 1;
@@ -175,6 +194,7 @@
       document.getElementById("shortsTitle").innerText = `Short ${shortsIndex}`;
     }
 
+    /* Videos navigation */
     let videosIndex = 1;
     function nextVideo(){
       videosIndex = (videosIndex % 6) + 1;
@@ -187,6 +207,57 @@
       document.getElementById("videosFrame").src =
         `https://www.youtube.com/embed?list=UU${channelId.substring(2)}&index=${videosIndex}`;
       document.getElementById("videosTitle").innerText = `Video ${videosIndex}`;
+    }
+
+    /* Music Player (hidden YouTube API) */
+    let player;
+    let isPlaying = false;
+
+    const playlistId = "UUY8hfNmsry6kxG1_DPChxqw";
+
+    function onYouTubeIframeAPIReady() {
+      player = new YT.Player('hiddenPlayer', {
+        height: '0',
+        width: '0',
+        playerVars: {
+          listType: 'playlist',
+          list: playlistId,
+          autoplay: 0,
+          modestbranding: 1
+        },
+        events: {
+          'onReady': () => { document.getElementById("musicTitle").innerText = "Ready to play 🎵"; },
+          'onStateChange': onPlayerStateChange
+        }
+      });
+    }
+
+    function onPlayerStateChange(e) {
+      const playPauseBtn = document.getElementById("playPauseBtn");
+      if (e.data === YT.PlayerState.PLAYING) {
+        isPlaying = true;
+        playPauseBtn.innerText = "⏹";
+        updateTrackInfo();
+      } else if (e.data === YT.PlayerState.PAUSED || e.data === YT.PlayerState.ENDED) {
+        isPlaying = false;
+        playPauseBtn.innerText = "▶";
+      }
+    }
+
+    function toggleMusic() {
+      if (!player) return;
+      if (isPlaying) player.pauseVideo();
+      else player.playVideo();
+    }
+
+    function nextTrack() { if (player) player.nextVideo(); }
+    function prevTrack() { if (player) player.previousVideo(); }
+
+    function updateTrackInfo() {
+      let data = player.getVideoData();
+      document.getElementById("musicTitle").innerText = data.title || "Now Playing...";
+      document.getElementById("musicThumb").src =
+        `https://img.youtube.com/vi/${data.video_id}/mqdefault.jpg`;
     }
   </script>
 </body>
