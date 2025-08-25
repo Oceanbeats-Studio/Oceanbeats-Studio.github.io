@@ -25,7 +25,7 @@
       background: linear-gradient(135deg,var(--bg1),var(--bg2),var(--bg3)) fixed;
     }
 
-    /* Header / Branding */
+    /* Header */
     header{
       padding:28px 18px 16px;
       text-align:center;
@@ -33,9 +33,7 @@
       background: linear-gradient(180deg, rgba(0,0,0,.55), rgba(0,0,0,0));
       backdrop-filter: blur(6px);
     }
-    .brand{
-      display:flex; align-items:center; justify-content:center; gap:14px;
-    }
+    .brand{ display:flex; align-items:center; justify-content:center; gap:14px; }
     .brand img{
       width:72px; height:72px; border-radius:50%;
       box-shadow:0 0 28px rgba(0,234,255,.35);
@@ -43,21 +41,20 @@
     .brand h1{
       margin:0; line-height:1;
       font-family: "Great Vibes", cursive;
-      font-size: 56px;
-      color:#fff; text-shadow:0 0 18px rgba(0,200,255,.6);
+      font-size: 56px; color:#fff;
+      text-shadow:0 0 18px rgba(0,200,255,.6);
     }
-    .tagline{
-      margin-top:10px; opacity:.9; color:var(--sub);
-    }
+    .tagline{ margin-top:10px; opacity:.9; color:var(--sub); }
 
     main{padding:16px}
     section{padding:28px 10px}
     section h2{
-      text-align:center; margin:10px 0 22px; font-size:26px; color:var(--sub);
+      text-align:center; margin:10px 0 22px;
+      font-size:26px; color:var(--sub);
       text-shadow:0 0 10px rgba(0,200,255,.45);
     }
 
-    /* Desktop grid */
+    /* YouTube Grid */
     .yt-grid{
       display:grid; grid-template-columns:1fr 1fr; gap:26px;
       max-width:1200px; margin:0 auto;
@@ -71,11 +68,8 @@
     .card h3{margin:6px 0 12px; color:var(--sub); text-align:center}
     iframe{width:100%; height:420px; border-radius:14px}
 
-    /* Mobile Flip Card */
-    .mobile-flip-wrap{
-      max-width:980px; margin:0 auto; perspective: 1200px;
-      margin-bottom:60px; /* extra bottom for button */
-    }
+    /* Mobile Flip */
+    .mobile-flip-wrap{max-width:980px; margin:0 auto 60px; perspective:1200px;}
     .flipbox{
       position:relative; width:100%; height:460px;
       transform-style:preserve-3d;
@@ -103,7 +97,7 @@
     }
     .btn:hover{ transform: translateY(-2px); box-shadow:0 0 20px rgba(138,43,226,.55); }
 
-    /* Music grid */
+    /* Music Grid */
     .music-grid{
       max-width:1200px; margin:0 auto; padding:6px;
       display:grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap:22px;
@@ -115,8 +109,7 @@
       box-shadow:var(--shadow);
       display:flex; flex-direction:column; justify-content:space-between;
       align-items:center;
-      min-height:380px; /* equal height cards */
-      transition:.25s;
+      min-height:380px; transition:.25s;
     }
     .music-card:hover{ transform: translateY(-4px); box-shadow:0 14px 34px rgba(0,0,0,.55);}
     .thumb-container{
@@ -136,15 +129,14 @@
     }
     .rotating-logo.playing{ animation-play-state: running; }
     @keyframes spin{ from{transform:rotate(0deg)} to{transform:rotate(360deg)} }
-
     .music-card h4{
       margin:10px 0;
       font-family:"Great Vibes", cursive; font-size:22px; color:#fff; text-align:center;
-      min-height:34px; /* equal space for titles */
+      min-height:34px;
     }
     audio{ width:100%; margin-top:auto; border-radius:10px }
 
-    /* Visibility rules */
+    /* Visibility */
     @media (min-width: 901px){
       .yt-grid{ display:grid }
       .mobile-only{ display:none !important }
@@ -213,6 +205,7 @@
     <section id="music">
       <h2>🎶 Oceanbeats Originals</h2>
       <div class="music-grid">
+        <!-- 1 -->
         <div class="music-card">
           <div class="thumb-container">
             <img src="assets/thumb/Young Hearts Collide.jpg" alt="">
@@ -223,6 +216,7 @@
             <source src="assets/audio/Young Hearts Collide.mp3" type="audio/mpeg">
           </audio>
         </div>
+        <!-- 2 -->
         <div class="music-card">
           <div class="thumb-container">
             <img src="assets/thumb/Your Eyes.jpg" alt="">
@@ -233,6 +227,7 @@
             <source src="assets/audio/Your Eyes.mp3" type="audio/mpeg">
           </audio>
         </div>
+        <!-- 3 -->
         <div class="music-card">
           <div class="thumb-container">
             <img src="assets/thumb/Angel Piano.jpg" alt="">
@@ -243,6 +238,7 @@
             <source src="assets/audio/Angel’s piano.mp3" type="audio/mpeg">
           </audio>
         </div>
+        <!-- 4 -->
         <div class="music-card">
           <div class="thumb-container">
             <img src="assets/thumb/It's okay.png" alt="">
@@ -253,7 +249,50 @@
             <source src="assets/audio/It's okay.mp3" type="audio/mpeg">
           </audio>
         </div>
-        <!-- add more cards as needed -->
+        <!-- 5 -->
+        <div class="music-card">
+          <div class="thumb-container">
+            <img src="assets/thumb/Rekindled Hearts.png" alt="">
+            <img class="rotating-logo" src="assets/logo.png" alt="logo">
+          </div>
+          <h4>Rekindled Hearts</h4>
+          <audio controls>
+            <source src="assets/audio/Rekindled Hearts.mp3" type="audio/mpeg">
+          </audio>
+        </div>
+        <!-- 6 -->
+        <div class="music-card">
+          <div class="thumb-container">
+            <img src="assets/thumb/it's a little thing.png" alt="">
+            <img class="rotating-logo" src="assets/logo.png" alt="logo">
+          </div>
+          <h4>It's a Little Thing</h4>
+          <audio controls>
+            <source src="assets/audio/it is little thing.mp3" type="audio/mpeg">
+          </audio>
+        </div>
+        <!-- 7 -->
+        <div class="music-card">
+          <div class="thumb-container">
+            <img src="assets/thumb/A singer voice.png" alt="">
+            <img class="rotating-logo" src="assets/logo.png" alt="logo">
+          </div>
+          <h4>A Singer Voice</h4>
+          <audio controls>
+            <source src="assets/audio/A Singer Voice.mp3" type="audio/mpeg">
+          </audio>
+        </div>
+        <!-- 8 -->
+        <div class="music-card">
+          <div class="thumb-container">
+            <img src="assets/thumb/Blue line.png" alt="">
+            <img class="rotating-logo" src="assets/logo.png" alt="logo">
+          </div>
+          <h4>Blue Line</h4>
+          <audio controls>
+            <source src="assets/audio/Blue line.mp3" type="audio/mpeg">
+          </audio>
+        </div>
       </div>
     </section>
   </main>
@@ -268,16 +307,25 @@
       flipBtn.addEventListener('click', () => flipBox.classList.toggle('flipped'));
     }
 
-    // Rotating logos on audio play
-    document.querySelectorAll('.music-card').forEach(card=>{
-      const audio = card.querySelector('audio');
-      const logo = card.querySelector('.rotating-logo');
-      audio.addEventListener('play', ()=>{
-        document.querySelectorAll('.rotating-logo').forEach(l=>l.classList.remove('playing'));
+    // Rotating logos + stop other audios
+    const allAudios = document.querySelectorAll('.music-card audio');
+    const allLogos = document.querySelectorAll('.rotating-logo');
+
+    allAudios.forEach((audio, idx) => {
+      const logo = allLogos[idx];
+
+      audio.addEventListener('play', () => {
+        allAudios.forEach((a,i) => {
+          if(a !== audio){
+            a.pause();
+            allLogos[i].classList.remove('playing');
+          }
+        });
         logo.classList.add('playing');
       });
-      audio.addEventListener('pause', ()=> logo.classList.remove('playing'));
-      audio.addEventListener('ended', ()=> logo.classList.remove('playing'));
+
+      audio.addEventListener('pause', () => logo.classList.remove('playing'));
+      audio.addEventListener('ended', () => logo.classList.remove('playing'));
     });
   </script>
 </body>
