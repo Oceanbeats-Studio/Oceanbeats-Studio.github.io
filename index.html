@@ -93,13 +93,25 @@
     .flipbox.flipped{ transform: rotateY(180deg); }
 
     .flip-controls{
-      display:flex; justify-content:center; gap:12px; margin-top:18px;
+      display:flex; 
+  justify-content:center; 
+  gap:12px; 
+  margin-top:16px;
+  position: relative;
+  z-index: 200; /* ensures it's always above */
     }
     .btn{
-      padding:10px 16px; border:none; border-radius:12px; cursor:pointer;
-      background: radial-gradient(circle at 30% 30%, var(--accentA), var(--accentB));
-      color:#111; font-weight:800; box-shadow:0 0 16px rgba(0,234,255,.45);
-      transition:.2s transform, .2s box-shadow, .2s opacity;
+      padding:10px 16px; 
+  border:none; 
+  border-radius:12px; 
+  cursor:pointer;
+  background: radial-gradient(circle at 30% 30%, var(--accentA), var(--accentB));
+  color:#111; 
+  font-weight:800; 
+  box-shadow:0 0 16px rgba(0,234,255,.45);
+  transition:.2s transform, .2s box-shadow, .2s opacity;
+  z-index: 210; /* sits on top */
+  position: relative;
     }
     .btn:hover{ transform: translateY(-2px); box-shadow:0 0 20px rgba(138,43,226,.55); }
 
@@ -345,4 +357,5 @@
   </script>
 </body>
 </html>
+
 
