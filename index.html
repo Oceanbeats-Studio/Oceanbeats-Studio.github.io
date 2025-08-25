@@ -7,245 +7,289 @@
   <style>
     body {
       margin: 0;
-      font-family: Arial, sans-serif;
+      font-family: 'Segoe UI', cursive, sans-serif;
       background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
       color: white;
+      text-align: center;
     }
-
-    /* Header */
     header {
-      text-align: center;
-      padding: 30px 20px;
-      background: rgba(0,0,0,0.5);
+      padding: 40px 20px;
     }
-
     header img {
-      width: 100px;
-      border-radius: 50%;
-      display: block;
-      margin: 0 auto 15px;
+      width: 80px;
     }
-
     header h1 {
-      font-family: 'Brush Script MT', cursive;
       font-size: 3rem;
-      color: #fff;
-      text-shadow: 0 0 15px #00eaff, 0 0 25px #00eaff;
-      margin: 0;
-    }
-
-    header p {
-      margin: 10px 0 0;
-      font-size: 1.2rem;
-      color: #d9d9d9;
-    }
-
-    /* Video and Shorts Section */
-    .video-section {
-      display: flex;
-      justify-content: space-between;
-      padding: 20px;
-      gap: 20px;
-    }
-
-    .video-window, .shorts-window {
-      flex: 1;
-      background: rgba(0,0,0,0.4);
-      border-radius: 15px;
-      padding: 10px;
-      box-shadow: 0 0 15px rgba(0,234,255,0.3);
-    }
-
-    .video-window h2, .shorts-window h2 {
-      text-align: center;
       font-family: 'Brush Script MT', cursive;
+      margin: 10px 0 0;
       color: #00eaff;
+      text-shadow: 0 0 15px rgba(0,234,255,0.8);
     }
 
+    /* YouTube Section */
+    #youtube { padding: 40px 20px; }
+    .yt-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 30px;
+      max-width: 1200px;
+      margin: auto;
+    }
+    .yt-box {
+      background: rgba(255,255,255,0.05);
+      border-radius: 20px;
+      padding: 15px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+    }
     iframe {
       width: 100%;
-      height: 315px;
-      border-radius: 10px;
-      border: none;
+      height: 400px;
+      border-radius: 15px;
     }
+
+    /* Mobile Flip System */
+    @media (max-width: 900px) {
+      .yt-grid { display: none; }
+      .flip-container { display: block; }
+    }
+    @media (min-width: 901px) {
+      .flip-container { display: none; }
+    }
+    .flip-container {
+      perspective: 1000px;
+      max-width: 95%;
+      margin: auto;
+    }
+    .flipper {
+      position: relative;
+      width: 100%;
+      height: 500px;
+      transition: transform 0.8s;
+      transform-style: preserve-3d;
+    }
+    .front, .back {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      backface-visibility: hidden;
+      border-radius: 20px;
+      background: rgba(255,255,255,0.05);
+      box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+      padding: 15px;
+    }
+    .front iframe, .back iframe {
+      width: 100%;
+      height: 420px;
+      border-radius: 15px;
+    }
+    .back { transform: rotateY(180deg); }
+    .flipped { transform: rotateY(180deg); }
+    .flip-btn {
+      margin-top: 15px;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 10px;
+      background: #00c8ff;
+      color: white;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+    .flip-btn:hover { background:#0099cc; }
 
     /* Music Section */
-    .music-section {
-      padding: 30px 20px;
-    }
-
-    .music-section h2 {
-      text-align: center;
-      font-family: 'Brush Script MT', cursive;
-      font-size: 2.2rem;
-      margin-bottom: 20px;
-      color: #00eaff;
-    }
-
+    #music { padding: 50px 20px; }
     .music-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
       gap: 20px;
+      max-width: 1200px;
+      margin: auto;
     }
-
     .music-card {
-      background: rgba(0, 0, 0, 0.5);
-      border-radius: 15px;
+      background: rgba(255,255,255,0.05);
+      border-radius: 20px;
       padding: 15px;
-      box-shadow: 0 0 15px rgba(0,234,255,0.3);
-      transition: transform 0.3s, box-shadow 0.3s;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      height: 380px; /* uniform height */
-    }
-
-    .music-card:hover {
-      transform: scale(1.05);
-      box-shadow: 0 0 25px rgba(0,234,255,0.6);
-    }
-
-    .thumb-container {
       position: relative;
-      flex-shrink: 0;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+      text-align: center;
     }
-
-    .thumb-container img:first-child {
+    .music-card img:first-child {
       width: 100%;
-      height: 200px;
+      height: 160px;
       object-fit: cover;
-      border-radius: 12px;
+      border-radius: 15px;
     }
+    .music-card h4 {
+      margin: 10px 0;
+      font-family: 'Brush Script MT', cursive;
+      font-size: 1.4rem;
+      color: #00eaff;
+    }
+    audio { width: 100%; margin-top: 5px; }
 
     .rotating-logo {
       position: absolute;
-      bottom: 10px;
-      right: 10px;
-      width: 45px;
-      height: 45px;
+      bottom: 12px;
+      left: 12px;
+      width: 36px;
+      height: 36px;
       border-radius: 50%;
-      border: 2px solid #fff;
-      background: #fff;
-      padding: 3px;
-      animation: spin 5s linear infinite;
-      animation-play-state: paused; /* default */
+      display: none;
     }
-
-    .rotating-logo.playing {
-      animation-play-state: running;
+    .music-card.playing .rotating-logo {
+      display: block;
+      animation: spin 4s linear infinite;
     }
-
     @keyframes spin {
       from { transform: rotate(0deg); }
       to { transform: rotate(360deg); }
     }
-
-    .song-title {
-      margin: 10px 0;
-      font-family: 'Brush Script MT', cursive;
-      font-size: 1.5rem;
-      color: #00eaff;
-      text-align: center;
-    }
-
-    audio {
-      width: 100%;
-    }
   </style>
 </head>
 <body>
-  <!-- Header -->
   <header>
     <img src="assets/logo.png" alt="Oceanbeats Logo">
     <h1>Oceanbeats Studio</h1>
-    <p>Feel the love. Hear the vibe.</p>
   </header>
 
-  <!-- Video + Shorts -->
-  <div class="video-section">
-    <div class="shorts-window">
-      <h2>Shorts</h2>
-      <iframe src="https://www.youtube.com/embed/VIDEO_ID1" allowfullscreen></iframe>
+  <!-- YouTube Section Desktop -->
+  <section id="youtube">
+    <h2>📺 Oceanbeats on YouTube</h2>
+    <div class="yt-grid">
+      <div class="yt-box">
+        <h3>📱 Shorts</h3>
+        <div id="shorts-player"></div>
+      </div>
+      <div class="yt-box">
+        <h3>🎥 Videos</h3>
+        <div id="videos-player"></div>
+      </div>
     </div>
-    <div class="video-window">
-      <h2>Videos</h2>
-      <iframe src="https://www.youtube.com/embed/VIDEO_ID2" allowfullscreen></iframe>
+
+    <!-- Mobile Flip -->
+    <div class="flip-container">
+      <div class="flipper" id="flipBox">
+        <div class="front">
+          <h3>🎥 Videos</h3>
+          <div id="mobile-videos"></div>
+        </div>
+        <div class="back">
+          <h3>📱 Shorts</h3>
+          <div id="mobile-shorts"></div>
+        </div>
+      </div>
+      <button class="flip-btn" onclick="flipCard()">🔄 Flip</button>
     </div>
-  </div>
+  </section>
 
   <!-- Music Section -->
-  <div class="music-section">
-    <h2>Music</h2>
+  <section id="music">
+    <h2>🎶 Oceanbeats Originals</h2>
     <div class="music-grid">
-      <!-- Example Card -->
       <div class="music-card">
-        <div class="thumb-container">
-          <img src="assets/thumb/Young Hearts Collide.jpg" alt="Young Hearts Collide">
-          <img src="assets/logo.png" class="rotating-logo" alt="Logo">
-        </div>
-        <div class="song-title">Young Hearts Collide</div>
+        <img src="assets/thumb/Young Hearts Collide.jpg" alt="Young Hearts Collide">
+        <h4>Young Hearts Collide</h4>
         <audio controls>
           <source src="assets/audio/Young Hearts Collide.mp3" type="audio/mpeg">
         </audio>
+        <img src="assets/logo.png" class="rotating-logo" alt="Oceanbeats Logo">
       </div>
-
       <div class="music-card">
-        <div class="thumb-container">
-          <img src="assets/thumb/Your Eyes.jpg" alt="Your Eyes">
-          <img src="assets/logo.png" class="rotating-logo" alt="Logo">
-        </div>
-        <div class="song-title">Your Eyes</div>
+        <img src="assets/thumb/Your Eyes.jpg" alt="Your Eyes">
+        <h4>Your Eyes</h4>
         <audio controls>
           <source src="assets/audio/Your eyes.mp3" type="audio/mpeg">
         </audio>
+        <img src="assets/logo.png" class="rotating-logo" alt="Oceanbeats Logo">
       </div>
-
       <div class="music-card">
-        <div class="thumb-container">
-          <img src="assets/thumb/Angel Piano.jpg" alt="Angel’s Piano">
-          <img src="assets/logo.png" class="rotating-logo" alt="Logo">
-        </div>
-        <div class="song-title">Angel’s Piano</div>
+        <img src="assets/thumb/Angel Piano.jpg" alt="Angel’s Piano">
+        <h4>Angel’s Piano</h4>
         <audio controls>
           <source src="assets/audio/Angel’s piano.mp3" type="audio/mpeg">
         </audio>
+        <img src="assets/logo.png" class="rotating-logo" alt="Oceanbeats Logo">
       </div>
-
       <div class="music-card">
-        <div class="thumb-container">
-          <img src="assets/thumb/It's okay.png" alt="It's Okay">
-          <img src="assets/logo.png" class="rotating-logo" alt="Logo">
-        </div>
-        <div class="song-title">It's Okay</div>
+        <img src="assets/thumb/It's okay.png" alt="It's Okay">
+        <h4>It's Okay</h4>
         <audio controls>
           <source src="assets/audio/It's okay.mp3" type="audio/mpeg">
         </audio>
+        <img src="assets/logo.png" class="rotating-logo" alt="Oceanbeats Logo">
+      </div>
+      <div class="music-card">
+        <img src="assets/thumb/Rekindled Hearts.png" alt="Rekindled Hearts">
+        <h4>Rekindled Hearts</h4>
+        <audio controls>
+          <source src="assets/audio/Rekindled Hearts.mp3" type="audio/mpeg">
+        </audio>
+        <img src="assets/logo.png" class="rotating-logo" alt="Oceanbeats Logo">
+      </div>
+      <div class="music-card">
+        <img src="assets/thumb/it's a little thing.png" alt="It's a Little Thing">
+        <h4>It's a Little Thing</h4>
+        <audio controls>
+          <source src="assets/audio/it is little thing.mp3" type="audio/mpeg">
+        </audio>
+        <img src="assets/logo.png" class="rotating-logo" alt="Oceanbeats Logo">
+      </div>
+      <div class="music-card">
+        <img src="assets/thumb/A singer voice.png" alt="A Singer Voice">
+        <h4>A Singer Voice</h4>
+        <audio controls>
+          <source src="assets/audio/A Singer Voice.mp3" type="audio/mpeg">
+        </audio>
+        <img src="assets/logo.png" class="rotating-logo" alt="Oceanbeats Logo">
+      </div>
+      <div class="music-card">
+        <img src="assets/thumb/Blue line.png" alt="Blue Line">
+        <h4>Blue Line</h4>
+        <audio controls>
+          <source src="assets/audio/Blue line.mp3" type="audio/mpeg">
+        </audio>
+        <img src="assets/logo.png" class="rotating-logo" alt="Oceanbeats Logo">
       </div>
     </div>
-  </div>
+  </section>
 
-  <!-- JS: Music Logo Rotation -->
   <script>
-    document.querySelectorAll(".music-card").forEach(card => {
-      const audio = card.querySelector("audio");
-      const logo = card.querySelector(".rotating-logo");
+    function flipCard() {
+      document.getElementById("flipBox").classList.toggle("flipped");
+    }
 
+    // Music card play/pause control
+    const audios = document.querySelectorAll("audio");
+    audios.forEach(audio => {
       audio.addEventListener("play", () => {
-        document.querySelectorAll("audio").forEach(a => {
-          if (a !== audio) a.pause();
-        });
-        document.querySelectorAll(".rotating-logo").forEach(l => l.classList.remove("playing"));
-        logo.classList.add("playing");
+        audios.forEach(a => { if (a !== audio) a.pause(); });
+        document.querySelectorAll(".music-card").forEach(c => c.classList.remove("playing"));
+        audio.closest(".music-card").classList.add("playing");
+        pauseAllYouTube();
       });
-
       audio.addEventListener("pause", () => {
-        logo.classList.remove("playing");
-      });
-
-      audio.addEventListener("ended", () => {
-        logo.classList.remove("playing");
+        audio.closest(".music-card").classList.remove("playing");
       });
     });
+
+    // ---- YouTube IFrame API ----
+    let players = [];
+    function onYouTubeIframeAPIReady() {
+      players.push(new YT.Player('shorts-player', {videoId: '', playerVars:{listType:'playlist', list:'UUSHY8hfNmsry6kxG1_DPChxqw'}, events:{'onStateChange':onPlayerStateChange}}));
+      players.push(new YT.Player('videos-player', {videoId: '', playerVars:{listType:'playlist', list:'UUY8hfNmsry6kxG1_DPChxqw'}, events:{'onStateChange':onPlayerStateChange}}));
+      players.push(new YT.Player('mobile-shorts', {videoId: '', playerVars:{listType:'playlist', list:'UUSHY8hfNmsry6kxG1_DPChxqw'}, events:{'onStateChange':onPlayerStateChange}}));
+      players.push(new YT.Player('mobile-videos', {videoId: '', playerVars:{listType:'playlist', list:'UUY8hfNmsry6kxG1_DPChxqw'}, events:{'onStateChange':onPlayerStateChange}}));
+    }
+    function onPlayerStateChange(event) {
+      if (event.data == YT.PlayerState.PLAYING) {
+        audios.forEach(a => a.pause());
+        players.forEach(p => { if (p !== event.target) p.pauseVideo(); });
+      }
+    }
+    function pauseAllYouTube() {
+      players.forEach(p => p.pauseVideo());
+    }
   </script>
+  <script src="https://www.youtube.com/iframe_api"></script>
 </body>
 </html>
