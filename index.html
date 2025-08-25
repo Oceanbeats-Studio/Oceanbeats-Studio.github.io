@@ -116,7 +116,32 @@
       transition:.25s transform, .25s box-shadow;
     }
     .music-card:hover{ transform: translateY(-4px); box-shadow:0 14px 34px rgba(0,0,0,.55);}
-    .music-card img{width:100%; border-radius:12px; display:block; margin-bottom:10px}
+    
+    .thumb-container{
+      position:relative;
+    }
+    .thumb-container img:first-child{
+      width:100%; border-radius:12px; display:block; margin-bottom:10px;
+    }
+
+    .rotating-logo{
+      position:absolute;
+      bottom:12px; right:12px;
+      width:45px; height:45px;
+      border-radius:50%;
+      background:#fff;
+      padding:3px;
+      animation: spin 5s linear infinite;
+      animation-play-state: paused;
+    }
+    .rotating-logo.playing{
+      animation-play-state: running;
+    }
+    @keyframes spin{
+      from{transform:rotate(0deg)}
+      to{transform:rotate(360deg)}
+    }
+
     .music-card h4{
       margin:6px 0 8px;
       font-family:"Great Vibes", cursive; font-size:22px; color:#fff; text-align:center
@@ -124,12 +149,10 @@
     audio{ width:100%; margin-top:6px; border-radius:10px }
 
     /* Visibility rules */
-    /* Desktop/widescreen: show grid, hide mobile flip */
     @media (min-width: 901px){
       .yt-grid{ display:grid }
       .mobile-only{ display:none !important }
     }
-    /* Mobile: hide grid, show flip version */
     @media (max-width: 900px){
       .yt-grid{ display:none }
       .mobile-only{ display:block }
@@ -153,129 +176,67 @@
   </header>
 
   <main>
-    <!-- YOUTUBE (Desktop: side-by-side | Mobile: flip card) -->
+    <!-- YOUTUBE -->
     <section id="youtube">
       <h2>📺 Oceanbeats on YouTube</h2>
-
-      <!-- Desktop / Widescreen -->
       <div class="yt-grid">
-        <!-- Shorts LEFT -->
         <div class="card">
           <h3>📱 Shorts</h3>
-          <iframe
-            src="https://www.youtube.com/embed?listType=playlist&list=UUSHY8hfNmsry6kxG1_DPChxqw&rel=0"
-            title="Oceanbeats Shorts" frameborder="0"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-            allowfullscreen></iframe>
+          <iframe src="https://www.youtube.com/embed?listType=playlist&list=UUSHY8hfNmsry6kxG1_DPChxqw&rel=0" allowfullscreen></iframe>
         </div>
-
-        <!-- Videos RIGHT -->
         <div class="card">
           <h3>🎥 Videos</h3>
-          <iframe
-            src="https://www.youtube.com/embed?listType=playlist&list=UUY8hfNmsry6kxG1_DPChxqw&rel=0"
-            title="Oceanbeats Videos" frameborder="0"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-            allowfullscreen></iframe>
-        </div>
-      </div>
-
-      <!-- Mobile: Flip Card -->
-      <div class="mobile-only">
-        <div class="mobile-flip-wrap">
-          <div class="flipbox" id="ytFlipBox">
-            <!-- FRONT: Videos -->
-            <div class="flipface front">
-              <h3 style="text-align:center; color:var(--sub); margin:6px 0 10px">🎥 Videos</h3>
-              <iframe
-                src="https://www.youtube.com/embed?listType=playlist&list=UUY8hfNmsry6kxG1_DPChxqw&rel=0"
-                title="Oceanbeats Videos (Mobile)" frameborder="0"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                allowfullscreen></iframe>
-            </div>
-            <!-- BACK: Shorts -->
-            <div class="flipface back">
-              <h3 style="text-align:center; color:var(--sub); margin:6px 0 10px">📱 Shorts</h3>
-              <iframe
-                src="https://www.youtube.com/embed?listType=playlist&list=UUSHY8hfNmsry6kxG1_DPChxqw&rel=0"
-                title="Oceanbeats Shorts (Mobile)" frameborder="0"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                allowfullscreen></iframe>
-            </div>
-          </div>
-        </div>
-        <div class="flip-controls">
-          <button class="btn" id="flipBtn">🔄 Flip</button>
+          <iframe src="https://www.youtube.com/embed?listType=playlist&list=UUY8hfNmsry6kxG1_DPChxqw&rel=0" allowfullscreen></iframe>
         </div>
       </div>
     </section>
 
-    <!-- MUSIC (Local files on GitHub) -->
+    <!-- MUSIC -->
     <section id="music">
       <h2>🎶 Oceanbeats Originals</h2>
       <div class="music-grid">
-        <!-- 1 -->
+        <!-- Example Card -->
         <div class="music-card">
-          <img src="assets/thumb/Young Hearts Collide.jpg" alt="Young Hearts Collide">
+          <div class="thumb-container">
+            <img src="assets/thumb/Young Hearts Collide.jpg" alt="Young Hearts Collide">
+            <img src="assets/logo.png" class="rotating-logo" alt="Logo">
+          </div>
           <h4>Young Hearts Collide</h4>
           <audio controls>
             <source src="assets/audio/Young Hearts Collide.mp3" type="audio/mpeg">
           </audio>
         </div>
-        <!-- 2 -->
+        
         <div class="music-card">
-          <img src="assets/thumb/Your Eyes.jpg" alt="Your Eyes">
+          <div class="thumb-container">
+            <img src="assets/thumb/Your Eyes.jpg" alt="Your Eyes">
+            <img src="assets/logo.png" class="rotating-logo" alt="Logo">
+          </div>
           <h4>Your Eyes</h4>
           <audio controls>
             <source src="assets/audio/Your eyes.mp3" type="audio/mpeg">
           </audio>
         </div>
-        <!-- 3 -->
+
         <div class="music-card">
-          <img src="assets/thumb/Angel Piano.jpg" alt="Angel’s Piano">
+          <div class="thumb-container">
+            <img src="assets/thumb/Angel Piano.jpg" alt="Angel’s Piano">
+            <img src="assets/logo.png" class="rotating-logo" alt="Logo">
+          </div>
           <h4>Angel’s Piano</h4>
           <audio controls>
             <source src="assets/audio/Angel’s piano.mp3" type="audio/mpeg">
           </audio>
         </div>
-        <!-- 4 -->
+
         <div class="music-card">
-          <img src="assets/thumb/It's okay.png" alt="It's Okay">
+          <div class="thumb-container">
+            <img src="assets/thumb/It's okay.png" alt="It's Okay">
+            <img src="assets/logo.png" class="rotating-logo" alt="Logo">
+          </div>
           <h4>It's Okay</h4>
           <audio controls>
             <source src="assets/audio/It's okay.mp3" type="audio/mpeg">
-          </audio>
-        </div>
-        <!-- 5 -->
-        <div class="music-card">
-          <img src="assets/thumb/Rekindled Hearts.png" alt="Rekindled Hearts">
-          <h4>Rekindled Hearts</h4>
-          <audio controls>
-            <source src="assets/audio/Rekindled Hearts.mp3" type="audio/mpeg">
-          </audio>
-        </div>
-        <!-- 6 -->
-        <div class="music-card">
-          <img src="assets/thumb/it's a little thing.png" alt="It's a Little Thing">
-          <h4>It's a Little Thing</h4>
-          <audio controls>
-            <source src="assets/audio/it is little thing.mp3" type="audio/mpeg">
-          </audio>
-        </div>
-        <!-- 7 -->
-        <div class="music-card">
-          <img src="assets/thumb/A singer voice.png" alt="A Singer Voice">
-          <h4>A Singer Voice</h4>
-          <audio controls>
-            <source src="assets/audio/A Singer Voice.mp3" type="audio/mpeg">
-          </audio>
-        </div>
-        <!-- 8 -->
-        <div class="music-card">
-          <img src="assets/thumb/Blue line.png" alt="Blue Line">
-          <h4>Blue Line</h4>
-          <audio controls>
-            <source src="assets/audio/Blue line.mp3" type="audio/mpeg">
           </audio>
         </div>
       </div>
@@ -285,32 +246,20 @@
   <footer>© 2025 Oceanbeats Studio • All rights reserved</footer>
 
   <script>
-    // Mobile flip behavior (button + swipe)
-    const flipBox = document.getElementById('ytFlipBox');
-    const flipBtn = document.getElementById('flipBtn');
-    if (flipBtn && flipBox){
-      flipBtn.addEventListener('click', () => flipBox.classList.toggle('flipped'));
+    // Rotate logo only when song is playing
+    document.querySelectorAll(".music-card").forEach(card => {
+      const audio = card.querySelector("audio");
+      const logo = card.querySelector(".rotating-logo");
 
-      // Swipe to flip
-      let startX = 0, startY = 0, isTouch = false;
-      flipBox.addEventListener('touchstart', (e) => {
-        isTouch = true;
-        startX = e.touches[0].clientX;
-        startY = e.touches[0].clientY;
-      }, {passive:true});
-      flipBox.addEventListener('touchend', (e) => {
-        if(!isTouch) return;
-        const endX = e.changedTouches[0].clientX;
-        const endY = e.changedTouches[0].clientY;
-        const dx = endX - startX;
-        const dy = endY - startY;
-        // Horizontal swipe threshold
-        if(Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy)){
-          flipBox.classList.toggle('flipped');
-        }
-        isTouch = false;
+      audio.addEventListener("play", () => {
+        document.querySelectorAll("audio").forEach(a => { if (a !== audio) a.pause(); });
+        document.querySelectorAll(".rotating-logo").forEach(l => l.classList.remove("playing"));
+        logo.classList.add("playing");
       });
-    }
+
+      audio.addEventListener("pause", () => logo.classList.remove("playing"));
+      audio.addEventListener("ended", () => logo.classList.remove("playing"));
+    });
   </script>
 </body>
 </html>
