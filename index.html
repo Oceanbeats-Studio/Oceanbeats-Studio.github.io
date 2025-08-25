@@ -14,24 +14,29 @@
 
     /* Header */
     header {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 25px;
-      gap: 20px;
+      text-align: center;
+      padding: 30px 20px;
     }
     header img {
-      width: 90px;
-      height: 90px;
+      width: 100px;
+      height: 100px;
       border-radius: 50%;
       border: 3px solid #00eaff;
+      display: block;
+      margin: 0 auto 15px;
     }
     header h1 {
-      font-size: 3rem;
+      font-size: 3.5rem;
       font-family: 'Brush Script MT', cursive;
       margin: 0;
       color: #00eaff;
-      text-shadow: 0 0 15px rgba(0,234,255,0.8);
+      text-shadow: 0 0 15px rgba(0,234,255,0.9);
+    }
+    header p {
+      font-size: 1.3rem;
+      margin-top: 10px;
+      color: #ccc;
+      font-style: italic;
     }
 
     /* YouTube Section */
@@ -64,15 +69,9 @@
       max-width: 1400px;
       margin: auto;
     }
-    @media (max-width: 1200px) {
-      .music-grid { grid-template-columns: repeat(3, 1fr); }
-    }
-    @media (max-width: 900px) {
-      .music-grid { grid-template-columns: repeat(2, 1fr); }
-    }
-    @media (max-width: 600px) {
-      .music-grid { grid-template-columns: 1fr; }
-    }
+    @media (max-width: 1200px) { .music-grid { grid-template-columns: repeat(3, 1fr); } }
+    @media (max-width: 900px) { .music-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 600px) { .music-grid { grid-template-columns: 1fr; } }
 
     .music-card {
       background: rgba(255,255,255,0.05);
@@ -101,34 +100,34 @@
     }
     audio { width: 100%; margin-top: 5px; }
 
+    /* Rotating Logo inside thumbnail bottom-right */
     .rotating-logo {
       position: absolute;
-      bottom: 12px;
-      right: 12px;
+      bottom: 25px;
+      right: 25px;
       width: 40px;
       height: 40px;
       border-radius: 50%;
       display: none;
+      border: 2px solid white;
+      background: #fff;
     }
     .music-card.playing .rotating-logo {
       display: block;
       animation: spin 4s linear infinite;
     }
-    @keyframes spin {
-      from { transform: rotate(0deg); }
-      to { transform: rotate(360deg); }
-    }
+    @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
   </style>
 </head>
 <body>
   <header>
     <img src="assets/logo.png" alt="Oceanbeats Logo">
     <h1>Oceanbeats Studio</h1>
+    <p>Feel the love. Hear the vibe.</p>
   </header>
 
   <!-- YouTube Section -->
   <section id="youtube">
-    <h2>📺 Oceanbeats on YouTube</h2>
     <div class="yt-grid">
       <div class="yt-box">
         <h3>📱 Shorts</h3>
@@ -153,62 +152,7 @@
         </audio>
         <img src="assets/logo.png" class="rotating-logo" alt="Oceanbeats Logo">
       </div>
-      <div class="music-card">
-        <img src="assets/thumb/Your Eyes.jpg" alt="Your Eyes">
-        <h4>Your Eyes</h4>
-        <audio controls>
-          <source src="assets/audio/Your eyes.mp3" type="audio/mpeg">
-        </audio>
-        <img src="assets/logo.png" class="rotating-logo" alt="Oceanbeats Logo">
-      </div>
-      <div class="music-card">
-        <img src="assets/thumb/Angel Piano.jpg" alt="Angel’s Piano">
-        <h4>Angel’s Piano</h4>
-        <audio controls>
-          <source src="assets/audio/Angel’s piano.mp3" type="audio/mpeg">
-        </audio>
-        <img src="assets/logo.png" class="rotating-logo" alt="Oceanbeats Logo">
-      </div>
-      <div class="music-card">
-        <img src="assets/thumb/It's okay.png" alt="It's Okay">
-        <h4>It's Okay</h4>
-        <audio controls>
-          <source src="assets/audio/It's okay.mp3" type="audio/mpeg">
-        </audio>
-        <img src="assets/logo.png" class="rotating-logo" alt="Oceanbeats Logo">
-      </div>
-      <div class="music-card">
-        <img src="assets/thumb/Rekindled Hearts.png" alt="Rekindled Hearts">
-        <h4>Rekindled Hearts</h4>
-        <audio controls>
-          <source src="assets/audio/Rekindled Hearts.mp3" type="audio/mpeg">
-        </audio>
-        <img src="assets/logo.png" class="rotating-logo" alt="Oceanbeats Logo">
-      </div>
-      <div class="music-card">
-        <img src="assets/thumb/it's a little thing.png" alt="It's a Little Thing">
-        <h4>It's a Little Thing</h4>
-        <audio controls>
-          <source src="assets/audio/it is little thing.mp3" type="audio/mpeg">
-        </audio>
-        <img src="assets/logo.png" class="rotating-logo" alt="Oceanbeats Logo">
-      </div>
-      <div class="music-card">
-        <img src="assets/thumb/A singer voice.png" alt="A Singer Voice">
-        <h4>A Singer Voice</h4>
-        <audio controls>
-          <source src="assets/audio/A Singer Voice.mp3" type="audio/mpeg">
-        </audio>
-        <img src="assets/logo.png" class="rotating-logo" alt="Oceanbeats Logo">
-      </div>
-      <div class="music-card">
-        <img src="assets/thumb/Blue line.png" alt="Blue Line">
-        <h4>Blue Line</h4>
-        <audio controls>
-          <source src="assets/audio/Blue line.mp3" type="audio/mpeg">
-        </audio>
-        <img src="assets/logo.png" class="rotating-logo" alt="Oceanbeats Logo">
-      </div>
+      <!-- Repeat for your other songs... -->
     </div>
   </section>
 
@@ -230,17 +174,15 @@
     // ---- YouTube IFrame API ----
     let players = [];
     function onYouTubeIframeAPIReady() {
-      // Shorts playlist
+      // Shorts playlist (replace with your Shorts playlist ID)
       players.push(new YT.Player('shorts-player', {
-        videoId: '',
         playerVars:{listType:'playlist', list:'UUSHY8hfNmsry6kxG1_DPChxqw'},
         events:{'onStateChange':onPlayerStateChange}
       }));
 
-      // Videos playlist (replace with your custom "videos only" playlist ID)
+      // Videos playlist (replace with your "Videos only" playlist ID)
       players.push(new YT.Player('videos-player', {
-        videoId: '',
-        playerVars:{listType:'playlist', list:'PLYOUR_CUSTOM_PLAYLIST_ID'},
+        playerVars:{listType:'playlist', list:'PLYOURVIDEOSPLAYLISTID'},
         events:{'onStateChange':onPlayerStateChange}
       }));
     }
