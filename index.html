@@ -10,24 +10,32 @@
       font-family: 'Segoe UI', cursive, sans-serif;
       background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
       color: white;
-      text-align: center;
     }
+
+    /* Header */
     header {
-      padding: 40px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 25px;
+      gap: 20px;
     }
     header img {
-      width: 80px;
+      width: 90px;
+      height: 90px;
+      border-radius: 50%;
+      border: 3px solid #00eaff;
     }
     header h1 {
       font-size: 3rem;
       font-family: 'Brush Script MT', cursive;
-      margin: 10px 0 0;
+      margin: 0;
       color: #00eaff;
       text-shadow: 0 0 15px rgba(0,234,255,0.8);
     }
 
     /* YouTube Section */
-    #youtube { padding: 40px 20px; }
+    #youtube { padding: 40px 20px; text-align: center; }
     .yt-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -47,64 +55,25 @@
       border-radius: 15px;
     }
 
-    /* Mobile Flip System */
-    @media (max-width: 900px) {
-      .yt-grid { display: none; }
-      .flip-container { display: block; }
-    }
-    @media (min-width: 901px) {
-      .flip-container { display: none; }
-    }
-    .flip-container {
-      perspective: 1000px;
-      max-width: 95%;
-      margin: auto;
-    }
-    .flipper {
-      position: relative;
-      width: 100%;
-      height: 500px;
-      transition: transform 0.8s;
-      transform-style: preserve-3d;
-    }
-    .front, .back {
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      backface-visibility: hidden;
-      border-radius: 20px;
-      background: rgba(255,255,255,0.05);
-      box-shadow: 0 4px 20px rgba(0,0,0,0.5);
-      padding: 15px;
-    }
-    .front iframe, .back iframe {
-      width: 100%;
-      height: 420px;
-      border-radius: 15px;
-    }
-    .back { transform: rotateY(180deg); }
-    .flipped { transform: rotateY(180deg); }
-    .flip-btn {
-      margin-top: 15px;
-      padding: 10px 20px;
-      border: none;
-      border-radius: 10px;
-      background: #00c8ff;
-      color: white;
-      font-size: 1rem;
-      cursor: pointer;
-    }
-    .flip-btn:hover { background:#0099cc; }
-
     /* Music Section */
-    #music { padding: 50px 20px; }
+    #music { padding: 50px 20px; text-align: center; }
     .music-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 20px;
-      max-width: 1200px;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 25px;
+      max-width: 1400px;
       margin: auto;
     }
+    @media (max-width: 1200px) {
+      .music-grid { grid-template-columns: repeat(3, 1fr); }
+    }
+    @media (max-width: 900px) {
+      .music-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 600px) {
+      .music-grid { grid-template-columns: 1fr; }
+    }
+
     .music-card {
       background: rgba(255,255,255,0.05);
       border-radius: 20px;
@@ -112,10 +81,15 @@
       position: relative;
       box-shadow: 0 4px 20px rgba(0,0,0,0.5);
       text-align: center;
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+    .music-card:hover {
+      transform: translateY(-8px) scale(1.03);
+      box-shadow: 0 8px 25px rgba(0, 234, 255, 0.4);
     }
     .music-card img:first-child {
       width: 100%;
-      height: 160px;
+      height: 180px;
       object-fit: cover;
       border-radius: 15px;
     }
@@ -130,9 +104,9 @@
     .rotating-logo {
       position: absolute;
       bottom: 12px;
-      left: 12px;
-      width: 36px;
-      height: 36px;
+      right: 12px;
+      width: 40px;
+      height: 40px;
       border-radius: 50%;
       display: none;
     }
@@ -152,7 +126,7 @@
     <h1>Oceanbeats Studio</h1>
   </header>
 
-  <!-- YouTube Section Desktop -->
+  <!-- YouTube Section -->
   <section id="youtube">
     <h2>📺 Oceanbeats on YouTube</h2>
     <div class="yt-grid">
@@ -164,21 +138,6 @@
         <h3>🎥 Videos</h3>
         <div id="videos-player"></div>
       </div>
-    </div>
-
-    <!-- Mobile Flip -->
-    <div class="flip-container">
-      <div class="flipper" id="flipBox">
-        <div class="front">
-          <h3>🎥 Videos</h3>
-          <div id="mobile-videos"></div>
-        </div>
-        <div class="back">
-          <h3>📱 Shorts</h3>
-          <div id="mobile-shorts"></div>
-        </div>
-      </div>
-      <button class="flip-btn" onclick="flipCard()">🔄 Flip</button>
     </div>
   </section>
 
@@ -254,10 +213,6 @@
   </section>
 
   <script>
-    function flipCard() {
-      document.getElementById("flipBox").classList.toggle("flipped");
-    }
-
     // Music card play/pause control
     const audios = document.querySelectorAll("audio");
     audios.forEach(audio => {
@@ -284,20 +239,6 @@
 
       // Videos playlist (replace with your custom "videos only" playlist ID)
       players.push(new YT.Player('videos-player', {
-        videoId: '',
-        playerVars:{listType:'playlist', list:'PLYOUR_CUSTOM_PLAYLIST_ID'},
-        events:{'onStateChange':onPlayerStateChange}
-      }));
-
-      // Mobile Shorts
-      players.push(new YT.Player('mobile-shorts', {
-        videoId: '',
-        playerVars:{listType:'playlist', list:'UUSHY8hfNmsry6kxG1_DPChxqw'},
-        events:{'onStateChange':onPlayerStateChange}
-      }));
-
-      // Mobile Videos
-      players.push(new YT.Player('mobile-videos', {
         videoId: '',
         playerVars:{listType:'playlist', list:'PLYOUR_CUSTOM_PLAYLIST_ID'},
         events:{'onStateChange':onPlayerStateChange}
