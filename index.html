@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Oceanbeats Studio</title>
 
-  <!-- Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
 
   <style>
@@ -40,13 +39,13 @@
       display:flex; align-items:center; justify-content:center; gap:14px;
     }
     .brand img{
-      width:72px; height:72px; border-radius:50%;
+      width:78px; height:78px; border-radius:50%;
       box-shadow:0 0 28px rgba(0,234,255,.35);
     }
     .brand h1{
       margin:0; line-height:1;
       font-family: "Great Vibes", cursive;
-      font-size: 56px;
+      font-size: 64px; /* ↑ bigger name */
       color:#fff; text-shadow:0 0 18px rgba(0,200,255,.6);
     }
     .tagline{
@@ -83,9 +82,20 @@
     main{padding:16px}
 
     section{padding:36px 10px}
-    section h2{
-      text-align:center; margin:6px 0 22px; font-size:28px; color:var(--sub);
-      text-shadow:0 0 10px rgba(0,200,255,.45);
+    /* Stylish section title (no emojis) */
+    .section-title{
+      text-align:center; margin:6px 0 22px; font-size:32px;
+      background: linear-gradient(90deg, #e6fbff, #9be7ff, #c7a4ff);
+      -webkit-background-clip: text; background-clip: text; color: transparent;
+      text-shadow: 0 0 0 transparent;
+      letter-spacing:.3px;
+    }
+
+    /* Subheads inside cards (Shorts, Videos) */
+    .subhead{
+      margin:6px 0 12px; text-align:center; font-weight:800; letter-spacing:.4px;
+      color:#e9faff;
+      text-transform:uppercase;
     }
 
     /* Desktop grid (>= 901px) */
@@ -99,7 +109,6 @@
       border-radius:18px; padding:16px;
       box-shadow:var(--shadow);
     }
-    .card h3{margin:6px 0 12px; color:var(--sub); text-align:center}
     iframe{width:100%; height:420px; border-radius:14px}
 
     /* Mobile Flip Card (<= 900px) */
@@ -183,20 +192,6 @@
     }
     .quote-card .by{ display:block; margin-top:10px; color:#bdeaff; font-style:normal; font-weight:600; }
 
-    /* About / Contact / Privacy */
-    .content-wrap{ max-width:1000px; margin:0 auto; }
-    .content-card{
-      background:var(--glass); border:1px solid var(--cardBorder);
-      border-radius:16px; padding:18px; box-shadow:var(--shadow);
-      line-height:1.7; color:#e9faff;
-    }
-    .info-grid{
-      display:grid; gap:16px; grid-template-columns:1fr 1fr;
-    }
-    @media (max-width: 800px){ .info-grid{ grid-template-columns:1fr; } }
-    .contact a{ color:var(--link); text-decoration:none; }
-    .contact a:hover{ text-decoration:underline; }
-
     /* Visibility rules */
     @media (min-width: 901px){
       .yt-grid{ display:grid }
@@ -231,25 +226,25 @@
       <a class="nav-link" href="#home">Home</a>
       <a class="nav-link" href="#music">Music</a>
       <a class="nav-link" href="#love-notes">Love Notes</a>
-      <a class="nav-link" href="#contact">Contact</a>
-      <a class="nav-link" href="#about">About</a>
-      <a class="nav-link" href="#privacy">Privacy Policy</a>
+      <!-- separate pages -->
+      <a class="nav-link" href="contact.html">Contact</a>
+      <a class="nav-link" href="privacy.html">Privacy Policy</a>
     </div>
   </nav>
 
   <main>
     <!-- YOUTUBE (HOME CONTENT) -->
     <section id="youtube">
-      <h2>📺 Oceanbeats on YouTube</h2>
+      <h2 class="section-title">Oceanbeats on YouTube</h2>
 
       <!-- Desktop / Widescreen -->
       <div class="yt-grid">
         <div class="card">
-          <h3>📱 Shorts</h3>
+          <h3 class="subhead">Shorts</h3>
           <iframe src="https://www.youtube.com/embed?listType=playlist&list=UUSHY8hfNmsry6kxG1_DPChxqw&rel=0" allowfullscreen></iframe>
         </div>
         <div class="card">
-          <h3>🎥 Videos</h3>
+          <h3 class="subhead">Videos</h3>
           <iframe src="https://www.youtube.com/embed?listType=playlist&list=UUY8hfNmsry6kxG1_DPChxqw&rel=0" allowfullscreen></iframe>
         </div>
       </div>
@@ -259,24 +254,24 @@
         <div class="mobile-flip-wrap">
           <div class="flipbox" id="ytFlipBox">
             <div class="flipface front">
-              <h3 style="text-align:center; color:var(--sub)">🎥 Videos</h3>
+              <h3 class="subhead">Videos</h3>
               <iframe src="https://www.youtube.com/embed?listType=playlist&list=UUY8hfNmsry6kxG1_DPChxqw&rel=0" allowfullscreen></iframe>
             </div>
             <div class="flipface back">
-              <h3 style="text-align:center; color:var(--sub)">📱 Shorts</h3>
+              <h3 class="subhead">Shorts</h3>
               <iframe src="https://www.youtube.com/embed?listType=playlist&list=UUSHY8hfNmsry6kxG1_DPChxqw&rel=0" allowfullscreen></iframe>
             </div>
           </div>
         </div>
         <div class="flip-controls">
-          <button class="btn" id="flipBtn">🔄 Flip</button>
+          <button class="btn" id="flipBtn">Flip</button>
         </div>
       </div>
     </section>
 
     <!-- MUSIC -->
     <section id="music">
-      <h2>🎶 Oceanbeats Originals</h2>
+      <h2 class="section-title">Oceanbeats Originals</h2>
       <div class="music-grid">
         <!-- 1 -->
         <div class="music-card">
@@ -297,7 +292,6 @@
           </div>
           <h4>Your Eyes</h4>
           <audio preload="none" controls>
-            <!-- match your repo filename exactly -->
             <source src="assets/audio/Your_eyes.mp3" type="audio/mpeg">
           </audio>
         </div>
@@ -370,59 +364,14 @@
       </div>
     </section>
 
-    <!-- LOVE QUOTES / LOVE NOTES -->
+    <!-- LOVE NOTES -->
     <section id="love-notes">
-      <h2>💖 Love Notes</h2>
+      <h2 class="section-title">Love Notes</h2>
       <div class="quotes-wrap">
         <div class="quote-card">“Where words fail, music speaks.” <span class="by">— Hans Christian Andersen</span></div>
         <div class="quote-card">“Every love story is beautiful, but ours is my favorite.” <span class="by">— Unknown</span></div>
         <div class="quote-card">“You are the song my heart loves to sing.” <span class="by">— Oceanbeats</span></div>
         <div class="quote-card">“In case I forget to tell you later, I had a really good time today.” <span class="by">— Pretty Woman</span></div>
-      </div>
-    </section>
-
-    <!-- ABOUT + CONTACT -->
-    <section id="about">
-      <h2>🌊 About Oceanbeats</h2>
-      <div class="content-wrap">
-        <div class="content-card">
-          Oceanbeats Studio is a vibe-first indie label and YouTube channel. We craft mellow pianos, warm vocals, and
-          feel-good beats for late nights and easy mornings. If you smile, we did it right.
-        </div>
-      </div>
-    </section>
-
-    <section id="contact">
-      <h2>📫 Contact</h2>
-      <div class="content-wrap">
-        <div class="content-card contact">
-          <div class="info-grid">
-            <div>
-              <p><strong>Email:</strong> <a href="mailto:oceanbeats.studio@gmail.com">oceanbeats.studio@gmail.com</a></p>
-              <p><strong>YouTube:</strong> <a href="https://www.youtube.com/@oceanbeats.studio" target="_blank" rel="noopener">/ @oceanbeats.studio</a></p>
-            </div>
-            <form onsubmit="location.href='mailto:oceanbeats.studio@gmail.com?subject=' + encodeURIComponent(this.name.value + ' — Oceanbeats Website') + '&body=' + encodeURIComponent(this.message.value); return false;">
-              <div style="display:flex; flex-direction:column; gap:10px">
-                <input name="name" required placeholder="Your name" style="padding:12px;border-radius:10px;border:1px solid rgba(255,255,255,.2);background:rgba(255,255,255,.06);color:#fff">
-                <textarea name="message" required rows="4" placeholder="Your message…" style="padding:12px;border-radius:10px;border:1px solid rgba(255,255,255,.2);background:rgba(255,255,255,.06);color:#fff"></textarea>
-                <button class="btn" type="submit">Send Email</button>
-              </div>
-            </form>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- PRIVACY POLICY -->
-    <section id="privacy">
-      <h2>🔐 Privacy Policy</h2>
-      <div class="content-wrap">
-        <div class="content-card">
-          <p><strong>Last updated:</strong> 26 Aug 2025</p>
-          <p>We don’t collect personal data on this site. Audio files are hosted on GitHub Pages and may be cached by your browser. YouTube embeds are provided by YouTube; viewing them is subject to Google’s Privacy Policy.</p>
-          <p>If you email us, we’ll use your message only to reply and won’t share your email with third parties.</p>
-          <p>Questions? Email us at <a href="mailto:oceanbeats.studio@gmail.com">oceanbeats.studio@gmail.com</a>.</p>
-        </div>
       </div>
     </section>
   </main>
@@ -450,7 +399,7 @@
       });
     }
 
-    // Music logic: rotate logo only while playing; reset angle when stop; only one audio at a time
+    // Music logic
     const cards = document.querySelectorAll('.music-card');
     cards.forEach(card => {
       const audio = card.querySelector('audio');
@@ -477,15 +426,13 @@
       });
     });
 
-    // Nav active link on scroll
-    const links = document.querySelectorAll('.nav-link');
-    const sections = [...links].map(a => document.querySelector(a.getAttribute('href')));
+    // Nav active link on scroll (only hash links)
+    const links = [...document.querySelectorAll('.nav-link')].filter(a=>a.getAttribute('href').startsWith('#'));
+    const sections = links.map(a => document.querySelector(a.getAttribute('href')));
     const onScroll = () => {
-      const pos = window.scrollY + 140; // header+nav offset
+      const pos = window.scrollY + 140;
       let active = 0;
-      sections.forEach((sec, i) => {
-        if (sec && sec.offsetTop <= pos) active = i;
-      });
+      sections.forEach((sec, i) => { if (sec && sec.offsetTop <= pos) active = i; });
       links.forEach((a,i)=> a.classList.toggle('active', i===active));
     };
     window.addEventListener('scroll', onScroll, {passive:true});
