@@ -45,7 +45,7 @@
     .brand h1{
       margin:0; line-height:1;
       font-family: "Great Vibes", cursive;
-      font-size: 64px; /* bigger */
+      font-size: 64px; /* bigger main name */
       color:#fff; text-shadow:0 0 18px rgba(0,200,255,.6);
     }
     .tagline{
@@ -83,7 +83,7 @@
 
     section{padding:36px 10px}
 
-    /* Section main titles (applied to YouTube, Originals, Love Notes) */
+    /* Premium section titles (no emojis) */
     .section-title{
       text-align:center;
       margin:10px 0 26px;
@@ -97,7 +97,7 @@
       text-shadow:0 0 12px rgba(0,200,255,.4);
     }
 
-    /* Subheads for "Shorts" and "Videos" */
+    /* Subheads (Shorts, Videos) */
     .subhead{
       margin:10px 0 16px;
       text-align:center;
@@ -251,7 +251,6 @@
       <a class="nav-link" href="#home">Home</a>
       <a class="nav-link" href="#music">Music</a>
       <a class="nav-link" href="#love-notes">Love Notes</a>
-      <!-- SPA links (show only that page) -->
       <a class="nav-link" href="#contact">Contact</a>
       <a class="nav-link" href="#privacy">Privacy Policy</a>
     </div>
@@ -350,9 +349,9 @@
               <img src="assets/thumb/Rekindled Hearts.png" loading="lazy" alt="">
               <img class="rotating-logo" src="assets/logo.png" alt="logo">
             </div>
-            <h4>Rekindled Hearts</h4>
+            <h4>It's Okay</h4>
             <audio preload="none" controls>
-              <source src="assets/audio/Rekindled Hearts.mp3" type="audio/mpeg">
+              <source src="assets/audio/It's okay.mp3" type="audio/mpeg">
             </audio>
           </div>
           <!-- 6 -->
@@ -361,9 +360,9 @@
               <img src="assets/thumb/it's a little thing.png" loading="lazy" alt="">
               <img class="rotating-logo" src="assets/logo.png" alt="logo">
             </div>
-            <h4>It's Okay</h4>
+            <h4>Rekindled Hearts</h4>
             <audio preload="none" controls>
-              <source src="assets/audio/It's okay.mp3" type="audio/mpeg">
+              <source src="assets/audio/Rekindled Hearts.mp3" type="audio/mpeg">
             </audio>
           </div>
           <!-- 7 -->
@@ -505,14 +504,13 @@
         el.classList.toggle('page-hidden', !(isPage && hash===id));
       });
 
-      // Active nav style (for hash links)
+      // Active nav style
       navLinks.forEach(a=>{
         if (!a.getAttribute('href')) return;
         const target = a.getAttribute('href').replace('#','');
         a.classList.toggle('active', target===hash);
       });
 
-      // Scroll to top when entering page mode
       if (isPage) window.scrollTo({top:0, behavior:'instant'});
     }
     window.addEventListener('hashchange', updateRoute);
