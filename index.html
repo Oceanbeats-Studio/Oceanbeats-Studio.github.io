@@ -68,7 +68,7 @@
       -webkit-background-clip: text; -webkit-text-fill-color: transparent;
       text-shadow:0 0 12px rgba(0,200,255,.35);
     }
-    .title-small{ font-size:32px; } /* 15% smaller */
+    .title-small{ font-size:32px; } /* 15% smaller when needed */
 
     /* Subheads */
     .subhead{ margin:10px 0 16px; text-align:center; font-size:18px; color:#fff; position:relative; display:inline-block;}
@@ -91,7 +91,7 @@
 
     /* YouTube */
     .yt-grid{ display:grid; grid-template-columns:1fr 1fr; gap:26px; max-width:1200px; margin:0 auto;}
-    .yt-actions{ display:flex; justify-content:flex-end; gap:10px; margin:12px 0 0; }
+    .yt-actions{ display:flex; justify-content:center; gap:20px; margin:12px 0 0; } /* centered buttons */
     iframe{width:100%; height:420px; border-radius:14px}
 
     /* Mobile Flip (YouTube) */
@@ -102,7 +102,7 @@
       border-radius:18px; padding:14px 14px 64px; box-shadow:var(--shadow); backface-visibility:hidden; }
     .flipface.back{ transform: rotateY(180deg); }
     .flipbox.flipped{ transform: rotateY(180deg); }
-    .flip-controls{ display:flex; justify-content:flex-end; gap:10px; margin-top:10px; position: relative; z-index:3; }
+    .flip-controls{ display:flex; justify-content:center; gap:20px; margin-top:12px; position: relative; z-index:3; } /* centered Share + Flip */
 
     /* Music */
     .music-grid{ max-width:1200px; margin:0 auto; padding:6px; display:grid;
@@ -242,7 +242,7 @@
               </div>
             </div>
           </div>
-          <!-- Buttons BELOW flipbox, aligned right: [Share] [Flip] -->
+          <!-- Buttons BELOW flipbox, centered: [Share] [Flip] -->
           <div class="flip-controls">
             <button class="share-btn" id="mobileShare">Share</button>
             <button class="btn" id="flipBtn">Flip</button>
@@ -366,12 +366,12 @@
             </div>
           </form>
 
-            <div style="height:1px;background:rgba(255,255,255,.1);margin:8px 0;"></div>
+          <div style="height:1px;background:rgba(255,255,255,.1);margin:8px 0;"></div>
 
-            <div style="display:grid; gap:10px;">
-              <div><strong>Email:</strong> <a style="color:var(--link)" href="mailto:oceanbeats.studio@gmail.com">oceanbeats.studio@gmail.com</a></div>
-              <div><strong>Social:</strong> <a style="color:var(--link)" href="#find-me">See all profiles</a></div>
-            </div>
+          <div style="display:grid; gap:10px;">
+            <div><strong>Email:</strong> <a style="color:var(--link)" href="mailto:oceanbeats.studio@gmail.com">oceanbeats.studio@gmail.com</a></div>
+            <div><strong>Social:</strong> <a style="color:var(--link)" href="#find-me">See all profiles</a></div>
+          </div>
         </div>
       </div>
     </section>
@@ -452,8 +452,6 @@
       else if (navigator.clipboard){ navigator.clipboard.writeText(url).then(()=>alert('Link copied!')).catch(()=>alert(url)); }
       else { alert(url); }
     }
-    // Desktop per-card share buttons already have data-share set.
-
     // Mobile share picks playlist based on visible side
     const mobileShareBtn = document.getElementById('mobileShare');
     if (mobileShareBtn){
@@ -465,20 +463,19 @@
         shareSomething(title, url);
       });
     }
-
-    // Attach click to any .share-btn without data-share inside music cards
+    // Desktop YouTube share buttons
+    document.querySelectorAll('#youtube .yt-grid .share-btn').forEach(btn=>{
+      btn.addEventListener('click', ()=>{
+        shareSomething('Oceanbeats on YouTube', btn.dataset.share || 'https://www.youtube.com/@oceanbeats.studio');
+      });
+    });
+    // Music card shares
     document.querySelectorAll('.music-card .share-btn').forEach(btn=>{
       btn.addEventListener('click', ()=>{
         const card = btn.closest('.music-card');
         const title = (card?.dataset.title || 'Oceanbeats') + ' — Oceanbeats';
         const url = window.location.href.split('#')[0] + '#music';
         shareSomething(title, url);
-      });
-    });
-    // Desktop YouTube share buttons
-    document.querySelectorAll('#youtube .yt-grid .share-btn').forEach(btn=>{
-      btn.addEventListener('click', ()=>{
-        shareSomething('Oceanbeats on YouTube', btn.dataset.share || 'https://www.youtube.com/@oceanbeats.studio');
       });
     });
 
@@ -539,7 +536,7 @@
 
     function wireCard(card){
       const audio = card.querySelector('audio');
-      const btn = card.querySelector('.pp-btn');
+      const btn = card.querySelector(' .pp-btn');
       const bar = card.querySelector('.bar');
       const fill = card.querySelector('.fill');
       const time = card.querySelector('.time');
