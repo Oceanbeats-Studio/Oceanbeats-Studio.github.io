@@ -31,26 +31,25 @@
       background: linear-gradient(135deg,var(--bg1),var(--bg2),var(--bg3)) fixed;
     }
 
-    /* ===== Font assignments ===== */
+    /* Fonts */
     .title-logo{ font-family: "Great Vibes", cursive; }
     .title-section{ font-family: "Cinzel Decorative", "Cinzel", serif; }
     .title-sub{ font-family: "Cinzel", serif; text-transform:uppercase; letter-spacing:3px; font-weight:700; }
 
-    /* Header / Branding */
+    /* Header */
     header{ padding:24px 18px 10px; text-align:center; position:sticky; top:0; z-index:80;
       background: linear-gradient(180deg, rgba(0,0,0,.65), rgba(0,0,0,0)); backdrop-filter: blur(6px);}
     .brand{ display:flex; align-items:center; justify-content:center; gap:14px; }
     .brand img{ width:78px; height:78px; border-radius:50%; box-shadow:0 0 28px rgba(0,234,255,.35);}
-    .brand h1{ margin:0; line-height:1; font-size: 64px; color:#fff; text-shadow:0 0 18px rgba(0,200,255,.6);}
+    .brand h1{ margin:0; line-height:1; font-size:64px; color:#fff; text-shadow:0 0 18px rgba(0,200,255,.6);}
     .tagline{ margin-top:6px; opacity:.9; color:var(--sub); font-size:14px; }
 
-    /* Icon Nav (icons only) */
+    /* Icon Nav */
     nav{ position:sticky; top:108px; z-index:79; background:rgba(0,0,0,.45);
       border-top:1px solid rgba(255,255,255,.06); border-bottom:1px solid rgba(255,255,255,.06); backdrop-filter: blur(6px);}
     .nav-inner{ max-width:1200px; margin:0 auto; padding:8px 12px; display:flex; gap:12px; justify-content:center; }
     .nav-link{
-      width:46px; height:46px; display:grid; place-items:center;
-      border-radius:12px; text-decoration:none; color:#eafcff;
+      width:46px; height:46px; display:grid; place-items:center; border-radius:12px; text-decoration:none; color:#eafcff;
       background:linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.02));
       border:1px solid rgba(255,255,255,.09); box-shadow:0 4px 18px rgba(0,0,0,.25);
       transition:.2s transform, .2s box-shadow, .2s background, .2s color;
@@ -62,7 +61,7 @@
     main{padding:16px}
     section{padding:36px 10px}
 
-    /* Section titles */
+    /* Section titles (used by other sections) */
     .section-title{
       text-align:center; margin:10px 0 26px; font-size:38px;
       background: linear-gradient(90deg, #00eaff, #8a2be2);
@@ -76,7 +75,7 @@
     .subhead::after{ content:""; display:block; width:42px; height:3px;
       background: linear-gradient(90deg, #00eaff, #8a2be2); margin:6px auto 0; border-radius:2px;}
 
-    /* Cards & Buttons */
+    /* Buttons & cards */
     .card{ background:var(--glass); border:1px solid var(--cardBorder); border-radius:18px; padding:16px; box-shadow:var(--shadow);}
     .btn{
       padding:10px 14px; border:none; border-radius:12px; cursor:pointer; background: var(--btn);
@@ -84,30 +83,26 @@
       transition:.2s transform, .2s box-shadow, .2s opacity;
     }
     .btn:hover{ transform: translateY(-2px); box-shadow:0 0 20px rgba(138,43,226,.55); }
-
-    /* YouTube */
-    .yt-grid{ display:grid; grid-template-columns:1fr 1fr; gap:26px; max-width:1200px; margin:0 auto;}
-    .yt-actions{ display:flex; justify-content:center; gap:10px; margin:12px 0 0; }
-    iframe{width:100%; height:420px; border-radius:14px}
-
-    /* Mobile Flip (YouTube) */
-    .mobile-only{ display:none; }
-    .mobile-flip-wrap{ max-width:980px; margin:0 auto 74px; perspective: 1200px; } /* extra bottom space so buttons don't overlap */
-    .flipbox{ position:relative; width:100%; height:460px; transform-style:preserve-3d; transition: transform .75s ease; z-index:1; }
-    .flipface{ position:absolute; inset:0; background:var(--glass); border:1px solid var(--cardBorder);
-      border-radius:18px; padding:14px 14px 64px; /* extra bottom padding inside */ box-shadow:var(--shadow); backface-visibility:hidden; }
-    .flipface.back{ transform: rotateY(180deg); }
-    .flipbox.flipped{ transform: rotateY(180deg); }
-    .flip-controls{ display:flex; justify-content:center; gap:12px; margin-top:-46px; /* pull closer */
-      position: relative; z-index: 3; } /* above any content */
-    .flip-controls .btn{ padding:12px 18px; }
-
-    /* Share button */
     .share-btn{
       border:none; cursor:pointer; border-radius:10px; padding:8px 10px; background:rgba(255,255,255,.08);
       color:#eafcff; display:flex; align-items:center; gap:6px;
     }
     .share-btn:hover{ background:rgba(255,255,255,.16); }
+
+    /* YouTube */
+    .yt-grid{ display:grid; grid-template-columns:1fr 1fr; gap:26px; max-width:1200px; margin:0 auto;}
+    .yt-actions{ display:flex; justify-content:flex-end; gap:10px; margin:12px 0 0; }
+    iframe{width:100%; height:420px; border-radius:14px}
+
+    /* Mobile Flip (YouTube) */
+    .mobile-only{ display:none; }
+    .mobile-flip-wrap{ max-width:980px; margin:0 auto 64px; perspective:1200px; }
+    .flipbox{ position:relative; width:100%; height:460px; transform-style:preserve-3d; transition: transform .75s ease; z-index:1; }
+    .flipface{ position:absolute; inset:0; background:var(--glass); border:1px solid var(--cardBorder);
+      border-radius:18px; padding:14px 14px 64px; box-shadow:var(--shadow); backface-visibility:hidden; }
+    .flipface.back{ transform: rotateY(180deg); }
+    .flipbox.flipped{ transform: rotateY(180deg); }
+    .flip-controls{ display:flex; justify-content:flex-end; gap:10px; margin-top:10px; position: relative; z-index:3; }
 
     /* Music */
     .music-grid{ max-width:1200px; margin:0 auto; padding:6px; display:grid;
@@ -131,10 +126,8 @@
       background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.12);
       border-radius:12px; padding:8px 10px;
     }
-    .pp-btn{
-      width:40px; height:40px; border-radius:10px; border:none; cursor:pointer; background:var(--btn);
-      display:grid; place-items:center; color:#111; font-weight:900; font-size:14px;
-    }
+    .pp-btn{ width:40px; height:40px; border-radius:10px; border:none; cursor:pointer; background:var(--btn);
+      display:grid; place-items:center; color:#111; font-weight:900; font-size:14px; }
     .bar{ position:relative; height:8px; background:rgba(255,255,255,.15); border-radius:6px; cursor:pointer; }
     .bar > .fill{ position:absolute; left:0; top:0; height:100%; width:0%; background:linear-gradient(90deg,#00eaff,#8a2be2); border-radius:6px; }
     .time{ font-size:12px; opacity:.85; text-align:right }
@@ -153,27 +146,23 @@
     .gp-btn{ width:48px; height:48px; border-radius:12px; border:none; background:var(--btn); color:#111; font-weight:900; cursor:pointer; }
     .gp-thumb{ width:48px; height:48px; border-radius:10px; object-fit:cover; }
 
-    /* Love Quotes (transparent white sheets + hover) */
+    /* Love Quotes */
     .quotes-wrap{ max-width:900px; margin:0 auto; display:grid; gap:18px; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); }
     .quote-card{
       background: var(--whiteGlass); border:1px solid var(--whiteBorder); border-radius:14px; padding:16px; color:#fff;
       backdrop-filter: blur(10px); box-shadow: 0 10px 28px rgba(0,0,0,.28);
       transform: translateY(0); transition: transform .25s ease, box-shadow .25s ease, background .25s ease;
     }
-    .quote-card:hover{
-      transform: translateY(-6px);
-      background: rgba(255,255,255,.2);
-      box-shadow: 0 16px 36px rgba(0,0,0,.35);
-    }
+    .quote-card:hover{ transform: translateY(-6px); background: rgba(255,255,255,.2); box-shadow: 0 16px 36px rgba(0,0,0,.35); }
     .quote-card .by{ display:block; margin-top:10px; color:#e9f7ff; font-weight:600; font-style:normal;}
 
     /* SPA helpers */
     .page-hidden{ display:none !important;}
 
-    /* Responsive visibility */
+    /* Responsive */
     @media (max-width:900px){
-      .yt-grid{ display:none; }        /* hide desktop grid on mobile */
-      .mobile-only{ display:block; }   /* show mobile flip on mobile */
+      .yt-grid{ display:none; }
+      .mobile-only{ display:block; }
       iframe{ height:360px }
       .flipbox{ height:400px }
       .nav-inner{ gap:8px }
@@ -198,40 +187,30 @@
       <a class="nav-link" href="#home" title="Home" aria-label="Home">
         <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 3l9 8h-3v9h-5v-6H11v6H6v-9H3l9-8z"/></svg>
       </a>
-      <!-- Music (clean music note icon) -->
+      <!-- Music -->
       <a class="nav-link" href="#music" title="Music" aria-label="Music">
-        <svg viewBox="0 0 24 24" fill="currentColor">
-          <path d="M19 3v10.26a4 4 0 1 1-2-3.46V7.5l-8 1.6V16.26a4 4 0 1 1-2-3.46V6l12-3z"/>
-        </svg>
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M19 3v10.26a4 4 0 1 1-2-3.46V7.5l-8 1.6V16.26a4 4 0 1 1-2-3.46V6l12-3z"/></svg>
       </a>
-      <!-- Love Quotes (heart icon fixed) -->
-      <a class="nav-link" href="#love-quotes" title="LQ" aria-label="Love Quotes">
-        <svg viewBox="0 0 24 24" fill="currentColor">
-          <path d="M12.1 21.35l-1.1-.99C5.14 15.24 2 12.39 2 8.5 2 6 4 4 6.5 4c1.74 0 3.41 1.01 4.2 2.51C11.09 5.01 12.76 4 14.5 4 17 4 19 6 19 8.5c0 3.89-3.14 6.74-8.9 11.86z"/>
-        </svg>
+      <!-- Love Quotes -->
+      <a class="nav-link" href="#love-quotes" title="Love Quotes" aria-label="Love Quotes">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12.1 21.35l-1.1-.99C5.14 15.24 2 12.39 2 8.5 2 6 4 4 6.5 4c1.74 0 3.41 1.01 4.2 2.51C11.09 5.01 12.76 4 14.5 4 17 4 19 6 19 8.5c0 3.89-3.14 6.74-8.9 11.86z"/></svg>
       </a>
-      <!-- Contact (envelope) -->
-      <a class="nav-link" href="#contact" title="Con" aria-label="Contact">
-        <svg viewBox="0 0 24 24" fill="currentColor">
-          <path d="M2 6h20v12H2z"/><path d="M2 6l10 7L22 6"/>
-        </svg>
+      <!-- Contact -->
+      <a class="nav-link" href="#contact" title="Contact" aria-label="Contact">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M2 6h20v12H2z"/><path d="M2 6l10 7L22 6"/></svg>
       </a>
-      <!-- Privacy Policy (shield) -->
-      <a class="nav-link" href="#privacy" title="PP" aria-label="Privacy Policy">
-        <svg viewBox="0 0 24 24" fill="currentColor">
-          <path d="M12 2l7 3v6c0 5-3.5 9.7-7 11-3.5-1.3-7-6-7-11V5l7-3z"/>
-        </svg>
+      <!-- Privacy -->
+      <a class="nav-link" href="#privacy" title="Privacy Policy" aria-label="Privacy Policy">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l7 3v6c0 5-3.5 9.7-7 11-3.5-1.3-7-6-7-11V5l7-3z"/></svg>
       </a>
     </div>
   </nav>
 
   <main>
     <div id="site-content">
-      <!-- YouTube -->
+      <!-- YOUTUBE (no section title) -->
       <section id="youtube">
-        <h2 class="section-title title-section title-small">Letest on YouTube</h2>
-
-        <!-- Desktop / Widescreen -->
+        <!-- Desktop grid -->
         <div class="yt-grid">
           <div class="card">
             <h3 class="subhead title-sub">Shorts</h3>
@@ -256,147 +235,85 @@
               <div class="flipface front">
                 <h3 class="subhead title-sub">Videos</h3>
                 <iframe src="https://www.youtube.com/embed?listType=playlist&list=UUY8hfNmsry6kxG1_DPChxqw&rel=0" allowfullscreen></iframe>
-                <div class="yt-actions" style="margin-bottom:6px;">
-                  <button class="share-btn" data-share="https://www.youtube.com/playlist?list=UUY8hfNmsry6kxG1_DPChxqw">Share</button>
-                </div>
               </div>
               <div class="flipface back">
                 <h3 class="subhead title-sub">Shorts</h3>
                 <iframe src="https://www.youtube.com/embed?listType=playlist&list=UUSHY8hfNmsry6kxG1_DPChxqw&rel=0" allowfullscreen></iframe>
-                <div class="yt-actions" style="margin-bottom:6px;">
-                  <button class="share-btn" data-share="https://www.youtube.com/playlist?list=UUSHY8hfNmsry6kxG1_DPChxqw">Share</button>
-                </div>
               </div>
             </div>
           </div>
-          <!-- Ensure this sits ABOVE and not overlapping -->
+          <!-- Buttons BELOW flipbox, aligned right: [Share] [Flip] -->
           <div class="flip-controls">
+            <button class="share-btn" id="mobileShare">Share</button>
             <button class="btn" id="flipBtn">Flip</button>
           </div>
         </div>
       </section>
 
-      <!-- Music -->
+      <!-- MUSIC -->
       <section id="music">
         <h2 class="section-title title-section title-small">ob originals</h2>
         <div class="music-grid">
-          <!-- 8 music cards (unchanged content) -->
           <div class="music-card" data-title="Young Hearts Collide" data-src="assets/audio/Young Hearts Collide.mp3" data-thumb="assets/thumb/Young Hearts Collide.jpg">
-            <div class="thumb-container">
-              <img src="assets/thumb/Young Hearts Collide.jpg" alt="Young Hearts Collide">
-              <img class="rotating-logo" src="assets/logo.png" alt="">
-            </div>
+            <div class="thumb-container"><img src="assets/thumb/Young Hearts Collide.jpg" alt="Young Hearts Collide"><img class="rotating-logo" src="assets/logo.png" alt=""></div>
             <h4>Young Hearts Collide</h4>
-            <div class="player">
-              <button class="pp-btn">▶</button>
-              <div class="bar"><div class="fill"></div></div>
-              <div class="time">0:00</div>
-            </div>
+            <div class="player"><button class="pp-btn">▶</button><div class="bar"><div class="fill"></div></div><div class="time">0:00</div></div>
             <button class="share-btn" data-share="">Share</button>
             <audio preload="none"></audio>
           </div>
 
           <div class="music-card" data-title="Your Eyes" data-src="assets/audio/Your_eyes.mp3" data-thumb="assets/thumb/Your Eyes.jpg">
-            <div class="thumb-container">
-              <img src="assets/thumb/Your Eyes.jpg" alt="Your Eyes">
-              <img class="rotating-logo" src="assets/logo.png" alt="">
-            </div>
+            <div class="thumb-container"><img src="assets/thumb/Your Eyes.jpg" alt="Your Eyes"><img class="rotating-logo" src="assets/logo.png" alt=""></div>
             <h4>Your Eyes</h4>
-            <div class="player">
-              <button class="pp-btn">▶</button>
-              <div class="bar"><div class="fill"></div></div>
-              <div class="time">0:00</div>
-            </div>
+            <div class="player"><button class="pp-btn">▶</button><div class="bar"><div class="fill"></div></div><div class="time">0:00</div></div>
             <button class="share-btn" data-share="">Share</button>
             <audio preload="none"></audio>
           </div>
 
           <div class="music-card" data-title="Angel’s Piano" data-src="assets/audio/Angel’s piano.mp3" data-thumb="assets/thumb/Angel Piano.jpg">
-            <div class="thumb-container">
-              <img src="assets/thumb/Angel Piano.jpg" alt="Angel’s Piano">
-              <img class="rotating-logo" src="assets/logo.png" alt="">
-            </div>
+            <div class="thumb-container"><img src="assets/thumb/Angel Piano.jpg" alt="Angel’s Piano"><img class="rotating-logo" src="assets/logo.png" alt=""></div>
             <h4>Angel’s Piano</h4>
-            <div class="player">
-              <button class="pp-btn">▶</button>
-              <div class="bar"><div class="fill"></div></div>
-              <div class="time">0:00</div>
-            </div>
+            <div class="player"><button class="pp-btn">▶</button><div class="bar"><div class="fill"></div></div><div class="time">0:00</div></div>
             <button class="share-btn" data-share="">Share</button>
             <audio preload="none"></audio>
           </div>
 
           <div class="music-card" data-title="It's Okay" data-src="assets/audio/It's okay.mp3" data-thumb="assets/thumb/It's okay.png">
-            <div class="thumb-container">
-              <img src="assets/thumb/It's okay.png" alt="It's Okay">
-              <img class="rotating-logo" src="assets/logo.png" alt="">
-            </div>
+            <div class="thumb-container"><img src="assets/thumb/It's okay.png" alt="It's Okay"><img class="rotating-logo" src="assets/logo.png" alt=""></div>
             <h4>It's Okay</h4>
-            <div class="player">
-              <button class="pp-btn">▶</button>
-              <div class="bar"><div class="fill"></div></div>
-              <div class="time">0:00</div>
-            </div>
+            <div class="player"><button class="pp-btn">▶</button><div class="bar"><div class="fill"></div></div><div class="time">0:00</div></div>
             <button class="share-btn" data-share="">Share</button>
             <audio preload="none"></audio>
           </div>
 
           <div class="music-card" data-title="Rekindled Hearts" data-src="assets/audio/Rekindled Hearts.mp3" data-thumb="assets/thumb/Rekindled Hearts.png">
-            <div class="thumb-container">
-              <img src="assets/thumb/Rekindled Hearts.png" alt="Rekindled Hearts">
-              <img class="rotating-logo" src="assets/logo.png" alt="">
-            </div>
+            <div class="thumb-container"><img src="assets/thumb/Rekindled Hearts.png" alt="Rekindled Hearts"><img class="rotating-logo" src="assets/logo.png" alt=""></div>
             <h4>Rekindled Hearts</h4>
-            <div class="player">
-              <button class="pp-btn">▶</button>
-              <div class="bar"><div class="fill"></div></div>
-              <div class="time">0:00</div>
-            </div>
+            <div class="player"><button class="pp-btn">▶</button><div class="bar"><div class="fill"></div></div><div class="time">0:00</div></div>
             <button class="share-btn" data-share="">Share</button>
             <audio preload="none"></audio>
           </div>
 
           <div class="music-card" data-title="It's a Little Thing" data-src="assets/audio/it is little thing.mp3" data-thumb="assets/thumb/it's a little thing.png">
-            <div class="thumb-container">
-              <img src="assets/thumb/it's a little thing.png" alt="It's a Little Thing">
-              <img class="rotating-logo" src="assets/logo.png" alt="">
-            </div>
+            <div class="thumb-container"><img src="assets/thumb/it's a little thing.png" alt="It's a Little Thing"><img class="rotating-logo" src="assets/logo.png" alt=""></div>
             <h4>It's a Little Thing</h4>
-            <div class="player">
-              <button class="pp-btn">▶</button>
-              <div class="bar"><div class="fill"></div></div>
-              <div class="time">0:00</div>
-            </div>
+            <div class="player"><button class="pp-btn">▶</button><div class="bar"><div class="fill"></div></div><div class="time">0:00</div></div>
             <button class="share-btn" data-share="">Share</button>
             <audio preload="none"></audio>
           </div>
 
           <div class="music-card" data-title="A Singer Voice" data-src="assets/audio/A Singer Voice.mp3" data-thumb="assets/thumb/A singer voice.png">
-            <div class="thumb-container">
-              <img src="assets/thumb/A singer voice.png" alt="A Singer Voice">
-              <img class="rotating-logo" src="assets/logo.png" alt="">
-            </div>
+            <div class="thumb-container"><img src="assets/thumb/A singer voice.png" alt="A Singer Voice"><img class="rotating-logo" src="assets/logo.png" alt=""></div>
             <h4>A Singer Voice</h4>
-            <div class="player">
-              <button class="pp-btn">▶</button>
-              <div class="bar"><div class="fill"></div></div>
-              <div class="time">0:00</div>
-            </div>
+            <div class="player"><button class="pp-btn">▶</button><div class="bar"><div class="fill"></div></div><div class="time">0:00</div></div>
             <button class="share-btn" data-share="">Share</button>
             <audio preload="none"></audio>
           </div>
 
           <div class="music-card" data-title="Blue Line" data-src="assets/audio/Blue line.mp3" data-thumb="assets/thumb/Blue line.png">
-            <div class="thumb-container">
-              <img src="assets/thumb/Blue line.png" alt="Blue Line">
-              <img class="rotating-logo" src="assets/logo.png" alt="">
-            </div>
+            <div class="thumb-container"><img src="assets/thumb/Blue line.png" alt="Blue Line"><img class="rotating-logo" src="assets/logo.png" alt=""></div>
             <h4>Blue Line</h4>
-            <div class="player">
-              <button class="pp-btn">▶</button>
-              <div class="bar"><div class="fill"></div></div>
-              <div class="time">0:00</div>
-            </div>
+            <div class="player"><button class="pp-btn">▶</button><div class="bar"><div class="fill"></div></div><div class="time">0:00</div></div>
             <button class="share-btn" data-share="">Share</button>
             <audio preload="none"></audio>
           </div>
@@ -406,7 +323,7 @@
       <!-- Find Me -->
       <section id="find-me">
         <h2 class="section-title title-section">Find Me</h2>
-        <div class="socials">
+        <div class="socials" style="max-width:1000px; margin:0 auto; display:grid; gap:16px; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));">
           <a class="social-card" href="https://www.instagram.com/oceanbeats.studio" target="_blank" rel="noopener">
             <div class="soc-ico">IG</div><div>@oceanbeats.studio</div>
           </a>
@@ -449,12 +366,12 @@
             </div>
           </form>
 
-          <div style="height:1px;background:rgba(255,255,255,.1);margin:8px 0;"></div>
+            <div style="height:1px;background:rgba(255,255,255,.1);margin:8px 0;"></div>
 
-          <div style="display:grid; gap:10px;">
-            <div><strong>Email:</strong> <a style="color:var(--link)" href="mailto:oceanbeats.studio@gmail.com">oceanbeats.studio@gmail.com</a></div>
-            <div><strong>Social:</strong> <a style="color:var(--link)" href="#find-me">See all profiles</a></div>
-          </div>
+            <div style="display:grid; gap:10px;">
+              <div><strong>Email:</strong> <a style="color:var(--link)" href="mailto:oceanbeats.studio@gmail.com">oceanbeats.studio@gmail.com</a></div>
+              <div><strong>Social:</strong> <a style="color:var(--link)" href="#find-me">See all profiles</a></div>
+            </div>
         </div>
       </div>
     </section>
@@ -488,7 +405,7 @@
   <footer>© 2025 Oceanbeats Studio • All rights reserved</footer>
 
   <script>
-    /* ------ Mobile flip (YouTube) ------ */
+    /* Mobile flip behavior */
     const flipBox = document.getElementById('ytFlipBox');
     const flipBtn = document.getElementById('flipBtn');
     if (flipBtn && flipBox){
@@ -508,7 +425,7 @@
       });
     }
 
-    /* ------ SPA routing ------ */
+    /* SPA routing */
     const sectionsSinglePage=['contact','privacy'];
     const siteContent=document.getElementById('site-content');
     const navLinks=document.querySelectorAll('.nav-link');
@@ -529,29 +446,43 @@
     window.addEventListener('hashchange',updateRoute);
     document.addEventListener('DOMContentLoaded',updateRoute);
 
-    /* ------ Share buttons (YouTube + Music) ------ */
+    /* Share logic */
     function shareSomething(title, url){
-      if (navigator.share){
-        navigator.share({title, url}).catch(()=>{});
-      } else if (navigator.clipboard){
-        navigator.clipboard.writeText(url).then(()=>alert('Link copied!')).catch(()=>alert(url));
-      } else {
-        alert(url);
-      }
+      if (navigator.share){ navigator.share({title, url}).catch(()=>{}); }
+      else if (navigator.clipboard){ navigator.clipboard.writeText(url).then(()=>alert('Link copied!')).catch(()=>alert(url)); }
+      else { alert(url); }
     }
-    document.querySelectorAll('.share-btn').forEach(btn=>{
+    // Desktop per-card share buttons already have data-share set.
+
+    // Mobile share picks playlist based on visible side
+    const mobileShareBtn = document.getElementById('mobileShare');
+    if (mobileShareBtn){
+      mobileShareBtn.addEventListener('click', ()=>{
+        const shortsURL = 'https://www.youtube.com/playlist?list=UUSHY8hfNmsry6kxG1_DPChxqw';
+        const videosURL = 'https://www.youtube.com/playlist?list=UUY8hfNmsry6kxG1_DPChxqw';
+        const url = (flipBox && flipBox.classList.contains('flipped')) ? shortsURL : videosURL;
+        const title = (flipBox && flipBox.classList.contains('flipped')) ? 'Oceanbeats Shorts' : 'Oceanbeats Videos';
+        shareSomething(title, url);
+      });
+    }
+
+    // Attach click to any .share-btn without data-share inside music cards
+    document.querySelectorAll('.music-card .share-btn').forEach(btn=>{
       btn.addEventListener('click', ()=>{
-        let url = btn.dataset.share || window.location.href;
-        let card = btn.closest('.music-card');
-        let title = card ? (card.dataset.title + ' — Oceanbeats') : 'Oceanbeats';
-        if(card){
-          url = window.location.href.split('#')[0] + '#music';
-        }
+        const card = btn.closest('.music-card');
+        const title = (card?.dataset.title || 'Oceanbeats') + ' — Oceanbeats';
+        const url = window.location.href.split('#')[0] + '#music';
         shareSomething(title, url);
       });
     });
+    // Desktop YouTube share buttons
+    document.querySelectorAll('#youtube .yt-grid .share-btn').forEach(btn=>{
+      btn.addEventListener('click', ()=>{
+        shareSomething('Oceanbeats on YouTube', btn.dataset.share || 'https://www.youtube.com/@oceanbeats.studio');
+      });
+    });
 
-    /* ------ Custom music players + global player ------ */
+    /* Music players + global player */
     const cards = document.querySelectorAll('.music-card');
     const gp = document.getElementById('globalPlayer');
     const gpBtn = document.getElementById('gpBtn');
@@ -596,7 +527,7 @@
       const thumb = card.dataset.thumb;
 
       if(audio.src !== location.origin + '/'+src && !audio.src.endsWith(src)){
-        audio.src = src; // set only once
+        audio.src = src;
       }
       current = {audio, card, fill, time, btn, logo};
 
@@ -640,9 +571,7 @@
         const p = audio.duration ? (audio.currentTime / audio.duration)*100 : 0;
         fill.style.width = p + '%';
         time.textContent = formatTime(audio.currentTime);
-        if(current && current.audio === audio){
-          gpFill.style.width = p + '%';
-        }
+        if(current && current.audio === audio){ gpFill.style.width = p + '%'; }
       });
 
       bar.addEventListener('click', (e)=>{
