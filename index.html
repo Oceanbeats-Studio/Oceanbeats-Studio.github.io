@@ -1,302 +1,747 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
+  <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Oceanbeats Studio</title>
-
-  <!-- Google Fonts: All free & safe -->
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Cinzel+Decorative:wght@400;700&family=Great+Vibes&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
-
+  <title>Oceanbeats Studio — OB</title>
   <style>
+    /* ========== THEME ========== */
     :root{
-      --bg1:#0f2027; --bg2:#203a43; --bg3:#2c5364;
-      --glass: rgba(255,255,255,.07);
-      --cardBorder: rgba(255,255,255,.09);
-      --text:#fff; --sub:#c8f3ff;
-      --accentA:#00eaff; --accentB:#8a2be2;
-      --shadow: 0 12px 30px rgba(0,0,0,.45);
-      --glowPlaying: 0 0 18px rgba(0,234,255,.55), 0 0 36px rgba(138,43,226,.35);
-      --link: #00eaff;
-      --whiteGlass: rgba(255,255,255,.14);
-      --whiteBorder: rgba(255,255,255,.28);
+      --bg: #0a0f1a;                /* deep ocean */
+      --bg-2:#0f1626;
+      --card:#121b2b;
+      --text:#e8f0ff;
+      --muted:#b7c4e0;
+      --brand:#28b4ff;
+      --brand-2:#6af0d3;
+      --accent:#8aa8ff;
+      --white: #ffffff;
+      --sheet: rgba(255,255,255,.78); /* Love Notes translucent sheet */
+      --shadow: 0 10px 30px rgba(0,0,0,.35);
+      --radius: 18px;
+      --radius-lg: 22px;
+      --gap: 16px;
+      --nav-h: 64px;                 /* mobile bottom nav height */
+      --player-h: 84px;              /* music player height */
+      --brand-scale: .85;            /* -15% */
     }
     *{box-sizing:border-box}
-    html,body{margin:0;height:100%}
-    html{ scroll-behavior:smooth; }
+    html,body{height:100%}
     body{
-      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial;
+      margin:0;
+      font-family: ui-sans-serif, system-ui, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
       color:var(--text);
-      background: linear-gradient(135deg,var(--bg1),var(--bg2),var(--bg3)) fixed;
+      background:
+        radial-gradient(1200px 600px at 85% -10%, rgba(40,180,255,.18), transparent 65%),
+        radial-gradient(1000px 600px at -10% 120%, rgba(106,240,211,.15), transparent 65%),
+        linear-gradient(180deg, var(--bg), var(--bg-2));
+    }
+    a{color:inherit;text-decoration:none}
+    h1,h2,h3{margin:0 0 10px}
+    .container{max-width:1100px;margin:0 auto;padding:20px}
+    .grid{display:grid; gap: var(--gap)}
+    .grid.cards{grid-template-columns: repeat(12,1fr)}
+    .card{
+      background: linear-gradient(180deg, #131e33, #0f192a);
+      border: 1px solid rgba(255,255,255,.06);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding:16px;
     }
 
-    /* ===== Font assignments ===== */
-    .title-logo{ font-family: "Great Vibes", cursive; }
-    .title-section{ font-family: "Cinzel Decorative", "Cinzel", serif; }
-    .title-sub{ font-family: "Cinzel", serif; text-transform:uppercase; letter-spacing:3px; font-weight:700; }
-
-    /* Header / Branding */
-    header{ padding:24px 18px 10px; text-align:center; position:sticky; top:0; z-index:60;
-      background: linear-gradient(180deg, rgba(0,0,0,.65), rgba(0,0,0,0)); backdrop-filter: blur(6px);}
-    .brand{ display:flex; align-items:center; justify-content:center; gap:14px; }
-    .brand img{ width:78px; height:78px; border-radius:50%; box-shadow:0 0 28px rgba(0,234,255,.35);}
-    .brand h1{ margin:0; line-height:1; font-size: 64px; color:#fff; text-shadow:0 0 18px rgba(0,200,255,.6);}
-    .tagline{ margin-top:6px; opacity:.9; color:var(--sub); font-size:14px; }
-
-    /* Nav */
-    nav{ position:sticky; top:108px; z-index:59; background:rgba(0,0,0,.45);
-      border-top:1px solid rgba(255,255,255,.06); border-bottom:1px solid rgba(255,255,255,.06); backdrop-filter: blur(6px);}
-    .nav-inner{ max-width:1200px; margin:0 auto; padding:10px 16px; display:flex; gap:14px; justify-content:center; flex-wrap:wrap;}
-    .nav-link{ padding:10px 14px; border-radius:12px; text-decoration:none; color:#eafcff; font-weight:700; letter-spacing:.2px;
-      background:linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.02));
-      border:1px solid rgba(255,255,255,.09); box-shadow:0 4px 18px rgba(0,0,0,.25);
-      transition:.2s transform, .2s box-shadow, .2s background, .2s color;}
-    .nav-link:hover{ transform: translateY(-2px); box-shadow:0 8px 24px rgba(0,0,0,.35);}
-    .nav-link.active{ color:#111; background: radial-gradient(circle at 30% 30%, var(--accentA), var(--accentB)); border-color: transparent;}
-
-    main{padding:16px}
-    section{padding:36px 10px}
-
-    /* Section titles */
-    .section-title{ text-align:center; margin:10px 0 26px; font-size:38px;
-      background: linear-gradient(90deg, #00eaff, #8a2be2);
-      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-      text-shadow:0 0 12px rgba(0,200,255,.35);}
-
-    /* Subheads */
-    .subhead{ margin:10px 0 16px; text-align:center; font-size:18px; color:#fff; position:relative; display:inline-block;}
-    .subhead::after{ content:""; display:block; width:42px; height:3px;
-      background: linear-gradient(90deg, #00eaff, #8a2be2); margin:6px auto 0; border-radius:2px;}
-
-    /* YouTube */
-    .yt-grid{ display:grid; grid-template-columns:1fr 1fr; gap:26px; max-width:1200px; margin:0 auto;}
-    .card{ background:var(--glass); border:1px solid var(--cardBorder); border-radius:18px; padding:16px; box-shadow:var(--shadow);}
-    iframe{width:100%; height:420px; border-radius:14px}
-
-    /* Mobile Flip (YouTube) */
-    .mobile-only{ display:none; }
-    .mobile-flip-wrap{ max-width:980px; margin:0 auto 64px; perspective: 1200px; }
-    .flipbox{ position:relative; width:100%; height:460px; transform-style:preserve-3d; transition: transform .75s ease; }
-    .flipface{
-      position:absolute; inset:0; background:var(--glass); border:1px solid var(--cardBorder);
-      border-radius:18px; padding:14px; box-shadow:var(--shadow); backface-visibility:hidden;
+    /* Header / Brand */
+    header{
+      position:sticky; top:0; z-index:50;
+      backdrop-filter: blur(10px);
+      background: linear-gradient(180deg, rgba(10,15,26,.85), rgba(10,15,26,.55));
+      border-bottom:1px solid rgba(255,255,255,.06);
     }
-    .flipface.back{ transform: rotateY(180deg); }
-    .flipbox.flipped{ transform: rotateY(180deg); }
-    .flip-controls{ display:flex; justify-content:center; gap:12px; margin-top:16px; position: relative; z-index: 200; }
-    .btn{
-      padding:10px 16px; border:none; border-radius:12px; cursor:pointer;
-      background: radial-gradient(circle at 30% 30%, var(--accentA), var(--accentB));
-      color:#111; font-weight:800; box-shadow:0 0 16px rgba(0,234,255,.45);
-      transition:.2s transform, .2s box-shadow, .2s opacity;
-      z-index: 210; position: relative;
+    .brand-row{
+      display:flex; align-items:center; justify-content:space-between;
+      gap:12px; padding:14px 20px;
     }
-    .btn:hover{ transform: translateY(-2px); box-shadow:0 0 20px rgba(138,43,226,.55); }
+    .brand{
+      display:flex; align-items:baseline; gap:14px; flex-wrap:wrap
+    }
+    .brand .tag{
+      padding:8px 14px;
+      border-radius: 999px;
+      background: linear-gradient(90deg, rgba(40,180,255,.18), rgba(106,240,211,.18));
+      border:1px solid rgba(255,255,255,.12);
+      font-weight:700; letter-spacing:.2px;
+      transform: scale(var(--brand-scale)); /* -15% size */
+      transform-origin:left center;
+      white-space:nowrap;
+    }
+    .brand .title{
+      font-weight:800; font-size: clamp(18px,3.5vw,28px);
+      background: linear-gradient(90deg, #cfe8ff, #9edbff 50%, #e1fff6);
+      -webkit-background-clip:text; background-clip:text; color:transparent;
+    }
+
+    /* Desktop nav (top) */
+    nav.top{
+      display:none;
+      padding:0 20px 12px;
+    }
+    .top .nav-buttons{
+      display:flex; gap:10px; flex-wrap:wrap
+    }
+    .chip{
+      display:flex; align-items:center; gap:8px;
+      padding:8px 12px; border-radius:999px;
+      background: rgba(255,255,255,.06);
+      border:1px solid rgba(255,255,255,.10);
+      cursor:pointer; user-select:none;
+    }
+    .chip.active{outline:2px solid rgba(40,180,255,.5)}
+    .chip svg{width:18px;height:18px;opacity:.85}
+
+    /* Section wrapper (SPA style) */
+    main{padding-bottom: calc(var(--nav-h) + var(--player-h) + 30px)}
+    section{display:none; animation: fade .25s ease}
+    section.active{display:block}
+    @keyframes fade{from{opacity:.6; transform:translateY(4px)} to{opacity:1; transform:none}}
+
+    /* Home hero */
+    .hero{
+      display:grid; gap:16px;
+      grid-template-columns: 1.2fr .8fr;
+      align-items:stretch;
+    }
+    .hero .pane{
+      border-radius: var(--radius-lg);
+      padding:18px;
+      background: linear-gradient(160deg, rgba(40,180,255,.12), rgba(138,168,255,.08) 40%, rgba(255,255,255,.02));
+      border:1px solid rgba(255,255,255,.08);
+      box-shadow: var(--shadow);
+      min-height: 220px;
+    }
+
+    /* Cards */
+    .cards .col-3 {grid-column: span 3}
+    .cards .col-4 {grid-column: span 4}
+    .cards .col-6 {grid-column: span 6}
+    .cards .col-12 {grid-column: span 12}
+
+    /* Love Notes (LQ) sheet style */
+    .sheet{
+      background: var(--sheet);
+      color:#0d1220;
+      border-radius: 14px;
+      border:1px solid rgba(0,0,0,.07);
+      padding:16px 18px;
+      box-shadow: 0 8px 24px rgba(255,255,255,.14), 0 10px 40px rgba(0,0,0,.25);
+      transition: transform .18s ease, box-shadow .18s ease;
+    }
+    .sheet:hover{ transform: translateY(-2px); box-shadow: 0 14px 30px rgba(0,0,0,.28) }
+    .sheet h3{ color:#0a0f1a; margin-bottom:6px }
+    .sheet small{ color:#394a7a }
 
     /* Music */
-    .music-grid{ max-width:1200px; margin:0 auto; padding:6px; display:grid;
-      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap:18px;}
-    .music-card{ background:var(--glass); border:1px solid var(--cardBorder); border-radius:16px; padding:14px; box-shadow:var(--shadow);
-      transition:.25s transform, .25s box-shadow, .25s border-color;
-      display:flex; flex-direction:column; justify-content:space-between; height:360px;}
-    .music-card:hover{ transform: translateY(-4px); box-shadow:0 14px 34px rgba(0,0,0,.55);}
-    .music-card.playing{ border-color: rgba(0,234,255,.6); box-shadow: var(--glowPlaying);}
-    .thumb-container{ position:relative }
-    .thumb-container img:first-child{ width:100%; height:200px; object-fit:cover; border-radius:12px; display:block; margin-bottom:10px}
-    .rotating-logo{ position:absolute; bottom:10px; right:10px; width:42px; height:42px; border-radius:50%; opacity:0;
-      transform:rotate(0deg); transition: opacity .3s, transform .4s ease-out;}
-    .rotating-logo.playing{ opacity:1; animation: spin 3s linear infinite;}
-    @keyframes spin{ from{transform:rotate(0deg)} to{transform:rotate(360deg)} }
-    .music-card h4{ margin:6px 0 8px; font-family:"Great Vibes", cursive; font-size:22px; text-align:center}
-    audio{ width:100%; margin-top:6px; border-radius:10px }
+    .music-card{
+      display:grid; grid-template-columns: 84px 1fr auto; gap:12px; align-items:center;
+      background: linear-gradient(180deg,#111b2d,#0f1827);
+      border:1px solid rgba(255,255,255,.06); border-radius:14px; padding:10px 12px;
+    }
+    .cover{
+      width:84px; height:84px; border-radius:10px; background:
+        linear-gradient(135deg, rgba(40,180,255,.35), rgba(138,168,255,.25));
+      border:1px solid rgba(255,255,255,.12);
+      display:flex; align-items:center; justify-content:center; font-weight:800; color:#0a0f1a
+    }
+    .music-meta b{display:block}
+    .row{display:flex; align-items:center; gap:8px}
+    .btn{
+      display:inline-flex; align-items:center; justify-content:center;
+      height:36px; padding:0 12px; gap:8px; border-radius:10px;
+      background: rgba(255,255,255,.08);
+      border:1px solid rgba(255,255,255,.10);
+      cursor:pointer; user-select:none;
+    }
+    .btn:hover{background: rgba(255,255,255,.14)}
+    .icon-btn{width:36px; padding:0; aspect-ratio:1/1}
+    .btn svg{width:18px;height:18px}
 
-    /* Love Notes */
-    .quotes-wrap{ max-width:900px; margin:0 auto; display:grid; gap:18px; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); }
-    .quote-card{ background: var(--whiteGlass); border:1px solid var(--whiteBorder); border-radius:14px; padding:16px; color:#fff;
-      backdrop-filter: blur(8px); box-shadow: 0 10px 28px rgba(0,0,0,.28);
-      animation: floaty 6s ease-in-out infinite;}
-    .quote-card:nth-child(2){ animation-delay:.6s } .quote-card:nth-child(3){ animation-delay:1.2s }
-    @keyframes floaty{ 0%,100%{ transform: translateY(0)} 50%{ transform: translateY(-6px)} }
-    .quote-card .by{ display:block; margin-top:10px; color:#e9f7ff; font-weight:600; font-style:normal;}
+    /* YouTube video card */
+    .yt-card{
+      border-radius:14px; overflow:hidden; border:1px solid rgba(255,255,255,.08);
+      background:#0f1626;
+    }
+    .yt-card .frame{position:relative; padding-top:56.25%}
+    .yt-card iframe, .yt-card .thumb{
+      position:absolute; inset:0; width:100%; height:100%; border:0; display:block
+    }
+    .yt-actions{display:flex; justify-content:space-between; align-items:center; padding:10px 12px}
 
-    /* SPA helpers */
-    .page-hidden{ display:none !important;}
+    /* Find Me strip */
+    .findme{
+      display:flex; gap:10px; flex-wrap:wrap;
+    }
+    .soc{
+      display:flex; align-items:center; gap:8px; padding:10px 14px; border-radius:12px;
+      background: rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.10)
+    }
+    .soc svg{width:18px;height:18px}
 
-    /* Responsive visibility */
-    @media (max-width:900px){
-      .yt-grid{ display:none; }        /* hide desktop grid on mobile */
-      .mobile-only{ display:block; }   /* show mobile flip on mobile */
-      iframe{ height:380px }
-      .flipbox{ height:420px }
+    /* Player (docked bottom) */
+    .player{
+      position:fixed; left:0; right:0; bottom: var(--nav-h);
+      background: linear-gradient(180deg, #0c1220, #0a101c);
+      border-top:1px solid rgba(255,255,255,.08);
+      height: var(--player-h);
+      display:grid; grid-template-columns: 1fr auto auto; gap:10px; align-items:center;
+      padding:8px 14px;
+      z-index:70;
+    }
+    .player .title{white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
+    .player .controls{display:flex; align-items:center; gap:8px}
+    .player .range{
+      width:100%;
+    }
+    .player input[type="range"]{ width:100% }
+    .player .time{font-variant-tabular-nums:tabular-nums; color:var(--muted); font-size:12px}
+
+    /* Mobile bottom nav with icons */
+    nav.bottom{
+      position:fixed; left:0; right:0; bottom:0; height: var(--nav-h);
+      background: rgba(10,15,26,.9);
+      backdrop-filter: blur(10px);
+      border-top:1px solid rgba(255,255,255,.08);
+      z-index:80;
+    }
+    .bottom .tabs{
+      display:flex; justify-content:space-around; align-items:center; height:100%;
+    }
+    .tab{
+      display:flex; flex-direction:column; align-items:center; gap:3px; font-size:12px; opacity:.8
+    }
+    .tab.active{opacity:1}
+    .tab svg{width:22px;height:22px}
+
+    /* Responsive */
+    @media (max-width: 920px){
+      .hero{grid-template-columns: 1fr}
+      .grid.cards{grid-template-columns: repeat(6,1fr)}
+      .cards .col-3{grid-column: span 6}
+      .cards .col-4{grid-column: span 6}
+      .cards .col-6{grid-column: span 6}
+    }
+    @media (min-width: 921px){
+      nav.top{display:block}
+      nav.bottom{display:none}
+      .player{bottom:0}
+      main{padding-bottom: calc(var(--player-h) + 30px)}
     }
 
-    footer{ text-align:center; color:#bcd; opacity:.8; padding:24px 10px; margin-top:10px; border-top:1px solid rgba(255,255,255,.08)}
+    /* Utility */
+    .muted{color:var(--muted)}
+    .spacer{height:10px}
+    .hide{display:none !important;}
+    .sep{height:1px; background:rgba(255,255,255,.06); margin:10px 0}
   </style>
 </head>
 <body>
-  <header id="home">
-    <div class="brand">
-      <img src="assets/logo.png" alt="Oceanbeats Logo">
-      <h1 class="title-logo">Oceanbeats Studio</h1>
+  <!-- ======= HEADER ======= -->
+  <header>
+    <div class="brand-row">
+      <div class="brand">
+        <span class="tag">OB on YouTube</span>
+        <span class="tag">OB Original</span>
+        <div class="title">Oceanbeats Studio</div>
+      </div>
+      <div class="muted" style="font-size:12px;">Clean • Minimal • Mobile-first</div>
     </div>
-    <div class="tagline">Feel the love. Hear the vibe.</div>
+
+    <!-- Desktop nav -->
+    <nav class="top">
+      <div class="nav-buttons">
+        <a data-nav="#home" class="chip"><svg viewBox="0 0 24 24" fill="none"><path d="M3 11L12 3l9 8v8a2 2 0 0 1-2 2h-4v-6H9v6H5a2 2 0 0 1-2-2v-8Z" stroke="currentColor" stroke-width="1.5"/></svg> Home</a>
+        <a data-nav="#music" class="chip"><svg viewBox="0 0 24 24" fill="none"><path d="M9 18V5l10-2v13" stroke="currentColor" stroke-width="1.5"/><circle cx="7" cy="18" r="3" stroke="currentColor" stroke-width="1.5"/><circle cx="17" cy="16" r="3" stroke="currentColor" stroke-width="1.5"/></svg> Music</a>
+        <a data-nav="#lq" class="chip"><svg viewBox="0 0 24 24" fill="none"><path d="M12 21s-7-4.35-7-10a4 4 0 0 1 7-2 4 4 0 0 1 7 2c0 5.65-7 10-7 10Z" stroke="currentColor" stroke-width="1.5"/></svg> LQ</a>
+        <a data-nav="#contact" class="chip"><svg viewBox="0 0 24 24" fill="none"><path d="M21 10v9a2 2 0 0 1-2 2H5l-2 2V5a2 2 0 0 1 2-2h8" stroke="currentColor" stroke-width="1.5"/><path d="M21 3l-9 9" stroke="currentColor" stroke-width="1.5"/></svg> Con</a>
+        <a data-nav="#pp" class="chip"><svg viewBox="0 0 24 24" fill="none"><path d="M12 2l7 4v6c0 5-3.5 9-7 10-3.5-1-7-5-7-10V6l7-4Z" stroke="currentColor" stroke-width="1.5"/></svg> PP</a>
+      </div>
+    </nav>
   </header>
 
-  <nav>
-    <div class="nav-inner">
-      <a class="nav-link" href="#home">Home</a>
-      <a class="nav-link" href="#music">Music</a>
-      <a class="nav-link" href="#love-notes">Love Notes</a>
-      <a class="nav-link" href="#contact">Contact</a>
-      <a class="nav-link" href="#privacy">Privacy Policy</a>
+  <!-- ======= MOBILE BOTTOM NAV ======= -->
+  <nav class="bottom">
+    <div class="tabs">
+      <a class="tab" data-nav="#home" aria-label="Home">
+        <svg viewBox="0 0 24 24" fill="none"><path d="M3 11L12 3l9 8v8a2 2 0 0 1-2 2h-4v-6H9v6H5a2 2 0 0 1-2-2v-8Z" stroke="currentColor" stroke-width="1.7"/></svg>
+        <span>Home</span>
+      </a>
+      <a class="tab" data-nav="#music" aria-label="Music">
+        <svg viewBox="0 0 24 24" fill="none"><path d="M9 18V5l10-2v13" stroke="currentColor" stroke-width="1.7"/><circle cx="7" cy="18" r="3" stroke="currentColor" stroke-width="1.7"/><circle cx="17" cy="16" r="3" stroke="currentColor" stroke-width="1.7"/></svg>
+        <span>Music</span>
+      </a>
+      <a class="tab" data-nav="#lq" aria-label="LQ">
+        <svg viewBox="0 0 24 24" fill="none"><path d="M12 21s-7-4.35-7-10a4 4 0 0 1 7-2 4 4 0 0 1 7 2c0 5.65-7 10-7 10Z" stroke="currentColor" stroke-width="1.7"/></svg>
+        <span>LQ</span>
+      </a>
+      <a class="tab" data-nav="#contact" aria-label="Contact">
+        <svg viewBox="0 0 24 24" fill="none"><path d="M21 10v9a2 2 0 0 1-2 2H5l-2 2V5a2 2 0 0 1 2-2h8" stroke="currentColor" stroke-width="1.7"/><path d="M21 3l-9 9" stroke="currentColor" stroke-width="1.7"/></svg>
+        <span>Con</span>
+      </a>
+      <a class="tab" data-nav="#pp" aria-label="Privacy">
+        <svg viewBox="0 0 24 24" fill="none"><path d="M12 2l7 4v6c0 5-3.5 9-7 10-3.5-1-7-5-7-10V6l7-4Z" stroke="currentColor" stroke-width="1.7"/></svg>
+        <span>PP</span>
+      </a>
     </div>
   </nav>
 
-  <main>
-    <div id="site-content">
-      <!-- YouTube -->
-      <section id="youtube">
-        <h2 class="section-title title-section">Oceanbeats on YouTube</h2>
-
-        <!-- Desktop / Widescreen -->
-        <div class="yt-grid">
-          <div class="card">
-            <h3 class="subhead title-sub">Shorts</h3>
-            <iframe src="https://www.youtube.com/embed?listType=playlist&list=UUSHY8hfNmsry6kxG1_DPChxqw&rel=0" allowfullscreen></iframe>
-          </div>
-          <div class="card">
-            <h3 class="subhead title-sub">Videos</h3>
-            <iframe src="https://www.youtube.com/embed?listType=playlist&list=UUY8hfNmsry6kxG1_DPChxqw&rel=0" allowfullscreen></iframe>
+  <!-- ======= MAIN (SPA Sections) ======= -->
+  <main class="container">
+    <!-- HOME -->
+    <section id="home" class="active">
+      <div class="hero">
+        <div class="pane">
+          <h2>Welcome to <span style="color:var(--brand)">Oceanbeats</span></h2>
+          <p class="muted">Fresh originals, love notes, and chill vibes. Explore music, watch videos, and share moments.</p>
+          <div class="sep"></div>
+          <div class="findme">
+            <!-- Find Me (Home) -->
+            <a class="soc" href="https://instagram.com/your_handle" target="_blank" rel="noopener">
+              <!-- Instagram -->
+              <svg viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="18" height="18" rx="5" stroke="currentColor" stroke-width="1.5"/><circle cx="12" cy="12" r="4" stroke="currentColor" stroke-width="1.5"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor"/></svg>
+              <span>Instagram</span>
+            </a>
+            <a class="soc" href="https://facebook.com/your_page" target="_blank" rel="noopener">
+              <!-- Facebook -->
+              <svg viewBox="0 0 24 24" fill="none"><path d="M14 9h3V6h-3a4 4 0 0 0-4 4v3H7v3h3v6h3v-6h3l1-3h-4v-3a1 1 0 0 1 1-1Z" stroke="currentColor" stroke-width="1.5"/></svg>
+              <span>Facebook</span>
+            </a>
+            <a class="soc" href="https://pinterest.com/your_profile" target="_blank" rel="noopener">
+              <!-- Pinterest -->
+              <svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.5"/><path d="M10.5 18c.5-1.5 1-3 .9-3.7-.1-.7-.6-1.1-1.2-1.7C9.3 11.7 9 10.7 9 9.8 9 7.6 10.7 6 12.9 6 15 6 16.5 7.3 16.5 9.4c0 2.4-1.3 4.1-3.6 4.1-.8 0-1.7-.3-2.2-.8" stroke="currentColor" stroke-width="1.3"/></svg>
+              <span>Pinterest</span>
+            </a>
           </div>
         </div>
 
-        <!-- Mobile Flip -->
-        <div class="mobile-only">
-          <div class="mobile-flip-wrap">
-            <div class="flipbox" id="ytFlipBox">
-              <div class="flipface front">
-                <h3 class="subhead title-sub">Videos</h3>
-                <iframe src="https://www.youtube.com/embed?listType=playlist&list=UUY8hfNmsry6kxG1_DPChxqw&rel=0" allowfullscreen></iframe>
+        <div class="pane">
+          <h3>OB on YouTube</h3>
+          <p class="muted">Watch our latest uploads and share your favorites.</p>
+          <div class="grid cards" style="margin-top:10px">
+            <div class="yt-card col-12">
+              <div class="frame">
+                <!-- Replace with your real video ID -->
+                <iframe loading="lazy" src="https://www.youtube.com/embed/VIDEO_ID_1" title="YouTube video" allowfullscreen></iframe>
               </div>
-              <div class="flipface back">
-                <h3 class="subhead title-sub">Shorts</h3>
-                <iframe src="https://www.youtube.com/embed?listType=playlist&list=UUSHY8hfNmsry6kxG1_DPChxqw&rel=0" allowfullscreen></iframe>
+              <div class="yt-actions">
+                <b>My Latest Upload</b>
+                <button class="btn" data-share-yt="https://youtu.be/VIDEO_ID_1" aria-label="Share YouTube">
+                  <svg viewBox="0 0 24 24" fill="none"><path d="M4 12v7a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-7" stroke="currentColor" stroke-width="1.6"/><path d="M16 8l-4-4-4 4M12 4v12" stroke="currentColor" stroke-width="1.6"/></svg>
+                  Share
+                </button>
               </div>
             </div>
           </div>
-          <div class="flip-controls">
-            <button class="btn" id="flipBtn">Flip</button>
+        </div>
+      </div>
+
+      <div style="height:16px"></div>
+      <h3>OB Original</h3>
+      <p class="muted">Original tracks and demos curated for you.</p>
+      <div class="grid cards">
+        <!-- Sample music cards (also appear in Music page) -->
+        <div class="col-6">
+          <div class="music-card" data-track="0">
+            <div class="cover">OB</div>
+            <div class="music-meta">
+              <b>Ocean Drift</b>
+              <small class="muted">Oceanbeats • 3:24</small>
+              <div class="row">
+                <button class="btn play-btn"><svg viewBox="0 0 24 24" fill="none"><path d="M8 5v14l11-7-11-7Z" stroke="currentColor" stroke-width="1.6"/></svg> Play</button>
+                <button class="btn" data-share-music aria-label="Share track">
+                  <svg viewBox="0 0 24 24" fill="none"><path d="M4 12v7a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-7" stroke="currentColor" stroke-width="1.6"/><path d="M16 8l-4-4-4 4M12 4v12" stroke="currentColor" stroke-width="1.6"/></svg>
+                  Share
+                </button>
+              </div>
+            </div>
+            <div class="row">
+              <button class="btn icon-btn play-btn" title="Play"><svg viewBox="0 0 24 24" fill="none"><path d="M8 5v14l11-7-11-7Z" stroke="currentColor" stroke-width="1.6"/></svg></button>
+            </div>
           </div>
         </div>
-      </section>
 
-      <!-- Music -->
-      <section id="music">
-        <h2 class="section-title title-section">Oceanbeats Originals</h2>
-        <div class="music-grid">
-          <div class="music-card"><div class="thumb-container"><img src="assets/thumb/Young Hearts Collide.jpg" alt="Young Hearts Collide"><img class="rotating-logo" src="assets/logo.png" alt=""></div><h4>Young Hearts Collide</h4><audio controls><source src="assets/audio/Young Hearts Collide.mp3" type="audio/mpeg"></audio></div>
-          <div class="music-card"><div class="thumb-container"><img src="assets/thumb/Your Eyes.jpg" alt="Your Eyes"><img class="rotating-logo" src="assets/logo.png" alt=""></div><h4>Your Eyes</h4><audio controls><source src="assets/audio/Your_eyes.mp3" type="audio/mpeg"></audio></div>
-          <div class="music-card"><div class="thumb-container"><img src="assets/thumb/Angel Piano.jpg" alt="Angel’s Piano"><img class="rotating-logo" src="assets/logo.png" alt=""></div><h4>Angel’s Piano</h4><audio controls><source src="assets/audio/Angel’s piano.mp3" type="audio/mpeg"></audio></div>
-          <div class="music-card"><div class="thumb-container"><img src="assets/thumb/It's okay.png" alt="It's Okay"><img class="rotating-logo" src="assets/logo.png" alt=""></div><h4>It's Okay</h4><audio controls><source src="assets/audio/It's okay.mp3" type="audio/mpeg"></audio></div>
-          <div class="music-card"><div class="thumb-container"><img src="assets/thumb/Rekindled Hearts.png" alt="Rekindled Hearts"><img class="rotating-logo" src="assets/logo.png" alt=""></div><h4>Rekindled Hearts</h4><audio controls><source src="assets/audio/Rekindled Hearts.mp3" type="audio/mpeg"></audio></div>
-          <div class="music-card"><div class="thumb-container"><img src="assets/thumb/it's a little thing.png" alt="It's a Little Thing"><img class="rotating-logo" src="assets/logo.png" alt=""></div><h4>It's a Little Thing</h4><audio controls><source src="assets/audio/it is little thing.mp3" type="audio/mpeg"></audio></div>
-          <div class="music-card"><div class="thumb-container"><img src="assets/thumb/A singer voice.png" alt="A Singer Voice"><img class="rotating-logo" src="assets/logo.png" alt=""></div><h4>A Singer Voice</h4><audio controls><source src="assets/audio/A Singer Voice.mp3" type="audio/mpeg"></audio></div>
-          <div class="music-card"><div class="thumb-container"><img src="assets/thumb/Blue line.png" alt="Blue Line"><img class="rotating-logo" src="assets/logo.png" alt=""></div><h4>Blue Line</h4><audio controls><source src="assets/audio/Blue line.mp3" type="audio/mpeg"></audio></div>
+        <div class="col-6">
+          <div class="music-card" data-track="1">
+            <div class="cover">OB</div>
+            <div class="music-meta">
+              <b>Blue Horizon</b>
+              <small class="muted">Oceanbeats • 2:58</small>
+              <div class="row">
+                <button class="btn play-btn"><svg viewBox="0 0 24 24" fill="none"><path d="M8 5v14l11-7-11-7Z" stroke="currentColor" stroke-width="1.6"/></svg> Play</button>
+                <button class="btn" data-share-music>
+                  <svg viewBox="0 0 24 24" fill="none"><path d="M4 12v7a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-7" stroke="currentColor" stroke-width="1.6"/><path d="M16 8l-4-4-4 4M12 4v12" stroke="currentColor" stroke-width="1.6"/></svg>
+                  Share
+                </button>
+              </div>
+            </div>
+            <div class="row">
+              <button class="btn icon-btn play-btn" title="Play"><svg viewBox="0 0 24 24" fill="none"><path d="M8 5v14l11-7-11-7Z" stroke="currentColor" stroke-width="1.6"/></svg></button>
+            </div>
+          </div>
         </div>
-      </section>
-
-      <!-- Love Notes -->
-      <section id="love-notes">
-        <h2 class="section-title title-section">Love Notes</h2>
-        <div class="quotes-wrap">
-          <div class="quote-card">“Where words fail, music speaks.” <span class="by">— Hans Christian Andersen</span></div>
-          <div class="quote-card">“Every love story is beautiful, but ours is my favorite.” <span class="by">— Unknown</span></div>
-          <div class="quote-card">“You are the song my heart loves to sing.” <span class="by">— Oceanbeats</span></div>
-          <div class="quote-card">“In case I forget to tell you later, I had a really good time today.” <span class="by">— Pretty Woman</span></div>
-        </div>
-      </section>
-    </div>
-
-    <!-- Contact -->
-    <section id="contact" class="page-hidden">
-      <h2 class="section-title title-section">Contact</h2>
-      <p style="text-align:center">Email us at <a href="mailto:oceanbeats.studio@gmail.com">oceanbeats.studio@gmail.com</a></p>
+      </div>
     </section>
 
-    <!-- Privacy -->
-    <section id="privacy" class="page-hidden">
-      <h2 class="section-title title-section">Privacy Policy</h2>
-      <p style="max-width:800px;margin:0 auto;text-align:center;line-height:1.6">
-        We don’t collect personal data. Audio files are hosted on GitHub Pages and may be cached by your browser. 
-        YouTube embeds are subject to Google’s Privacy Policy.
-      </p>
+    <!-- MUSIC -->
+    <section id="music">
+      <div class="row" style="justify-content:space-between; gap:10px; align-items:flex-end">
+        <div>
+          <h2>Music</h2>
+          <p class="muted">Tap a card to play in the Oceanbeats player.</p>
+        </div>
+        <div class="findme">
+          <!-- Find Me (Music) -->
+          <a class="soc" href="https://instagram.com/your_handle" target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="18" height="18" rx="5" stroke="currentColor" stroke-width="1.5"/><circle cx="12" cy="12" r="4" stroke="currentColor" stroke-width="1.5"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor"/></svg>
+            <span>Find me</span>
+          </a>
+        </div>
+      </div>
+
+      <div class="grid cards">
+        <!-- Duplicate the same cards here if you want more content -->
+        <div class="col-6">
+          <div class="music-card" data-track="0">
+            <div class="cover">OB</div>
+            <div class="music-meta">
+              <b>Ocean Drift</b>
+              <small class="muted">Oceanbeats • 3:24</small>
+              <div class="row">
+                <button class="btn play-btn"><svg viewBox="0 0 24 24" fill="none"><path d="M8 5v14l11-7-11-7Z" stroke="currentColor" stroke-width="1.6"/></svg> Play</button>
+                <button class="btn" data-share-music><svg viewBox="0 0 24 24" fill="none"><path d="M4 12v7a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-7" stroke="currentColor" stroke-width="1.6"/><path d="M16 8l-4-4-4 4M12 4v12" stroke="currentColor" stroke-width="1.6"/></svg> Share</button>
+              </div>
+            </div>
+            <div class="row">
+              <button class="btn icon-btn play-btn" title="Play"><svg viewBox="0 0 24 24" fill="none"><path d="M8 5v14l11-7-11-7Z" stroke="currentColor" stroke-width="1.6"/></svg></button>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-6">
+          <div class="music-card" data-track="1">
+            <div class="cover">OB</div>
+            <div class="music-meta">
+              <b>Blue Horizon</b>
+              <small class="muted">Oceanbeats • 2:58</small>
+              <div class="row">
+                <button class="btn play-btn"><svg viewBox="0 0 24 24" fill="none"><path d="M8 5v14l11-7-11-7Z" stroke="currentColor" stroke-width="1.6"/></svg> Play</button>
+                <button class="btn" data-share-music><svg viewBox="0 0 24 24" fill="none"><path d="M4 12v7a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-7" stroke="currentColor" stroke-width="1.6"/><path d="M16 8l-4-4-4 4M12 4v12" stroke="currentColor" stroke-width="1.6"/></svg> Share</button>
+              </div>
+            </div>
+            <div class="row">
+              <button class="btn icon-btn play-btn" title="Play"><svg viewBox="0 0 24 24" fill="none"><path d="M8 5v14l11-7-11-7Z" stroke="currentColor" stroke-width="1.6"/></svg></button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- LQ (Love Notes / Quotes) -->
+    <section id="lq">
+      <h2>Love Notes</h2>
+      <p class="muted">Soft, handwritten feelings on translucent sheets.</p>
+      <div class="grid cards">
+        <div class="col-6">
+          <div class="sheet">
+            <h3>Note #1</h3>
+            <p>In the hush of waves, I learned your name by heart.</p>
+            <small>— OB</small>
+          </div>
+        </div>
+        <div class="col-6">
+          <div class="sheet">
+            <h3>Note #2</h3>
+            <p>Your smile feels like sunrise, even on rainy days.</p>
+            <small>— OB</small>
+          </div>
+        </div>
+        <div class="col-6">
+          <div class="sheet">
+            <h3>Note #3</h3>
+            <p>If oceans could sing, they'd whisper how you changed the tide.</p>
+            <small>— OB</small>
+          </div>
+        </div>
+        <div class="col-6">
+          <div class="sheet">
+            <h3>Note #4</h3>
+            <p>Between beats, I keep a place where only you belong.</p>
+            <small>— OB</small>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CONTACT -->
+    <section id="contact">
+      <h2>Contact</h2>
+      <p class="muted">Let’s talk — collaborations, requests, or just say hi.</p>
+      <div class="grid cards">
+        <div class="col-6 card">
+          <form id="contactForm" class="grid" style="gap:10px">
+            <label>
+              <div>Name</div>
+              <input required name="name" placeholder="Your name" style="width:100%;padding:10px;border-radius:10px;border:1px solid rgba(255,255,255,.12);background:#0c1322;color:var(--text)"/>
+            </label>
+            <label>
+              <div>Email</div>
+              <input required type="email" name="email" placeholder="you@example.com" style="width:100%;padding:10px;border-radius:10px;border:1px solid rgba(255,255,255,.12);background:#0c1322;color:var(--text)"/>
+            </label>
+            <label>
+              <div>Subject</div>
+              <input name="subject" placeholder="What’s this about?" style="width:100%;padding:10px;border-radius:10px;border:1px solid rgba(255,255,255,.12);background:#0c1322;color:var(--text)"/>
+            </label>
+            <label>
+              <div>Message</div>
+              <textarea required name="message" rows="6" placeholder="Write your message..." style="width:100%;padding:10px;border-radius:10px;border:1px solid rgba(255,255,255,.12);background:#0c1322;color:var(--text)"></textarea>
+            </label>
+            <div class="row" style="justify-content:flex-end">
+              <button class="btn" type="submit">
+                <svg viewBox="0 0 24 24" fill="none"><path d="M3 12l18-9-9 18-2-7-7-2Z" stroke="currentColor" stroke-width="1.6"/></svg>
+                Send
+              </button>
+            </div>
+          </form>
+        </div>
+        <div class="col-6 card">
+          <h3>Also find me</h3>
+          <div class="spacer"></div>
+          <div class="findme">
+            <a class="soc" href="mailto:your@email.com"><svg viewBox="0 0 24 24" fill="none"><path d="M3 5h18v14H3z" stroke="currentColor" stroke-width="1.5"/><path d="M3 7l9 7 9-7" stroke="currentColor" stroke-width="1.5"/></svg>Email</a>
+            <a class="soc" href="https://instagram.com/your_handle" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="18" height="18" rx="5" stroke="currentColor" stroke-width="1.5"/><circle cx="12" cy="12" r="4" stroke="currentColor" stroke-width="1.5"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor"/></svg>Instagram</a>
+            <a class="soc" href="https://facebook.com/your_page" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none"><path d="M14 9h3V6h-3a4 4 0 0 0-4 4v3H7v3h3v6h3v-6h3l1-3h-4v-3a1 1 0 0 1 1-1Z" stroke="currentColor" stroke-width="1.5"/></svg>Facebook</a>
+            <a class="soc" href="https://pinterest.com/your_profile" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.5"/><path d="M10.5 18c.5-1.5 1-3 .9-3.7-.1-.7-.6-1.1-1.2-1.7C9.3 11.7 9 10.7 9 9.8 9 7.6 10.7 6 12.9 6 15 6 16.5 7.3 16.5 9.4c0 2.4-1.3 4.1-3.6 4.1-.8 0-1.7-.3-2.2-.8" stroke="currentColor" stroke-width="1.3"/></svg>Pinterest</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PRIVACY POLICY -->
+    <section id="pp">
+      <h2>Privacy Policy</h2>
+      <div class="card">
+        <p class="muted">We respect your privacy. We do not sell your data. Contact information submitted via the form above is used to respond to your message only.</p>
+      </div>
     </section>
   </main>
 
-  <footer>© 2025 Oceanbeats Studio • All rights reserved</footer>
+  <!-- ======= OCEANBEATS PLAYER ======= -->
+  <div class="player" id="player">
+    <div>
+      <div class="title" id="playerTitle">Nothing playing</div>
+      <div class="time"><span id="curT">0:00</span> / <span id="durT">0:00</span></div>
+    </div>
+    <div class="controls">
+      <button class="btn icon-btn" id="prevBtn" title="Previous">
+        <svg viewBox="0 0 24 24" fill="none"><path d="M6 5v14M18 6l-9 6 9 6V6Z" stroke="currentColor" stroke-width="1.6"/></svg>
+      </button>
+      <button class="btn" id="playPauseBtn" title="Play/Pause">
+        <svg id="playIcon" viewBox="0 0 24 24" fill="none"><path d="M8 5v14l11-7-11-7Z" stroke="currentColor" stroke-width="1.8"/></svg>
+      </button>
+      <button class="btn icon-btn" id="nextBtn" title="Next">
+        <svg viewBox="0 0 24 24" fill="none"><path d="M18 19V5M6 18l9-6-9-6v12Z" stroke="currentColor" stroke-width="1.6"/></svg>
+      </button>
+    </div>
+    <div style="display:grid; gap:6px; min-width:220px">
+      <input class="range" id="seek" type="range" min="0" max="100" value="0" step="1" />
+      <input class="range" id="volume" type="range" min="0" max="1" value="0.9" step="0.01" title="Volume"/>
+    </div>
+    <audio id="audio" preload="metadata"></audio>
+  </div>
 
   <script>
-    // Mobile flip behavior
-    const flipBox = document.getElementById('ytFlipBox');
-    const flipBtn = document.getElementById('flipBtn');
-    if (flipBtn && flipBox){
-      flipBtn.addEventListener('click', () => flipBox.classList.toggle('flipped'));
-      let startX = 0, startY = 0, isTouch = false;
-      flipBox.addEventListener('touchstart', e => {
-        isTouch = true; startX = e.touches[0].clientX; startY = e.touches[0].clientY;
-      }, {passive:true});
-      flipBox.addEventListener('touchend', e => {
-        if(!isTouch) return;
-        const dx = e.changedTouches[0].clientX - startX;
-        const dy = e.changedTouches[0].clientY - startY;
-        if(Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy)){
-          flipBox.classList.toggle('flipped');
+    /* ========= SPA NAV ========= */
+    const sections = document.querySelectorAll('main section');
+    const topChips = document.querySelectorAll('nav.top .chip');
+    const tabs = document.querySelectorAll('nav.bottom .tab');
+
+    function showSection(target){
+      sections.forEach(s => s.classList.toggle('active', '#' + s.id === target));
+      // highlight nav
+      [...topChips, ...tabs].forEach(el => el.classList.toggle('active', el.dataset.nav === target));
+      // update hash if needed
+      if (location.hash !== target) location.hash = target;
+      // focus top
+      window.scrollTo({top:0, behavior:'smooth'});
+    }
+    [...topChips, ...tabs].forEach(el => el.addEventListener('click', e => {
+      e.preventDefault();
+      showSection(el.dataset.nav);
+    }));
+    window.addEventListener('hashchange', () => {
+      const target = location.hash || '#home';
+      showSection(target);
+    });
+    // initial
+    showSection(location.hash || '#home');
+
+    /* ========= SHARE (Web Share API + Clipboard fallback) ========= */
+    async function shareLink(url, title='Check this out on Oceanbeats'){
+      try{
+        if (navigator.share){
+          await navigator.share({title, url});
+        } else {
+          await navigator.clipboard.writeText(url);
+          toast('Link copied!');
         }
-        isTouch = false;
+      }catch(e){ console.log('share canceled/failed', e); }
+    }
+    function toast(msg){
+      const note = document.createElement('div');
+      note.textContent = msg;
+      Object.assign(note.style, {
+        position:'fixed', bottom:'calc(var(--nav-h) + var(--player-h) + 14px)', left:'50%', transform:'translateX(-50%)',
+        background:'rgba(255,255,255,.12)', border:'1px solid rgba(255,255,255,.22)', padding:'8px 12px',
+        borderRadius:'10px', backdropFilter:'blur(8px)', zIndex:999
       });
+      document.body.appendChild(note);
+      setTimeout(()=> note.remove(), 1600);
     }
 
-    // Music control
-    const cards = document.querySelectorAll('.music-card');
-    cards.forEach(card => {
-      const audio = card.querySelector('audio');
-      const logo  = card.querySelector('.rotating-logo');
-      audio.addEventListener('play', () => {
-        cards.forEach(c => {
-          const a = c.querySelector('audio');
-          const l = c.querySelector('.rotating-logo');
-          if(a!==audio){ a.pause(); if(l){ l.classList.remove('playing'); l.style.transform="rotate(0deg)";}}
-          c.classList.remove('playing');
-        });
-        logo.classList.add('playing'); card.classList.add('playing');
-      });
-      ['pause','ended'].forEach(ev=>{
-        audio.addEventListener(ev,()=>{
-          logo.classList.remove('playing'); logo.style.transform="rotate(0deg)"; card.classList.remove('playing');
-        });
-      });
+    document.querySelectorAll('[data-share-yt]').forEach(btn=>{
+      btn.addEventListener('click', ()=> shareLink(btn.getAttribute('data-share-yt'), 'Watch on Oceanbeats'));
     });
 
-    // SPA routing
-    const sectionsSinglePage=['contact','privacy'];
-    const siteContent=document.getElementById('site-content');
-    const navLinks=document.querySelectorAll('.nav-link');
-    function updateRoute(){
-      const hash=(location.hash||'#home').replace('#','');
-      const isPage=sectionsSinglePage.includes(hash);
-      siteContent.classList.toggle('page-hidden',isPage);
-      sectionsSinglePage.forEach(id=>{
-        const el=document.getElementById(id);
-        if(el) el.classList.toggle('page-hidden',!(isPage&&hash===id));
-      });
-      navLinks.forEach(a=>{
-        const target=a.getAttribute('href').replace('#','');
-        a.classList.toggle('active',target===hash);
-      });
-      if(isPage) window.scrollTo({top:0, behavior:'instant'});
+    /* ========= MUSIC PLAYER ========= */
+    const tracks = [
+      {
+        title:'Ocean Drift',
+        artist:'Oceanbeats',
+        dur: 204, // 3:24 (for display before metadata loads)
+        // Replace with your actual file path:
+        src:'audio/ocean-drift.mp3',
+        share: location.origin + location.pathname + '#music?track=0'
+      },
+      {
+        title:'Blue Horizon',
+        artist:'Oceanbeats',
+        dur: 178, // 2:58
+        src:'audio/blue-horizon.mp3',
+        share: location.origin + location.pathname + '#music?track=1'
+      }
+    ];
+
+    const audio = document.getElementById('audio');
+    const playPauseBtn = document.getElementById('playPauseBtn');
+    const playIcon = document.getElementById('playIcon');
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    const seek = document.getElementById('seek');
+    const volume = document.getElementById('volume');
+    const titleEl = document.getElementById('playerTitle');
+    const curT = document.getElementById('curT');
+    const durT = document.getElementById('durT');
+
+    let currentIndex = 0;
+    let seeking = false;
+
+    function fmt(n){
+      n = Math.floor(n || 0);
+      const m = Math.floor(n/60), s = n % 60;
+      return m + ':' + String(s).padStart(2,'0');
     }
-    window.addEventListener('hashchange',updateRoute);
-    document.addEventListener('DOMContentLoaded',updateRoute);
+    function loadTrack(i){
+      currentIndex = ((i % tracks.length) + tracks.length) % tracks.length;
+      const t = tracks[currentIndex];
+      audio.src = t.src;
+      titleEl.textContent = `${t.title} — ${t.artist}`;
+      seek.value = 0; curT.textContent = '0:00';
+      durT.textContent = t.dur ? fmt(t.dur) : '0:00';
+      audio.play().catch(()=>{}); // autoplay if allowed
+      setPlayState(true);
+      // focus music section if not visible
+      if (!document.getElementById('music').classList.contains('active')) showSection('#music');
+    }
+    function setPlayState(isPlaying){
+      if (isPlaying){
+        playIcon.innerHTML = '<path d="M9 5v14M15 5v14" stroke="currentColor" stroke-width="1.8"/>'; // pause icon
+      } else {
+        playIcon.innerHTML = '<path d="M8 5v14l11-7-11-7Z" stroke="currentColor" stroke-width="1.8"/>'; // play icon
+      }
+    }
+
+    playPauseBtn.addEventListener('click', ()=>{
+      if (audio.paused) audio.play(); else audio.pause();
+    });
+    prevBtn.addEventListener('click', ()=> loadTrack(currentIndex-1));
+    nextBtn.addEventListener('click', ()=> loadTrack(currentIndex+1));
+    volume.addEventListener('input', ()=> audio.volume = volume.value);
+
+    audio.addEventListener('play', ()=> setPlayState(true));
+    audio.addEventListener('pause', ()=> setPlayState(false));
+    audio.addEventListener('loadedmetadata', ()=>{
+      durT.textContent = fmt(audio.duration || tracks[currentIndex].dur);
+    });
+    audio.addEventListener('timeupdate', ()=>{
+      if (!seeking && audio.duration){
+        seek.value = Math.floor((audio.currentTime / audio.duration) * 100);
+        curT.textContent = fmt(audio.currentTime);
+        durT.textContent = fmt(audio.duration);
+      }
+    });
+    seek.addEventListener('input', ()=>{
+      seeking = true;
+      if (audio.duration){
+        const t = (seek.value/100) * audio.duration;
+        curT.textContent = fmt(t);
+      }
+    });
+    seek.addEventListener('change', ()=>{
+      if (audio.duration){
+        audio.currentTime = (seek.value/100) * audio.duration;
+      }
+      seeking = false;
+    });
+    audio.addEventListener('ended', ()=> loadTrack(currentIndex+1));
+
+    // Hook music cards
+    function hookMusicCards(scope=document){
+      scope.querySelectorAll('.music-card').forEach(card=>{
+        const idx = Number(card.getAttribute('data-track') || 0);
+        card.querySelectorAll('.play-btn').forEach(btn=>{
+          btn.addEventListener('click', ()=> loadTrack(idx));
+        });
+        const shareBtn = card.querySelector('[data-share-music]');
+        if (shareBtn){
+          shareBtn.addEventListener('click', ()=>{
+            shareLink(tracks[idx].share, `Listen: ${tracks[idx].title}`);
+          });
+        }
+      });
+    }
+    hookMusicCards(document);
+
+    // If URL contains ?track=X on #music, autoload it
+    function tryLoadFromHash(){
+      if (location.hash.startsWith('#music')){
+        const q = location.hash.split('?')[1] || '';
+        const params = new URLSearchParams(q);
+        const i = Number(params.get('track'));
+        if (!Number.isNaN(i)) loadTrack(i);
+      }
+    }
+    window.addEventListener('hashchange', tryLoadFromHash);
+    tryLoadFromHash();
+
+    /* ========= CONTACT FORM (no backend; opens mailto as fallback) ========= */
+    document.getElementById('contactForm').addEventListener('submit', e=>{
+      e.preventDefault();
+      const data = Object.fromEntries(new FormData(e.target).entries());
+      const mail = `mailto:your@email.com?subject=${encodeURIComponent(data.subject||'Oceanbeats Contact')}&body=${encodeURIComponent(
+        `Name: ${data.name}\nEmail: ${data.email}\n\n${data.message}`
+      )}`;
+      window.location.href = mail;
+      toast('Opening your email app…');
+      e.target.reset();
+    });
+
+    /* ========= SHARE on YT cards already wired above ========= */
   </script>
 </body>
 </html>
