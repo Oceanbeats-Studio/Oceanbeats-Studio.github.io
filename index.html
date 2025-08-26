@@ -20,7 +20,7 @@
       --link: #00eaff;
       --btn: radial-gradient(circle at 30% 30%, var(--accentA), var(--accentB));
 
-      /* Player (rounded rectangle) – glass, not white */
+      /* Player (rounded rectangle) – glass */
       --ob-bg: rgba(255,255,255,.06);
       --ob-border: rgba(255,255,255,.14);
       --ob-shadow: 0 10px 26px rgba(0,0,0,.25);
@@ -162,7 +162,7 @@
     .bar > .fill{ position:absolute; left:0; top:0; height:100%; width:0%; background:linear-gradient(90deg,#00eaff,#8a2be2); border-radius:6px; }
     .time{ font-size:12px; opacity:.85; text-align:right }
 
-    /* ===== OB Rounded-Rect Music Player (sticky bottom) – glass ===== */
+    /* ===== OB Player – glass ===== */
     .ob-shell{
       position:sticky; bottom:0; z-index:95;
       margin:20px auto 0; max-width:1200px; padding:0 12px 12px;
@@ -175,31 +175,34 @@
       border-radius: var(--ob-radius);
       box-shadow: var(--ob-shadow);
       padding: 10px 12px;
-      display:none; /* hidden until user plays */
+      display:none; /* hidden until first play */
       grid-template-columns: 80px 1fr auto; /* cover | title+controls | right */
       align-items:center; gap:14px;
     }
     .ob-player.show{ display:grid; }
 
-    /* Top strip / drawer (transparent glass, fade) */
+    /* Top strip / drawer (transparent glass, fade, black icons, square shadows) */
     .obp-strip{
       position:absolute; left:12px; right:12px; bottom:100%; margin-bottom:10px;
       background: rgba(255,255,255,.06); backdrop-filter: blur(8px);
-      color:#fff; border:1px solid rgba(255,255,255,.16);
+      color:#111; border:1px solid rgba(255,255,255,.16);
       border-radius:12px; box-shadow:0 10px 24px rgba(0,0,0,.25);
       padding:8px; display:flex; gap:12px; justify-content:center;
-      opacity:0; pointer-events:none; transform: translateY(6px); transition: opacity .2s ease, transform .2s ease;
+      opacity:0; pointer-events:none; transform: translateY(6px);
+      transition: opacity .35s ease, transform .35s ease;
       z-index:12;
     }
     .obp-strip.show{ opacity:1; pointer-events:auto; transform: translateY(0); }
     .strip-icon{
-      width:44px; height:44px; border-radius:10px;
-      background: rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.18);
+      width:46px; height:46px; border-radius:12px;
+      background: rgba(255,255,255,.9);
+      border:1px solid rgba(0,0,0,.08);
       display:grid; place-items:center; cursor:pointer;
-      transition:transform .15s, background .15s;
+      box-shadow:0 8px 18px rgba(0,0,0,.18);
+      transition: transform .15s, box-shadow .15s, background .15s;
     }
-    .strip-icon:hover{ transform: translateY(-2px); background: rgba(255,255,255,.14); }
-    .strip-icon svg{ width:22px; height:22px; fill:#fff; }
+    .strip-icon:hover{ transform: translateY(-2px); box-shadow:0 12px 26px rgba(0,0,0,.22); background:#fff; }
+    .strip-icon svg{ width:22px; height:22px; fill:#000; }
 
     /* CD cover (circular, thin dark ring) */
     .obp-cover-wrap{
@@ -212,7 +215,7 @@
       width:60px; height:60px; border-radius:50%;
       object-fit:cover; display:block;
       border:1px solid var(--cd-ring);
-      background:#fff; /* avoids dark edge on transparent art */
+      background:#fff;
       animation:none;
     }
     .cd-rotate{ animation: spin 6s linear infinite; }
@@ -237,7 +240,6 @@
     }
     .obp-btn:hover{ transform: translateY(-2px); background: rgba(255,255,255,.10); border-color: rgba(255,255,255,.35); }
     .obp-btn svg{ width:20px; height:20px; fill:#fff; }
-    .obp-btn .label{ font-weight:800; font-size:13px; letter-spacing:.5px; }
 
     /* Progress */
     .obp-progress{ width:100%; display:flex; align-items:center; gap:8px; }
@@ -245,7 +247,7 @@
     .obp-bar{ position:relative; height:8px; flex:1; background:var(--progress-bg); border-radius:6px; cursor:pointer; }
     .obp-bar .fill{ position:absolute; left:0; top:0; height:100%; width:0%; background:var(--progress-fill); border-radius:6px; }
 
-    /* Right side: mode ([R]/[NR]/[S]) + three-dots */
+    /* Right side: star (repeat-one) + three-dots */
     .obp-right{ display:flex; align-items:center; gap:8px; }
     .obp-menu-btn{
       width:42px; height:42px; border-radius:10px; border:1px solid rgba(255,255,255,.25);
@@ -253,8 +255,7 @@
     }
     .obp-menu-btn svg{ width:20px; height:20px; fill:#fff; }
 
-    .page-hidden{ display:none !important;}
-
+    /* Mobile tweaks: make progress bar longer */
     @media (max-width:900px){
       .yt-grid{ display:none; }
       .mobile-only{ display:block; }
@@ -263,12 +264,17 @@
       .nav-inner{ gap:8px }
       .nav-link{ width:44px; height:44px }
 
-      .ob-player{ gap:12px; padding:10px; grid-template-columns:70px 1fr auto; }
+      .ob-player{ gap:10px; padding:10px; grid-template-columns:70px 1fr auto; }
       .obp-cover-wrap{ width:62px; height:62px; }
       .obp-cover{ width:54px; height:54px; }
       .obp-title{ font-size:16px; }
       .obp-btn, .obp-menu-btn{ min-width:40px; height:40px; }
       .obp-controls{ gap:8px; }
+
+      /* Longer progress bar on mobile */
+      .obp-progress{ gap:6px; }
+      .obp-bar{ flex:1.6; } /* more length */
+      .obp-time{ min-width:38px; }
     }
 
     footer{ text-align:center; color:#bcd; opacity:.8; padding:24px 10px; margin-top:10px; border-top:1px solid rgba(255,255,255,.08)}
@@ -305,7 +311,7 @@
 
   <main>
     <div id="site-content">
-      <!-- YOUTUBE (considered part of "home" for scroll spy) -->
+      <!-- YOUTUBE (part of "home" for scroll spy) -->
       <section id="youtube">
         <div class="yt-grid">
           <div class="card">
@@ -525,12 +531,11 @@
       </div>
     </section>
 
-    <!-- ===== OB Rounded-Rect Music Player (sticky bottom) ===== -->
+    <!-- ===== OB Player ===== -->
     <div class="ob-shell">
       <div class="ob-player" id="obPlayer">
-        <!-- Top strip opened by 3-dots (transparent glass, icons) -->
+        <!-- Top strip -->
         <div class="obp-strip" id="obpStrip">
-          <!-- Go to YT area (so "home" shows the videos as you wanted) -->
           <a class="strip-icon" href="#youtube" title="Home" aria-label="Home">
             <svg viewBox="0 0 24 24"><path d="M12 3l9 8h-3v9h-5v-6H11v6H6v-9H3l9-8z"/></svg>
           </a>
@@ -548,7 +553,7 @@
           </button>
         </div>
 
-        <!-- Cover (CD) -->
+        <!-- Cover -->
         <div class="obp-cover-wrap">
           <img class="obp-cover" id="obpCover" src="" alt="Cover">
         </div>
@@ -556,7 +561,6 @@
         <!-- Center -->
         <div class="obp-center">
           <h3 class="obp-title" id="obpTitle">Oceanbeats</h3>
-
           <div class="obp-controls-row">
             <div class="obp-controls">
               <!-- Order: Next – Play/Pause – Prev -->
@@ -571,7 +575,6 @@
               </button>
             </div>
           </div>
-
           <!-- Progress -->
           <div class="obp-progress">
             <div class="obp-time" id="obpCur">0:00</div>
@@ -580,10 +583,13 @@
           </div>
         </div>
 
-        <!-- Right: playback mode ([R]/[NR]/[S]) + three-dots -->
+        <!-- Right: Star (repeat-one) + 3-dots -->
         <div class="obp-right">
-          <button class="obp-btn" id="obpMode" title="Repeat" aria-label="Playback mode">
-            <span id="obpModeLabel" class="label">[R]</span>
+          <button class="obp-btn" id="obpStar" title="Repeat this song" aria-label="Repeat this song">
+            <!-- star (outline by default) -->
+            <svg id="obpStarIcon" viewBox="0 0 24 24">
+              <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" fill="none" stroke="#fff" stroke-width="2" />
+            </svg>
           </button>
 
           <button class="obp-menu-btn" id="obpMenuBtn" title="More" aria-haspopup="true" aria-expanded="false">
@@ -591,7 +597,6 @@
           </button>
         </div>
 
-        <!-- Single audio element -->
         <audio id="obpAudio" preload="auto"></audio>
       </div>
     </div>
@@ -613,16 +618,12 @@
     if (flipBtn && flipBox){
       flipBtn.addEventListener('click', () => flipBox.classList.toggle('flipped'));
       let startX = 0, startY = 0, isTouch = false;
-      flipBox.addEventListener('touchstart', e => {
-        isTouch = true; startX = e.touches[0].clientX; startY = e.touches[0].clientY;
-      }, {passive:true});
+      flipBox.addEventListener('touchstart', e => { isTouch = true; startX = e.touches[0].clientX; startY = e.touches[0].clientY; }, {passive:true});
       flipBox.addEventListener('touchend', e => {
         if(!isTouch) return;
         const dx = e.changedTouches[0].clientX - startX;
         const dy = e.changedTouches[0].clientY - startY;
-        if(Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy)){
-          flipBox.classList.toggle('flipped');
-        }
+        if(Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy)){ flipBox.classList.toggle('flipped'); }
         isTouch = false;
       });
     }
@@ -640,7 +641,7 @@
       btn.addEventListener('click', ()=> shareSomething('Oceanbeats on YouTube', btn.dataset.share) );
     });
 
-    /* ---- SPA route for contact/privacy + scroll-spy for top nav ---- */
+    /* ---- SPA: contact/privacy + scroll spy for nav ---- */
     const sectionsSinglePage=['contact','privacy'];
     const siteContent=document.getElementById('site-content');
     const navLinks=[...document.querySelectorAll('.nav-link')];
@@ -663,7 +664,6 @@
     window.addEventListener('hashchange',updateRoute);
     document.addEventListener('DOMContentLoaded',updateRoute);
 
-    // Scroll spy: home is active when #home OR #youtube is in view
     const spyTargets = [
       {id:'home', el: document.getElementById('home')},
       {id:'youtube', el: document.getElementById('youtube')},
@@ -671,14 +671,13 @@
       {id:'love-quotes', el: document.getElementById('love-quotes')}
     ].filter(x=>x.el);
     const spy = new IntersectionObserver((entries)=>{
-      // pick the one with largest intersection ratio
       let best = entries.filter(e=>e.isIntersecting).sort((a,b)=>b.intersectionRatio - a.intersectionRatio)[0];
       if(best){
         const id = best.target.id;
         if(id==='home' || id==='youtube'){ setActive('home'); }
         else { setActive(id); }
       }
-    }, {root:null, rootMargin:'-40% 0px -50% 0px', threshold:[0, .25, .5, .75, 1]});
+    }, {root:null, rootMargin:'-40% 0px -50% 0px', threshold:[0,.25,.5,.75,1]});
     spyTargets.forEach(t=> spy.observe(t.el));
 
     /* ---- Player wiring ---- */
@@ -690,8 +689,8 @@
     const $play    = document.getElementById('obpPlay');
     const $playIc  = document.getElementById('obpPlayIcon');
     const $prev    = document.getElementById('obpPrev');
-    const $modeBtn = document.getElementById('obpMode');
-    const $modeLabel= document.getElementById('obpModeLabel');
+    const $starBtn = document.getElementById('obpStar');
+    const $starIc  = document.getElementById('obpStarIcon');
     const $menuBtn = document.getElementById('obpMenuBtn');
     const $strip   = document.getElementById('obpStrip');
     const $stripShare = document.getElementById('stripShare');
@@ -710,18 +709,21 @@
     let isPlaying = false;
     let currentCard = null;
 
-    // playbackMode: 'repeat' | 'norepeat' | 'shuffle'
-    let playbackMode = 'repeat';
-    function setModeLabel(){
-      if(playbackMode==='repeat'){ $modeLabel.textContent='[R]'; $modeBtn.title='Repeat'; }
-      else if(playbackMode==='norepeat'){ $modeLabel.textContent='[NR]'; $modeBtn.title='No Repeat'; }
-      else { $modeLabel.textContent='[S]'; $modeBtn.title='Shuffle'; }
+    // repeat-one state via star toggle
+    let repeatOne = false;
+    function setStarUI(){
+      if(repeatOne){
+        // filled star (selected)
+        $starIc.innerHTML = '<path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2l-2.81 6.63L2 9.24l5.46 4.73L5.82 21z" fill="#fff"/>';
+        $starBtn.title = 'Repeat this song (ON)';
+      }else{
+        // outline star (not selected)
+        $starIc.innerHTML = '<path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" fill="none" stroke="#fff" stroke-width="2"/>';
+        $starBtn.title = 'Repeat this song (OFF)';
+      }
     }
-    $modeBtn.addEventListener('click', ()=>{
-      playbackMode = playbackMode==='repeat' ? 'norepeat' : (playbackMode==='norepeat' ? 'shuffle' : 'repeat');
-      setModeLabel();
-    });
-    setModeLabel();
+    $starBtn.addEventListener('click', ()=>{ repeatOne = !repeatOne; setStarUI(); });
+    setStarUI();
 
     function selectCardUI(ci, playing){
       cards.forEach((c, i)=>{
@@ -796,7 +798,7 @@
       else { $audio.pause(); }
     }
 
-    // Real audio state keeps UI in sync
+    // Keep UI synced with real audio state
     $audio.addEventListener('play',  ()=>{ isPlaying=true;  $playIc.innerHTML='<path d="M6 5h4v14H6zM14 5h4v14h-4z"/>'; selectCardUI(index, true); updateMediaSessionPlaybackState(); });
     $audio.addEventListener('pause', ()=>{ isPlaying=false; $playIc.innerHTML='<path d="M8 5v14l11-7z"/>'; selectCardUI(index, false); updateMediaSessionPlaybackState(); });
     $audio.addEventListener('durationchange', ()=>{ $durT.textContent = fmt($audio.duration||0); });
@@ -811,13 +813,11 @@
       $curT.textContent = fmt($audio.currentTime||0);
     });
     $audio.addEventListener('ended', ()=>{
-      if(playbackMode==='shuffle'){
-        let n; do{ n = Math.floor(Math.random()*tracks.length); } while(n===index && tracks.length>1);
-        load(n, true);
-      }else if(playbackMode==='repeat'){
-        load(index+1, true);
+      if(repeatOne){
+        $audio.currentTime = 0;
+        $audio.play().catch(()=>{});
       }else{
-        $audio.pause(); $audio.currentTime = 0;
+        load(index+1, true);
       }
       updateMediaSessionPlaybackState();
     });
@@ -852,20 +852,10 @@
 
     // Player controls
     $play.addEventListener('click', ()=>{ if(!$audio.src) load(index); setPlay(!isPlaying); });
-    $next.addEventListener('click', ()=>{ 
-      if(playbackMode==='shuffle'){
-        let n; do{ n = Math.floor(Math.random()*tracks.length); } while(n===index && tracks.length>1);
-        load(n, true);
-      }else{ load(index+1, true); }
-    });
-    $prev.addEventListener('click', ()=>{ 
-      if(playbackMode==='shuffle'){
-        let n; do{ n = Math.floor(Math.random()*tracks.length); } while(n===index && tracks.length>1);
-        load(n, true);
-      }else{ load(index-1, true); }
-    });
+    $next.addEventListener('click', ()=> load(index+1, true));
+    $prev.addEventListener('click', ()=> load(index-1, true));
 
-    // Three dots -> show/hide transparent strip (fade) ; auto-close after click
+    // Three dots -> show/hide transparent strip (fade). Close slowly after action.
     function closeStrip(){ $strip.classList.remove('show'); $menuBtn.setAttribute('aria-expanded','false'); }
     function openStrip(){ $strip.classList.add('show'); $menuBtn.setAttribute('aria-expanded','true'); }
     document.addEventListener('click', (e)=>{
@@ -877,12 +867,12 @@
       if($strip.classList.contains('show')) closeStrip(); else openStrip();
     });
 
-    // Share/Download (strip) – fade out after action
+    // Strip actions: fade out after picking an option
     function doShare(){
       const t = tracks[index] || {title:'Oceanbeats'};
       const url = window.location.href.split('#')[0] + '#music';
       shareSomething(`${t.title} — Oceanbeats`, url);
-      closeStrip();
+      closeStrip(); // fades (CSS .35s)
     }
     function doDownload(){
       const t = tracks[index]; if(!t) return;
@@ -890,12 +880,12 @@
       a.href = t.src;
       a.download = (t.title||'Oceanbeats').replace(/[^\w\s-]/g,'').replace(/\s+/g,'_') + '.mp3';
       a.click();
-      closeStrip();
+      closeStrip(); // fades
     }
     document.getElementById('stripShare').addEventListener('click', doShare);
     document.getElementById('stripDownload').addEventListener('click', doDownload);
 
-    // Keep player hidden until first manual play: no pre-init
+    // Player is hidden until first manual play (no pre-init load)
   </script>
 </body>
 </html>
