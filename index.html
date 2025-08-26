@@ -20,11 +20,11 @@
       --link: #00eaff;
       --btn: radial-gradient(circle at 30% 30%, var(--accentA), var(--accentB));
 
-      /* Pill player vars */
+      /* Pill player vars (rounded rectangle) */
       --ob-bg: rgba(255,255,255,.92);
       --ob-border: rgba(0,0,0,.08);
       --ob-shadow: 0 10px 26px rgba(0,0,0,.20);
-      --ob-pill: 999px;
+      --ob-radius: 22px;      /* rectangular rounded */
       --ob-accent: #111;
       --ob-muted: rgba(0,0,0,.55);
     }
@@ -167,37 +167,38 @@
     .bar > .fill{ position:absolute; left:0; top:0; height:100%; width:0%; background:linear-gradient(90deg,#00eaff,#8a2be2); border-radius:6px; }
     .time{ font-size:12px; opacity:.85; text-align:right }
 
-    /* ===== OB Pill Music Player (sticky bottom) ===== */
+    /* ===== OB Rounded-Rect Music Player (sticky bottom) ===== */
     .ob-shell{
       position:sticky; bottom:0; z-index:95;
       margin:20px auto 0; max-width:1200px; padding:0 12px 12px;
     }
     .ob-player{
-      max-width: 720px; margin: 0 auto;
+      max-width: 820px; margin: 0 auto;
       background: var(--ob-bg);
       border: 1px solid var(--ob-border);
-      border-radius: var(--ob-pill);
+      border-radius: var(--ob-radius);
       box-shadow: var(--ob-shadow);
       padding: 14px 16px;
-      display: grid;
-      grid-template-columns: 88px 1fr 64px;
-      align-items: center; gap: 16px;
       display:none; /* hidden until user plays something */
+      display:grid;
+      grid-template-columns: 84px 1fr auto auto; /* cover | title+controls | volume | share */
+      align-items:center; gap:16px;
     }
     .ob-player.show{ display:grid; }
 
     .obp-cover{
-      width:72px; height:72px; border-radius:16px;
+      width:72px; height:72px; border-radius:14px;
       object-fit:cover; display:block; border:1px solid var(--ob-border);
     }
+
     .obp-center{ display:flex; flex-direction:column; align-items:center; gap:10px; min-width:0; }
     .obp-title{
       margin:0; font-weight:700; font-size:20px; color:#111; text-align:center;
       white-space:nowrap; overflow:hidden; text-overflow:ellipsis; width:100%;
     }
-    .obp-controls{ display:flex; align-items:center; gap:18px; }
+    .obp-controls{ display:flex; align-items:center; gap:12px; }
     .obp-btn{
-      width:44px; height:44px; border-radius:12px; border:1px solid var(--ob-border);
+      width:44px; height:44px; border-radius:10px; border:1px solid var(--ob-border);
       background:#fff; display:grid; place-items:center; cursor:pointer;
       box-shadow:0 4px 12px rgba(0,0,0,.10);
       transition: transform .15s, box-shadow .15s;
@@ -208,7 +209,7 @@
 
     .obp-right{ position:relative; height:72px; display:flex; align-items:center; justify-content:center; }
     .obp-speak-btn{
-      width:44px; height:44px; border-radius:12px; border:1px solid var(--ob-border);
+      width:44px; height:44px; border-radius:10px; border:1px solid var(--ob-border);
       background:#fff; display:grid; place-items:center; cursor:pointer;
       box-shadow:0 4px 12px rgba(0,0,0,.10);
     }
@@ -235,8 +236,13 @@
       width:16px; height:16px; border-radius:50%; background:#111; border:2px solid #fff;
       box-shadow:0 2px 6px rgba(0,0,0,.25);
     }
-    .obp-progress{ width:100%; height:4px; border-radius:999px; background:rgba(0,0,0,.08); overflow:hidden; display:none; }
-    .obp-progress > span{ display:block; height:100%; width:0%; background:rgba(0,0,0,.7); }
+
+    .obp-share{
+      width:44px; height:44px; border-radius:10px; border:1px solid var(--ob-border);
+      background:#fff; display:grid; place-items:center; cursor:pointer;
+      box-shadow:0 4px 12px rgba(0,0,0,.10);
+    }
+    .obp-share svg{ width:20px; height:20px; fill:#111; }
 
     /* SPA helpers */
     .page-hidden{ display:none !important;}
@@ -251,12 +257,13 @@
       .nav-link{ width:44px; height:44px }
 
       .ob-player{
-        grid-template-columns: 74px 1fr 54px; gap:12px; padding:12px;
+        grid-template-columns: 72px 1fr auto auto;
+        gap:12px; padding:12px;
       }
-      .obp-cover{ width:64px; height:64px; border-radius:14px; }
+      .obp-cover{ width:60px; height:60px; border-radius:12px; }
       .obp-title{ font-size:18px; }
-      .obp-btn, .obp-speak-btn{ width:40px; height:40px; border-radius:10px; }
-      .obp-controls{ gap:12px; }
+      .obp-btn, .obp-speak-btn, .obp-share{ width:40px; height:40px; border-radius:10px; }
+      .obp-controls{ gap:10px; }
     }
 
     footer{ text-align:center; color:#bcd; opacity:.8; padding:24px 10px; margin-top:10px; border-top:1px solid rgba(255,255,255,.08)}
@@ -355,7 +362,6 @@
               <div class="bar"><div class="fill"></div></div>
               <div class="time">0:00</div>
             </div>
-            <button class="share-btn">Share</button>
           </div>
           <!-- 2 -->
           <div class="music-card" data-title="Your Eyes" data-src="assets/audio/Your_eyes.mp3" data-thumb="assets/thumb/Your Eyes.jpg">
@@ -369,7 +375,6 @@
               <div class="bar"><div class="fill"></div></div>
               <div class="time">0:00</div>
             </div>
-            <button class="share-btn">Share</button>
           </div>
           <!-- 3 -->
           <div class="music-card" data-title="Angel’s Piano" data-src="assets/audio/Angel’s piano.mp3" data-thumb="assets/thumb/Angel Piano.jpg">
@@ -383,7 +388,6 @@
               <div class="bar"><div class="fill"></div></div>
               <div class="time">0:00</div>
             </div>
-            <button class="share-btn">Share</button>
           </div>
           <!-- 4 -->
           <div class="music-card" data-title="It's Okay" data-src="assets/audio/It's okay.mp3" data-thumb="assets/thumb/It's okay.png">
@@ -397,7 +401,6 @@
               <div class="bar"><div class="fill"></div></div>
               <div class="time">0:00</div>
             </div>
-            <button class="share-btn">Share</button>
           </div>
           <!-- 5 -->
           <div class="music-card" data-title="Rekindled Hearts" data-src="assets/audio/Rekindled Hearts.mp3" data-thumb="assets/thumb/Rekindled Hearts.png">
@@ -411,7 +414,6 @@
               <div class="bar"><div class="fill"></div></div>
               <div class="time">0:00</div>
             </div>
-            <button class="share-btn">Share</button>
           </div>
           <!-- 6 -->
           <div class="music-card" data-title="It's a Little Thing" data-src="assets/audio/it is little thing.mp3" data-thumb="assets/thumb/it's a little thing.png">
@@ -425,7 +427,6 @@
               <div class="bar"><div class="fill"></div></div>
               <div class="time">0:00</div>
             </div>
-            <button class="share-btn">Share</button>
           </div>
           <!-- 7 -->
           <div class="music-card" data-title="A Singer Voice" data-src="assets/audio/A Singer Voice.mp3" data-thumb="assets/thumb/A singer voice.png">
@@ -439,7 +440,6 @@
               <div class="bar"><div class="fill"></div></div>
               <div class="time">0:00</div>
             </div>
-            <button class="share-btn">Share</button>
           </div>
           <!-- 8 -->
           <div class="music-card" data-title="Blue Line" data-src="assets/audio/Blue line.mp3" data-thumb="assets/thumb/Blue line.png">
@@ -453,7 +453,6 @@
               <div class="bar"><div class="fill"></div></div>
               <div class="time">0:00</div>
             </div>
-            <button class="share-btn">Share</button>
           </div>
         </div>
       </section>
@@ -527,33 +526,29 @@
       </div>
     </section>
 
-    <!-- ===== OB Pill Music Player (sticky bottom) ===== -->
+    <!-- ===== OB Rounded-Rect Music Player (sticky bottom) ===== -->
     <div class="ob-shell">
       <div class="ob-player" id="obPlayer">
-        <!-- Left: cover -->
+        <!-- Cover -->
         <img class="obp-cover" id="obpCover" src="assets/thumb/Young Hearts Collide.jpg" alt="Cover">
 
-        <!-- Center: title + controls -->
+        <!-- Center: title + controls [Prev - Play/Pause - Next] -->
         <div class="obp-center">
           <h3 class="obp-title" id="obpTitle">Oceanbeats</h3>
           <div class="obp-controls">
-            <!-- Prev -->
             <button class="obp-btn" id="obpPrev" title="Previous" aria-label="Previous">
               <svg viewBox="0 0 24 24"><path d="M6 6h2v12H6V6zm12 6L8 18V6l10 6z"/></svg>
             </button>
-            <!-- Stop -->
-            <button class="obp-btn" id="obpStop" title="Stop" aria-label="Stop">
-              <svg viewBox="0 0 24 24"><path d="M6 6h12v12H6z"/></svg>
-            </button>
-            <!-- Play/Pause -->
             <button class="obp-btn" id="obpPlay" title="Play/Pause" aria-label="Play or pause">
               <svg id="obpPlayIcon" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
             </button>
+            <button class="obp-btn" id="obpNext" title="Next" aria-label="Next">
+              <svg viewBox="0 0 24 24"><path d="M16 6h2v12h-2V6zM6 12l10 6V6L6 12z"/></svg>
+            </button>
           </div>
-          <div class="obp-progress" id="obpProgress"><span></span></div>
         </div>
 
-        <!-- Right: speaker with popup vertical volume -->
+        <!-- Volume popup -->
         <div class="obp-right" id="obpRight">
           <button class="obp-speak-btn" id="obpSpeak" title="Volume" aria-haspopup="true" aria-expanded="false">
             <svg viewBox="0 0 24 24"><path d="M4 9v6h4l5 5V4L8 9H4z"/></svg>
@@ -563,7 +558,12 @@
           </div>
         </div>
 
-        <!-- Hidden single audio element that ALL cards control -->
+        <!-- Share -->
+        <button class="obp-share" id="obpShare" title="Share" aria-label="Share">
+          <svg viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7a3.27 3.27 0 0 0 0-1.39l7-4.11A3 3 0 1 0 14 5a2.99 2.99 0 0 0 .04.49l-7 4.11a3 3 0 1 0 0 4.8l7.05 4.14c-.02.15-.04.31-.04.46a3 3 0 1 0 3-3z"/></svg>
+        </button>
+
+        <!-- Single audio element that ALL cards control -->
         <audio id="obpAudio" preload="metadata"></audio>
       </div>
     </div>
@@ -572,6 +572,13 @@
   <footer>© 2025 Oceanbeats Studio • All rights reserved</footer>
 
   <script>
+    /* ------ helpers ------ */
+    function shareSomething(title, url){
+      if (navigator.share){ navigator.share({title, url}).catch(()=>{}); }
+      else if (navigator.clipboard){ navigator.clipboard.writeText(url).then(()=>alert('Link copied!')).catch(()=>alert(url)); }
+      else { alert(url); }
+    }
+
     /* ------ Mobile flip (YouTube) ------ */
     const flipBox = document.getElementById('ytFlipBox');
     const flipBtn = document.getElementById('flipBtn');
@@ -591,13 +598,7 @@
         isTouch = false;
       });
     }
-    // Mobile share picks current side
     const mobileShareBtn = document.getElementById('mobileShare');
-    function shareSomething(title, url){
-      if (navigator.share){ navigator.share({title, url}).catch(()=>{}); }
-      else if (navigator.clipboard){ navigator.clipboard.writeText(url).then(()=>alert('Link copied!')).catch(()=>alert(url)); }
-      else { alert(url); }
-    }
     if (mobileShareBtn){
       mobileShareBtn.addEventListener('click', ()=>{
         const shortsURL = 'https://www.youtube.com/playlist?list=UUSHY8hfNmsry6kxG1_DPChxqw';
@@ -633,46 +634,39 @@
     window.addEventListener('hashchange',updateRoute);
     document.addEventListener('DOMContentLoaded',updateRoute);
 
-    /* ------ OB Pill Music Player (single audio) ------ */
+    /* ------ OB Rounded-Rect Music Player (single audio) ------ */
     const $obShell  = document.getElementById('obPlayer');
     const $audio   = document.getElementById('obpAudio');
     const $title   = document.getElementById('obpTitle');
     const $cover   = document.getElementById('obpCover');
     const $prev    = document.getElementById('obpPrev');
-    const $stop    = document.getElementById('obpStop');
     const $play    = document.getElementById('obpPlay');
     const $playIc  = document.getElementById('obpPlayIcon');
+    const $next    = document.getElementById('obpNext');
     const $volume  = document.getElementById('obpVolume');
     const $right   = document.getElementById('obpRight');
     const $speak   = document.getElementById('obpSpeak');
-    const $prog    = document.getElementById('obpProgress');
-    const $progFill= $prog.querySelector('span');
+    const $share   = document.getElementById('obpShare');
 
-    // Build playlist from music cards (keeps order in the grid)
+    // Build playlist from cards (keeps grid order)
     const cards = Array.from(document.querySelectorAll('.music-card'));
-    const tracks = cards.map(c=>({
-      title: c.dataset.title,
-      src:   c.dataset.src,
-      cover: c.dataset.thumb
-    }));
+    const tracks = cards.map(c=>({ title:c.dataset.title, src:c.dataset.src, cover:c.dataset.thumb }));
 
     let index = 0;          // current track index
     let isPlaying = false;
     let hideTimer = null;   // for auto-hide volume
-    let currentCard = null; // DOM of the card currently active
+    let currentCard = null; // DOM of active card
 
-    function load(i, fromClick=false){
+    function load(i, autoplay=false){
       index = (i + tracks.length) % tracks.length;
       const t = tracks[index];
       $audio.src = t.src;
       $title.textContent = t.title;
       $cover.src = t.cover;
       $cover.alt = t.title + " cover";
-      $progFill.style.width = '0%';
-      setPlay(false, true);          // pause at load
-      $obShell.classList.add('show'); // reveal pill once used
+      $obShell.classList.add('show');
 
-      // highlight the active card + reset others
+      // highlight active card + reset others
       cards.forEach((c, ci)=>{
         const logo = c.querySelector('.rotating-logo');
         const fill = c.querySelector('.fill');
@@ -689,8 +683,7 @@
         }
       });
 
-      // If load triggered by clicking a card play button, immediately play
-      if (fromClick) setPlay(true);
+      if(autoplay){ setPlay(true); } else { setPlay(false, true); }
     }
 
     function setPlay(playing, pauseOnly=false){
@@ -719,14 +712,15 @@
       }
     }
 
-    // Hook up each card to control the pill
+    // Hook up each card to control the player
     cards.forEach((card, ci)=>{
       const btn = card.querySelector('.pp-btn');
       const bar = card.querySelector('.bar');
-      btn.addEventListener('click', ()=>{
-        // select this track
-        load(ci, true); // load and auto-play
-      });
+      const time = card.querySelector('.time');
+      const fill = card.querySelector('.fill');
+
+      btn.addEventListener('click', ()=>{ load(ci, true); });
+
       bar.addEventListener('click', (e)=>{
         if(index !== ci) return; // only scrub when this card is active
         const rect = bar.getBoundingClientRect();
@@ -734,60 +728,51 @@
         const pct = x / rect.width;
         $audio.currentTime = ($audio.duration||0) * pct;
       });
-      // Share buttons on cards
-      const shareBtn = card.querySelector('.share-btn');
-      shareBtn.addEventListener('click', ()=>{
-        const url = window.location.href.split('#')[0] + '#music';
-        shareSomething(card.dataset.title + ' — Oceanbeats', url);
-      });
+
+      // keep time/fill synced from the audio 'timeupdate' below
     });
 
-    // Pill controls
+    // Player controls
     $play.addEventListener('click', ()=>{ if(!$audio.src) load(index); setPlay(!isPlaying); });
     $prev.addEventListener('click', ()=>{ load(index-1, true); });
-    $stop.addEventListener('click', ()=>{ $audio.pause(); $audio.currentTime = 0; setPlay(false); });
+    $next.addEventListener('click', ()=>{ load(index+1, true); });
 
     // Volume popup (toggle + auto-hide)
     function showVolume(){
       $right.classList.add('open');
       $speak.setAttribute('aria-expanded','true');
-      resetHideTimer();
-    }
-    function hideVolume(){
-      $right.classList.remove('open');
-      $speak.setAttribute('aria-expanded','false');
-      if(hideTimer){ clearTimeout(hideTimer); hideTimer=null; }
-    }
-    function resetHideTimer(){
       if(hideTimer) clearTimeout(hideTimer);
-      hideTimer = setTimeout(hideVolume, 3000);
+      hideTimer = setTimeout(()=>{ $right.classList.remove('open'); $speak.setAttribute('aria-expanded','false'); }, 3000);
     }
     $speak.addEventListener('click', (e)=>{
       e.stopPropagation();
-      if($right.classList.contains('open')) hideVolume(); else showVolume();
+      if($right.classList.contains('open')){ $right.classList.remove('open'); $speak.setAttribute('aria-expanded','false'); }
+      else{ showVolume(); }
     });
     $volume.addEventListener('input', ()=>{ $audio.volume = +$volume.value; showVolume(); });
-    $volume.addEventListener('change', resetHideTimer);
-    document.addEventListener('click', (e)=>{ if(!$right.contains(e.target)) hideVolume(); });
+    document.addEventListener('click', (e)=>{ if(!$right.contains(e.target)) { $right.classList.remove('open'); $speak.setAttribute('aria-expanded','false'); } });
 
-    // Progress + sync to active card
+    // Share button (shares current track)
+    $share.addEventListener('click', ()=>{
+      const t = tracks[index] || {title:'Oceanbeats'};
+      const url = window.location.href.split('#')[0] + '#music';
+      shareSomething(`${t.title} — Oceanbeats`, url);
+    });
+
+    // Progress + sync to active card UI
     $audio.addEventListener('timeupdate', ()=>{
-      if(!$audio.duration) return;
+      if(!$audio.duration || !currentCard) return;
       const pct = ($audio.currentTime/$audio.duration)*100;
-      $progFill.style.width = pct + '%';
-
-      if(currentCard){
-        const fill = currentCard.querySelector('.fill');
-        const time = currentCard.querySelector('.time');
-        if(fill){ fill.style.width = pct + '%'; }
-        if(time){
-          const s = Math.floor($audio.currentTime||0);
-          const m = Math.floor(s/60), r = s%60;
-          time.textContent = m + ':' + (r<10 ? '0'+r : r);
-        }
+      const fill = currentCard.querySelector('.fill');
+      const time = currentCard.querySelector('.time');
+      if(fill) fill.style.width = pct + '%';
+      if(time){
+        const s = Math.floor($audio.currentTime||0);
+        const m = Math.floor(s/60), r = s%60;
+        time.textContent = m + ':' + (r<10 ? '0'+r : r);
       }
     });
-    $audio.addEventListener('ended', ()=> setPlay(false,true));
+    $audio.addEventListener('ended', ()=> setPlay(false, true));
 
     // Init: preload first track meta (no autoplay)
     if(tracks.length){
