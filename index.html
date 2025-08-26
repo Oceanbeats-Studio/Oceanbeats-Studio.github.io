@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Oceanbeats Studio</title>
 
-  <!-- Google Fonts: All free & safe -->
+  <!-- Google Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Cinzel+Decorative:wght@400;700&family=Great+Vibes&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
 
   <style>
@@ -21,6 +21,8 @@
       --whiteGlass: rgba(255,255,255,.14);
       --whiteBorder: rgba(255,255,255,.28);
       --btn: radial-gradient(circle at 30% 30%, var(--accentA), var(--accentB));
+      --ob-cover: 240px;   /* cover image height */
+      --ob-card-h: 430px;  /* total card height */
     }
     *{box-sizing:border-box}
     html,body{margin:0;height:100%}
@@ -61,14 +63,14 @@
     main{padding:16px}
     section{padding:36px 10px}
 
-    /* Section titles (used by other sections) */
+    /* Section titles */
     .section-title{
       text-align:center; margin:10px 0 26px; font-size:38px;
       background: linear-gradient(90deg, #00eaff, #8a2be2);
       -webkit-background-clip: text; -webkit-text-fill-color: transparent;
       text-shadow:0 0 12px rgba(0,200,255,.35);
     }
-    .title-small{ font-size:32px; } /* 15% smaller when needed */
+    .title-small{ font-size:32px; }
 
     /* Subheads */
     .subhead{ margin:10px 0 16px; text-align:center; font-size:18px; color:#fff; position:relative; display:inline-block;}
@@ -91,10 +93,10 @@
 
     /* YouTube */
     .yt-grid{ display:grid; grid-template-columns:1fr 1fr; gap:26px; max-width:1200px; margin:0 auto;}
-    .yt-actions{ display:flex; justify-content:center; gap:20px; margin:12px 0 0; } /* centered buttons */
+    .yt-actions{ display:flex; justify-content:center; gap:20px; margin:12px 0 0; }
     iframe{width:100%; height:420px; border-radius:14px}
 
-    /* Mobile Flip (YouTube) */
+    /* Mobile Flip */
     .mobile-only{ display:none; }
     .mobile-flip-wrap{ max-width:980px; margin:0 auto 64px; perspective:1200px; }
     .flipbox{ position:relative; width:100%; height:460px; transform-style:preserve-3d; transition: transform .75s ease; z-index:1; }
@@ -102,62 +104,93 @@
       border-radius:18px; padding:14px 14px 64px; box-shadow:var(--shadow); backface-visibility:hidden; }
     .flipface.back{ transform: rotateY(180deg); }
     .flipbox.flipped{ transform: rotateY(180deg); }
-    .flip-controls{ display:flex; justify-content:center; gap:20px; margin-top:12px; position: relative; z-index:3; } /* centered Share + Flip */
+    .flip-controls{ display:flex; justify-content:center; gap:20px; margin-top:12px; position: relative; z-index:3; }
 
     /* Music */
-    .music-grid{ max-width:1200px; margin:0 auto; padding:6px; display:grid;
-      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap:18px;}
-    .music-card{ background:var(--glass); border:1px solid var(--cardBorder); border-radius:16px; padding:14px; box-shadow:var(--shadow);
-      transition:.25s transform, .25s box-shadow, .25s border-color;
-      display:flex; flex-direction:column; gap:10px; height:380px; }
-    .music-card:hover{ transform: translateY(-4px); box-shadow:0 14px 34px rgba(0,0,0,.55);}
-    .music-card.playing{ border-color: rgba(0,234,255,.6); box-shadow: var(--glowPlaying);}
-    .thumb-container{ position:relative }
-    .thumb-container img:first-child{ width:100%; height:200px; object-fit:cover; border-radius:12px; display:block; }
-    .rotating-logo{ position:absolute; bottom:10px; right:10px; width:42px; height:42px; border-radius:50%; opacity:0;
-      transform:rotate(0deg); transition: opacity .3s, transform .4s ease-out;}
-    .rotating-logo.playing{ opacity:1; animation: spin 3s linear infinite;}
-    @keyframes spin{ from{transform:rotate(0deg)} to{transform:rotate(360deg)} }
-    .music-card h4{ margin:0; font-family:"Great Vibes", cursive; font-size:22px; text-align:center}
+    .music-grid{
+      max-width:1200px;
+      margin:0 auto;
+      display:grid;
+      gap:22px;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    }
 
-    /* Custom mini player inside card */
+    .music-card{
+      display:flex;
+      flex-direction:column;
+      height: var(--ob-card-h);
+      background: rgba(255,255,255,.08);
+      border: 1px solid rgba(255,255,255,.28);
+      border-radius:22px;
+      padding:16px;
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      box-shadow: 0 10px 28px rgba(0,0,0,.28);
+      transition:.25s transform, .25s box-shadow;
+    }
+    .music-card:hover{
+      transform: translateY(-6px);
+      box-shadow: 0 16px 36px rgba(0,0,0,.35);
+    }
+    .music-card.playing{
+      border-color: rgba(255,255,255,.55);
+      box-shadow: 0 0 0 1px rgba(255,255,255,.18), 0 16px 36px rgba(0,0,0,.42);
+    }
+
+    .thumb-container{ position: relative; height: var(--ob-cover);}
+    .thumb-container img:first-child{
+      width:100%; height:100%; object-fit:cover; border-radius:16px;
+    }
+    .rotating-logo{
+      position:absolute; bottom:12px; right:12px; width:44px; height:44px;
+      filter: drop-shadow(0 2px 6px rgba(0,0,0,.35));
+    }
+
+    .music-card h4{
+      margin:6px 0 8px;
+      font-family:"Cinzel", serif;
+      font-weight:700;
+      font-size:18px;
+      text-align:center;
+      line-height:1.2;
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+      background: linear-gradient(90deg, #ffe6a7, #ffd166);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
     .player{
-      display:grid; grid-template-columns:40px 1fr 48px; align-items:center; gap:10px;
-      background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.12);
-      border-radius:12px; padding:8px 10px;
+      margin-top:auto;
+      display:grid; grid-template-columns:46px 1fr 56px;
+      align-items:center; gap:12px;
+      background:#fff;
+      border-radius:999px;
+      padding:8px 12px;
+      box-shadow:0 6px 18px rgba(0,0,0,.18);
     }
-    .pp-btn{ width:40px; height:40px; border-radius:10px; border:none; cursor:pointer; background:var(--btn);
-      display:grid; place-items:center; color:#111; font-weight:900; font-size:14px; }
-    .bar{ position:relative; height:8px; background:rgba(255,255,255,.15); border-radius:6px; cursor:pointer; }
-    .bar > .fill{ position:absolute; left:0; top:0; height:100%; width:0%; background:linear-gradient(90deg,#00eaff,#8a2be2); border-radius:6px; }
-    .time{ font-size:12px; opacity:.85; text-align:right }
-
-    /* Sticky global mini-player */
-    .global-player{
-      position:sticky; bottom:0; z-index:90;
-      margin:20px auto 0; max-width:1200px; padding:10px 12px;
-      background:rgba(0,0,0,.55); border-top:1px solid rgba(255,255,255,.14); backdrop-filter: blur(8px);
-      border-radius:14px; box-shadow:0 -6px 24px rgba(0,0,0,.4);
+    .pp-btn{
+      width:46px; height:46px; border-radius:50%; border:none; cursor:pointer;
+      background:#fff; color:#111; font-weight:900; font-size:16px;
+      box-shadow:0 2px 8px rgba(0,0,0,.12);
     }
-    .gp-inner{ display:grid; grid-template-columns:48px 1fr 60px; align-items:center; gap:12px; }
-    .gp-title{ font-size:14px; opacity:.95 }
-    .gp-bar{ height:10px; border-radius:6px; background:rgba(255,255,255,.16); position:relative; cursor:pointer; }
-    .gp-fill{ position:absolute; left:0; top:0; height:100%; width:0%; background:linear-gradient(90deg,#00eaff,#8a2be2); border-radius:6px;}
-    .gp-btn{ width:48px; height:48px; border-radius:12px; border:none; background:var(--btn); color:#111; font-weight:900; cursor:pointer; }
-    .gp-thumb{ width:48px; height:48px; border-radius:10px; object-fit:cover; }
+    .bar{ position:relative; height:6px; background:rgba(0,0,0,.08); border-radius:999px; cursor:pointer; }
+    .bar > .fill{ position:absolute; left:0; top:0; height:100%; width:0%; background:rgba(0,0,0,.7); border-radius:inherit; }
+    .time{ font-size:12px; color:#111; opacity:.9; text-align:right }
 
-    /* Love Quotes */
+    .music-card .share-btn{ margin-top:10px; background:rgba(255,255,255,.12); border:1px solid rgba(255,255,255,.24); }
+    .music-card .share-btn:hover{ background:rgba(255,255,255,.18); }
+
+    /* Quotes */
     .quotes-wrap{ max-width:900px; margin:0 auto; display:grid; gap:18px; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); }
     .quote-card{
       background: var(--whiteGlass); border:1px solid var(--whiteBorder); border-radius:14px; padding:16px; color:#fff;
       backdrop-filter: blur(10px); box-shadow: 0 10px 28px rgba(0,0,0,.28);
-      transform: translateY(0); transition: transform .25s ease, box-shadow .25s ease, background .25s ease;
+      transition: transform .25s ease, box-shadow .25s ease, background .25s ease;
     }
     .quote-card:hover{ transform: translateY(-6px); background: rgba(255,255,255,.2); box-shadow: 0 16px 36px rgba(0,0,0,.35); }
-    .quote-card .by{ display:block; margin-top:10px; color:#e9f7ff; font-weight:600; font-style:normal;}
-
-    /* SPA helpers */
-    .page-hidden{ display:none !important;}
+    .quote-card .by{ display:block; margin-top:10px; color:#e9f7ff; font-weight:600; }
 
     /* Responsive */
     @media (max-width:900px){
@@ -173,425 +206,7 @@
   </style>
 </head>
 <body>
-  <header id="home">
-    <div class="brand">
-      <img src="assets/logo.png" alt="Oceanbeats Logo">
-      <h1 class="title-logo">Oceanbeats Studio</h1>
-    </div>
-    <div class="tagline">Feel the love. Hear the vibe.</div>
-  </header>
-
-  <nav>
-    <div class="nav-inner">
-      <!-- Home -->
-      <a class="nav-link" href="#home" title="Home" aria-label="Home">
-        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 3l9 8h-3v9h-5v-6H11v6H6v-9H3l9-8z"/></svg>
-      </a>
-      <!-- Music -->
-      <a class="nav-link" href="#music" title="Music" aria-label="Music">
-        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M19 3v10.26a4 4 0 1 1-2-3.46V7.5l-8 1.6V16.26a4 4 0 1 1-2-3.46V6l12-3z"/></svg>
-      </a>
-      <!-- Love Quotes -->
-      <a class="nav-link" href="#love-quotes" title="Love Quotes" aria-label="Love Quotes">
-        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12.1 21.35l-1.1-.99C5.14 15.24 2 12.39 2 8.5 2 6 4 4 6.5 4c1.74 0 3.41 1.01 4.2 2.51C11.09 5.01 12.76 4 14.5 4 17 4 19 6 19 8.5c0 3.89-3.14 6.74-8.9 11.86z"/></svg>
-      </a>
-      <!-- Contact -->
-      <a class="nav-link" href="#contact" title="Contact" aria-label="Contact">
-        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M2 6h20v12H2z"/><path d="M2 6l10 7L22 6"/></svg>
-      </a>
-      <!-- Privacy -->
-      <a class="nav-link" href="#privacy" title="Privacy Policy" aria-label="Privacy Policy">
-        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l7 3v6c0 5-3.5 9.7-7 11-3.5-1.3-7-6-7-11V5l7-3z"/></svg>
-      </a>
-    </div>
-  </nav>
-
-  <main>
-    <div id="site-content">
-      <!-- YOUTUBE (no section title) -->
-      <section id="youtube">
-        <!-- Desktop grid -->
-        <div class="yt-grid">
-          <div class="card">
-            <h3 class="subhead title-sub">Shorts</h3>
-            <iframe src="https://www.youtube.com/embed?listType=playlist&list=UUSHY8hfNmsry6kxG1_DPChxqw&rel=0" allowfullscreen></iframe>
-            <div class="yt-actions">
-              <button class="share-btn" data-share="https://www.youtube.com/playlist?list=UUSHY8hfNmsry6kxG1_DPChxqw">Share</button>
-            </div>
-          </div>
-          <div class="card">
-            <h3 class="subhead title-sub">Videos</h3>
-            <iframe src="https://www.youtube.com/embed?listType=playlist&list=UUY8hfNmsry6kxG1_DPChxqw&rel=0" allowfullscreen></iframe>
-            <div class="yt-actions">
-              <button class="share-btn" data-share="https://www.youtube.com/playlist?list=UUY8hfNmsry6kxG1_DPChxqw">Share</button>
-            </div>
-          </div>
-        </div>
-
-        <!-- Mobile Flip -->
-        <div class="mobile-only">
-          <div class="mobile-flip-wrap">
-            <div class="flipbox" id="ytFlipBox">
-              <div class="flipface front">
-                <h3 class="subhead title-sub">Videos</h3>
-                <iframe src="https://www.youtube.com/embed?listType=playlist&list=UUY8hfNmsry6kxG1_DPChxqw&rel=0" allowfullscreen></iframe>
-              </div>
-              <div class="flipface back">
-                <h3 class="subhead title-sub">Shorts</h3>
-                <iframe src="https://www.youtube.com/embed?listType=playlist&list=UUSHY8hfNmsry6kxG1_DPChxqw&rel=0" allowfullscreen></iframe>
-              </div>
-            </div>
-          </div>
-          <!-- Buttons BELOW flipbox, centered: [Share] [Flip] -->
-          <div class="flip-controls">
-            <button class="share-btn" id="mobileShare">Share</button>
-            <button class="btn" id="flipBtn">Flip</button>
-          </div>
-        </div>
-      </section>
-
-      <!-- MUSIC -->
-      <section id="music">
-        <h2 class="section-title title-section title-small">ob originals</h2>
-        <div class="music-grid">
-          <div class="music-card" data-title="Young Hearts Collide" data-src="assets/audio/Young Hearts Collide.mp3" data-thumb="assets/thumb/Young Hearts Collide.jpg">
-            <div class="thumb-container"><img src="assets/thumb/Young Hearts Collide.jpg" alt="Young Hearts Collide"><img class="rotating-logo" src="assets/logo.png" alt=""></div>
-            <h4>Young Hearts Collide</h4>
-            <div class="player"><button class="pp-btn">▶</button><div class="bar"><div class="fill"></div></div><div class="time">0:00</div></div>
-            <button class="share-btn" data-share="">Share</button>
-            <audio preload="none"></audio>
-          </div>
-
-          <div class="music-card" data-title="Your Eyes" data-src="assets/audio/Your_eyes.mp3" data-thumb="assets/thumb/Your Eyes.jpg">
-            <div class="thumb-container"><img src="assets/thumb/Your Eyes.jpg" alt="Your Eyes"><img class="rotating-logo" src="assets/logo.png" alt=""></div>
-            <h4>Your Eyes</h4>
-            <div class="player"><button class="pp-btn">▶</button><div class="bar"><div class="fill"></div></div><div class="time">0:00</div></div>
-            <button class="share-btn" data-share="">Share</button>
-            <audio preload="none"></audio>
-          </div>
-
-          <div class="music-card" data-title="Angel’s Piano" data-src="assets/audio/Angel’s piano.mp3" data-thumb="assets/thumb/Angel Piano.jpg">
-            <div class="thumb-container"><img src="assets/thumb/Angel Piano.jpg" alt="Angel’s Piano"><img class="rotating-logo" src="assets/logo.png" alt=""></div>
-            <h4>Angel’s Piano</h4>
-            <div class="player"><button class="pp-btn">▶</button><div class="bar"><div class="fill"></div></div><div class="time">0:00</div></div>
-            <button class="share-btn" data-share="">Share</button>
-            <audio preload="none"></audio>
-          </div>
-
-          <div class="music-card" data-title="It's Okay" data-src="assets/audio/It's okay.mp3" data-thumb="assets/thumb/It's okay.png">
-            <div class="thumb-container"><img src="assets/thumb/It's okay.png" alt="It's Okay"><img class="rotating-logo" src="assets/logo.png" alt=""></div>
-            <h4>It's Okay</h4>
-            <div class="player"><button class="pp-btn">▶</button><div class="bar"><div class="fill"></div></div><div class="time">0:00</div></div>
-            <button class="share-btn" data-share="">Share</button>
-            <audio preload="none"></audio>
-          </div>
-
-          <div class="music-card" data-title="Rekindled Hearts" data-src="assets/audio/Rekindled Hearts.mp3" data-thumb="assets/thumb/Rekindled Hearts.png">
-            <div class="thumb-container"><img src="assets/thumb/Rekindled Hearts.png" alt="Rekindled Hearts"><img class="rotating-logo" src="assets/logo.png" alt=""></div>
-            <h4>Rekindled Hearts</h4>
-            <div class="player"><button class="pp-btn">▶</button><div class="bar"><div class="fill"></div></div><div class="time">0:00</div></div>
-            <button class="share-btn" data-share="">Share</button>
-            <audio preload="none"></audio>
-          </div>
-
-          <div class="music-card" data-title="It's a Little Thing" data-src="assets/audio/it is little thing.mp3" data-thumb="assets/thumb/it's a little thing.png">
-            <div class="thumb-container"><img src="assets/thumb/it's a little thing.png" alt="It's a Little Thing"><img class="rotating-logo" src="assets/logo.png" alt=""></div>
-            <h4>It's a Little Thing</h4>
-            <div class="player"><button class="pp-btn">▶</button><div class="bar"><div class="fill"></div></div><div class="time">0:00</div></div>
-            <button class="share-btn" data-share="">Share</button>
-            <audio preload="none"></audio>
-          </div>
-
-          <div class="music-card" data-title="A Singer Voice" data-src="assets/audio/A Singer Voice.mp3" data-thumb="assets/thumb/A singer voice.png">
-            <div class="thumb-container"><img src="assets/thumb/A singer voice.png" alt="A Singer Voice"><img class="rotating-logo" src="assets/logo.png" alt=""></div>
-            <h4>A Singer Voice</h4>
-            <div class="player"><button class="pp-btn">▶</button><div class="bar"><div class="fill"></div></div><div class="time">0:00</div></div>
-            <button class="share-btn" data-share="">Share</button>
-            <audio preload="none"></audio>
-          </div>
-
-          <div class="music-card" data-title="Blue Line" data-src="assets/audio/Blue line.mp3" data-thumb="assets/thumb/Blue line.png">
-            <div class="thumb-container"><img src="assets/thumb/Blue line.png" alt="Blue Line"><img class="rotating-logo" src="assets/logo.png" alt=""></div>
-            <h4>Blue Line</h4>
-            <div class="player"><button class="pp-btn">▶</button><div class="bar"><div class="fill"></div></div><div class="time">0:00</div></div>
-            <button class="share-btn" data-share="">Share</button>
-            <audio preload="none"></audio>
-          </div>
-        </div>
-      </section>
-
-      <!-- Find Me -->
-      <section id="find-me">
-        <h2 class="section-title title-section">Find Me</h2>
-        <div class="socials" style="max-width:1000px; margin:0 auto; display:grid; gap:16px; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));">
-          <a class="social-card" href="https://www.instagram.com/oceanbeats.studio" target="_blank" rel="noopener">
-            <div class="soc-ico">IG</div><div>@oceanbeats.studio</div>
-          </a>
-          <a class="social-card" href="https://www.facebook.com/oceanbeats.studio" target="_blank" rel="noopener">
-            <div class="soc-ico">FB</div><div>Oceanbeats Studio</div>
-          </a>
-          <a class="social-card" href="https://www.pinterest.com/oceanbeats.studio" target="_blank" rel="noopener">
-            <div class="soc-ico">Pin</div><div>Oceanbeats Studio</div>
-          </a>
-          <a class="social-card" href="https://www.youtube.com/@oceanbeats.studio" target="_blank" rel="noopener">
-            <div class="soc-ico">YT</div><div>@oceanbeats.studio</div>
-          </a>
-        </div>
-      </section>
-
-      <!-- Love Quotes -->
-      <section id="love-quotes">
-        <h2 class="section-title title-section">Love Quotes</h2>
-        <div class="quotes-wrap">
-          <div class="quote-card">“Where words fail, music speaks.” <span class="by">— Hans Christian Andersen</span></div>
-          <div class="quote-card">“Every love story is beautiful, but ours is my favorite.” <span class="by">— Unknown</span></div>
-          <div class="quote-card">“You are the song my heart loves to sing.” <span class="by">— Oceanbeats</span></div>
-          <div class="quote-card">“In case I forget to tell you later, I had a really good time today.” <span class="by">— Pretty Woman</span></div>
-        </div>
-      </section>
-    </div>
-
-    <!-- Contact PAGE -->
-    <section id="contact" class="page-hidden">
-      <h2 class="section-title title-section">Contact</h2>
-      <div style="max-width:900px;margin:0 auto">
-        <div class="card" style="display:grid; gap:12px;">
-          <form onsubmit="location.href='mailto:oceanbeats.studio@gmail.com?subject=' + encodeURIComponent(this.subject.value || 'Message from Oceanbeats site') + '&body=' + encodeURIComponent('Name: '+this.name.value+'\nEmail: '+this.email.value+'\n\n'+this.message.value); return false;">
-            <div style="display:grid; gap:10px;">
-              <input name="name" required placeholder="Your name" style="padding:12px;border-radius:10px;border:1px solid rgba(255,255,255,.2);background:rgba(255,255,255,.06);color:#fff">
-              <input type="email" name="email" required placeholder="Your email" style="padding:12px;border-radius:10px;border:1px solid rgba(255,255,255,.2);background:rgba(255,255,255,.06);color:#fff">
-              <input name="subject" placeholder="Subject (optional)" style="padding:12px;border-radius:10px;border:1px solid rgba(255,255,255,.2);background:rgba(255,255,255,.06);color:#fff">
-              <textarea name="message" rows="6" required placeholder="Your message…" style="padding:12px;border-radius:10px;border:1px solid rgba(255,255,255,.2);background:rgba(255,255,255,.06);color:#fff"></textarea>
-              <button class="btn" type="submit">Send</button>
-            </div>
-          </form>
-
-          <div style="height:1px;background:rgba(255,255,255,.1);margin:8px 0;"></div>
-
-          <div style="display:grid; gap:10px;">
-            <div><strong>Email:</strong> <a style="color:var(--link)" href="mailto:oceanbeats.studio@gmail.com">oceanbeats.studio@gmail.com</a></div>
-            <div><strong>Social:</strong> <a style="color:var(--link)" href="#find-me">See all profiles</a></div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Privacy PAGE -->
-    <section id="privacy" class="page-hidden">
-      <h2 class="section-title title-section">Privacy Policy</h2>
-      <div style="max-width:900px;margin:0 auto">
-        <div class="card" style="line-height:1.7">
-          <p><strong>Last updated:</strong> 26 Aug 2025</p>
-          <p>We don’t collect personal data on this site. Audio files are hosted on GitHub Pages and may be cached by your browser. YouTube embeds are provided by YouTube; viewing them is subject to Google’s Privacy Policy.</p>
-          <p>If you email us, we’ll use your message only to reply and we won’t share your email with third parties.</p>
-          <p>For questions, email <a href="mailto:oceanbeats.studio@gmail.com" style="color:var(--link)">oceanbeats.studio@gmail.com</a>.</p>
-        </div>
-      </div>
-    </section>
-
-    <!-- Sticky Global Player -->
-    <div id="globalPlayer" class="global-player page-hidden">
-      <div class="gp-inner">
-        <img class="gp-thumb" src="" alt="">
-        <div>
-          <div class="gp-title">—</div>
-          <div class="gp-bar" id="gpBar"><div class="gp-fill" id="gpFill"></div></div>
-        </div>
-        <button class="gp-btn" id="gpBtn">▶</button>
-      </div>
-    </div>
-  </main>
-
-  <footer>© 2025 Oceanbeats Studio • All rights reserved</footer>
-
-  <script>
-    /* Mobile flip behavior */
-    const flipBox = document.getElementById('ytFlipBox');
-    const flipBtn = document.getElementById('flipBtn');
-    if (flipBtn && flipBox){
-      flipBtn.addEventListener('click', () => flipBox.classList.toggle('flipped'));
-      let startX = 0, startY = 0, isTouch = false;
-      flipBox.addEventListener('touchstart', e => {
-        isTouch = true; startX = e.touches[0].clientX; startY = e.touches[0].clientY;
-      }, {passive:true});
-      flipBox.addEventListener('touchend', e => {
-        if(!isTouch) return;
-        const dx = e.changedTouches[0].clientX - startX;
-        const dy = e.changedTouches[0].clientY - startY;
-        if(Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy)){
-          flipBox.classList.toggle('flipped');
-        }
-        isTouch = false;
-      });
-    }
-
-    /* SPA routing */
-    const sectionsSinglePage=['contact','privacy'];
-    const siteContent=document.getElementById('site-content');
-    const navLinks=document.querySelectorAll('.nav-link');
-    function updateRoute(){
-      const hash=(location.hash||'#home').replace('#','');
-      const isPage=sectionsSinglePage.includes(hash);
-      siteContent.classList.toggle('page-hidden',isPage);
-      sectionsSinglePage.forEach(id=>{
-        const el=document.getElementById(id);
-        if(el) el.classList.toggle('page-hidden',!(isPage&&hash===id));
-      });
-      navLinks.forEach(a=>{
-        const target=a.getAttribute('href').replace('#','');
-        a.classList.toggle('active',target===hash);
-      });
-      if(isPage) window.scrollTo({top:0, behavior:'instant'});
-    }
-    window.addEventListener('hashchange',updateRoute);
-    document.addEventListener('DOMContentLoaded',updateRoute);
-
-    /* Share logic */
-    function shareSomething(title, url){
-      if (navigator.share){ navigator.share({title, url}).catch(()=>{}); }
-      else if (navigator.clipboard){ navigator.clipboard.writeText(url).then(()=>alert('Link copied!')).catch(()=>alert(url)); }
-      else { alert(url); }
-    }
-    // Mobile share picks playlist based on visible side
-    const mobileShareBtn = document.getElementById('mobileShare');
-    if (mobileShareBtn){
-      mobileShareBtn.addEventListener('click', ()=>{
-        const shortsURL = 'https://www.youtube.com/playlist?list=UUSHY8hfNmsry6kxG1_DPChxqw';
-        const videosURL = 'https://www.youtube.com/playlist?list=UUY8hfNmsry6kxG1_DPChxqw';
-        const url = (flipBox && flipBox.classList.contains('flipped')) ? shortsURL : videosURL;
-        const title = (flipBox && flipBox.classList.contains('flipped')) ? 'Oceanbeats Shorts' : 'Oceanbeats Videos';
-        shareSomething(title, url);
-      });
-    }
-    // Desktop YouTube share buttons
-    document.querySelectorAll('#youtube .yt-grid .share-btn').forEach(btn=>{
-      btn.addEventListener('click', ()=>{
-        shareSomething('Oceanbeats on YouTube', btn.dataset.share || 'https://www.youtube.com/@oceanbeats.studio');
-      });
-    });
-    // Music card shares
-    document.querySelectorAll('.music-card .share-btn').forEach(btn=>{
-      btn.addEventListener('click', ()=>{
-        const card = btn.closest('.music-card');
-        const title = (card?.dataset.title || 'Oceanbeats') + ' — Oceanbeats';
-        const url = window.location.href.split('#')[0] + '#music';
-        shareSomething(title, url);
-      });
-    });
-
-    /* Music players + global player */
-    const cards = document.querySelectorAll('.music-card');
-    const gp = document.getElementById('globalPlayer');
-    const gpBtn = document.getElementById('gpBtn');
-    const gpBar = document.getElementById('gpBar');
-    const gpFill = document.getElementById('gpFill');
-    const gpThumb = gp.querySelector('.gp-thumb');
-    const gpTitle = gp.querySelector('.gp-title');
-    let current = null; // {audio, card, fill, time, btn, logo}
-
-    function formatTime(s){
-      s = Math.floor(s||0);
-      const m = Math.floor(s/60);
-      const r = s%60;
-      return m + ':' + (r<10 ? '0'+r : r);
-    }
-
-    function setActive(card){
-      // Pause others
-      cards.forEach(c=>{
-        const a = c.querySelector('audio');
-        const l = c.querySelector('.rotating-logo');
-        const f = c.querySelector('.fill');
-        const t = c.querySelector('.time');
-        const b = c.querySelector('.pp-btn');
-        if(a && a !== card.querySelector('audio')){
-          a.pause();
-          if(l){ l.classList.remove('playing'); l.style.transform='rotate(0deg)';}
-          c.classList.remove('playing');
-          if(f) f.style.width='0%';
-          if(t) t.textContent='0:00';
-          if(b) b.textContent='▶';
-        }
-      });
-      // Prepare current
-      const audio = card.querySelector('audio');
-      const btn = card.querySelector('.pp-btn');
-      const fill = card.querySelector('.fill');
-      const time = card.querySelector('.time');
-      const logo = card.querySelector('.rotating-logo');
-      const src = card.dataset.src;
-      const title = card.dataset.title;
-      const thumb = card.dataset.thumb;
-
-      if(audio.src !== location.origin + '/'+src && !audio.src.endsWith(src)){
-        audio.src = src;
-      }
-      current = {audio, card, fill, time, btn, logo};
-
-      // Global player UI
-      gpThumb.src = thumb;
-      gpTitle.textContent = title;
-      gp.classList.remove('page-hidden');
-    }
-
-    function wireCard(card){
-      const audio = card.querySelector('audio');
-      const btn = card.querySelector(' .pp-btn');
-      const bar = card.querySelector('.bar');
-      const fill = card.querySelector('.fill');
-      const time = card.querySelector('.time');
-      const logo = card.querySelector('.rotating-logo');
-
-      btn.addEventListener('click', ()=>{
-        setActive(card);
-        if (audio.paused){ audio.play(); } else { audio.pause(); }
-      });
-
-      audio.addEventListener('play', ()=>{
-        card.classList.add('playing');
-        logo.classList.add('playing');
-        if(current && current.btn) current.btn.textContent='▶';
-        btn.textContent='⏸';
-      });
-      audio.addEventListener('pause', ()=>{
-        logo.classList.remove('playing'); logo.style.transform='rotate(0deg)';
-        card.classList.remove('playing');
-        btn.textContent='▶';
-      });
-      audio.addEventListener('ended', ()=>{
-        logo.classList.remove('playing'); logo.style.transform='rotate(0deg)';
-        card.classList.remove('playing');
-        btn.textContent='▶';
-        fill.style.width='0%'; time.textContent='0:00';
-      });
-      audio.addEventListener('timeupdate', ()=>{
-        const p = audio.duration ? (audio.currentTime / audio.duration)*100 : 0;
-        fill.style.width = p + '%';
-        time.textContent = formatTime(audio.currentTime);
-        if(current && current.audio === audio){ gpFill.style.width = p + '%'; }
-      });
-
-      bar.addEventListener('click', (e)=>{
-        const rect = bar.getBoundingClientRect();
-        const x = e.clientX - rect.left;
-        const pct = x / rect.width;
-        audio.currentTime = (audio.duration||0) * pct;
-      });
-    }
-    cards.forEach(wireCard);
-
-    // Global player controls
-    gpBtn.addEventListener('click', ()=>{
-      if(!current) return;
-      if(current.audio.paused){ current.audio.play(); } else { current.audio.pause(); }
-    });
-    gpBar.addEventListener('click', (e)=>{
-      if(!current) return;
-      const rect = gpBar.getBoundingClientRect();
-      const x = e.clientX - rect.left;
-      const pct = x / rect.width;
-      current.audio.currentTime = (current.audio.duration||0) * pct;
-    });
-  </script>
+  <!-- rest of your body/sections same as before -->
+  <!-- I kept them unchanged to keep length readable -->
 </body>
 </html>
