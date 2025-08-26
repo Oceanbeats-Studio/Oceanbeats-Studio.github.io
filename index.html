@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Oceanbeats Studio</title>
 
-  <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <!-- Google Fonts: All free & safe -->
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Cinzel+Decorative:wght@400;700&family=Great+Vibes&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
 
   <style>
     :root{
@@ -17,6 +18,8 @@
       --shadow: 0 12px 30px rgba(0,0,0,.45);
       --glowPlaying: 0 0 18px rgba(0,234,255,.55), 0 0 36px rgba(138,43,226,.35);
       --link: #00eaff;
+      --whiteGlass: rgba(255,255,255,.14);
+      --whiteBorder: rgba(255,255,255,.28);
     }
     *{box-sizing:border-box}
     html,body{margin:0;height:100%}
@@ -27,225 +30,88 @@
       background: linear-gradient(135deg,var(--bg1),var(--bg2),var(--bg3)) fixed;
     }
 
+    /* ===== Font assignments ===== */
+    .title-logo{ font-family: "Great Vibes", cursive; }
+    .title-section{ font-family: "Cinzel Decorative", "Cinzel", serif; }
+    .title-sub{ font-family: "Cinzel", serif; text-transform:uppercase; letter-spacing:3px; font-weight:700; }
+
     /* Header / Branding */
-    header{
-      padding:24px 18px 10px;
-      text-align:center;
-      position:sticky; top:0; z-index:60;
-      background: linear-gradient(180deg, rgba(0,0,0,.65), rgba(0,0,0,0));
-      backdrop-filter: blur(6px);
-    }
-    .brand{
-      display:flex; align-items:center; justify-content:center; gap:14px;
-    }
-    .brand img{
-      width:78px; height:78px; border-radius:50%;
-      box-shadow:0 0 28px rgba(0,234,255,.35);
-    }
-    .brand h1{
-      margin:0; line-height:1;
-      font-family: "Great Vibes", cursive;
-      font-size: 64px; /* bigger main name */
-      color:#fff; text-shadow:0 0 18px rgba(0,200,255,.6);
-    }
-    .tagline{
-      margin-top:6px; opacity:.9; color:var(--sub);
-      font-size:14px;
-    }
+    header{ padding:24px 18px 10px; text-align:center; position:sticky; top:0; z-index:60;
+      background: linear-gradient(180deg, rgba(0,0,0,.65), rgba(0,0,0,0)); backdrop-filter: blur(6px);}
+    .brand{ display:flex; align-items:center; justify-content:center; gap:14px; }
+    .brand img{ width:78px; height:78px; border-radius:50%; box-shadow:0 0 28px rgba(0,234,255,.35);}
+    .brand h1{ margin:0; line-height:1; font-size: 64px; color:#fff; text-shadow:0 0 18px rgba(0,200,255,.6);}
+    .tagline{ margin-top:6px; opacity:.9; color:var(--sub); font-size:14px; }
 
     /* Nav */
-    nav{
-      position:sticky; top:108px; z-index:59;
-      background:rgba(0,0,0,.45);
-      border-top:1px solid rgba(255,255,255,.06);
-      border-bottom:1px solid rgba(255,255,255,.06);
-      backdrop-filter: blur(6px);
-    }
-    .nav-inner{
-      max-width:1200px; margin:0 auto; padding:10px 16px;
-      display:flex; gap:14px; justify-content:center; flex-wrap:wrap;
-    }
-    .nav-link{
-      padding:10px 14px; border-radius:12px; text-decoration:none;
-      color:#eafcff; font-weight:700; letter-spacing:.2px;
+    nav{ position:sticky; top:108px; z-index:59; background:rgba(0,0,0,.45);
+      border-top:1px solid rgba(255,255,255,.06); border-bottom:1px solid rgba(255,255,255,.06); backdrop-filter: blur(6px);}
+    .nav-inner{ max-width:1200px; margin:0 auto; padding:10px 16px; display:flex; gap:14px; justify-content:center; flex-wrap:wrap;}
+    .nav-link{ padding:10px 14px; border-radius:12px; text-decoration:none; color:#eafcff; font-weight:700; letter-spacing:.2px;
       background:linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.02));
-      border:1px solid rgba(255,255,255,.09);
-      box-shadow:0 4px 18px rgba(0,0,0,.25);
-      transition:.2s transform, .2s box-shadow, .2s background, .2s color;
-    }
-    .nav-link:hover{ transform: translateY(-2px); box-shadow:0 8px 24px rgba(0,0,0,.35); }
-    .nav-link.active{
-      color:#111; background: radial-gradient(circle at 30% 30%, var(--accentA), var(--accentB));
-      border-color: transparent;
-    }
+      border:1px solid rgba(255,255,255,.09); box-shadow:0 4px 18px rgba(0,0,0,.25);
+      transition:.2s transform, .2s box-shadow, .2s background, .2s color;}
+    .nav-link:hover{ transform: translateY(-2px); box-shadow:0 8px 24px rgba(0,0,0,.35);}
+    .nav-link.active{ color:#111; background: radial-gradient(circle at 30% 30%, var(--accentA), var(--accentB)); border-color: transparent;}
 
     main{padding:16px}
-
     section{padding:36px 10px}
 
-    /* Premium section titles (no emojis) */
-    .section-title{
-      text-align:center;
-      margin:10px 0 26px;
-      font-size:36px;
-      font-family: "Great Vibes", cursive;
-      letter-spacing:1px;
+    /* Section titles */
+    .section-title{ text-align:center; margin:10px 0 26px; font-size:38px;
       background: linear-gradient(90deg, #00eaff, #8a2be2);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      color: transparent;
-      text-shadow:0 0 12px rgba(0,200,255,.4);
-    }
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      text-shadow:0 0 12px rgba(0,200,255,.35);}
+    /* Subheads */
+    .subhead{ margin:10px 0 16px; text-align:center; font-size:18px; color:#fff; position:relative; display:inline-block;}
+    .subhead::after{ content:""; display:block; width:42px; height:3px;
+      background: linear-gradient(90deg, #00eaff, #8a2be2); margin:6px auto 0; border-radius:2px;}
 
-    /* Subheads (Shorts, Videos) */
-    .subhead{
-      margin:10px 0 16px;
-      text-align:center;
-      font-family: Inter, sans-serif;
-      font-size:18px;
-      font-weight:800;
-      text-transform:uppercase;
-      letter-spacing:3px;
-      color:#ffffff;
-      position:relative;
-      display:inline-block;
-    }
-    .subhead::after{
-      content:"";
-      display:block;
-      width:40px;
-      height:3px;
-      background: linear-gradient(90deg, #00eaff, #8a2be2);
-      margin:6px auto 0;
-      border-radius:2px;
-    }
-
-    /* Desktop grid (>= 901px) */
-    .yt-grid{
-      display:grid; grid-template-columns:1fr 1fr; gap:26px;
-      max-width:1200px; margin:0 auto;
-    }
-    .card{
-      background:var(--glass);
-      border:1px solid var(--cardBorder);
-      border-radius:18px; padding:16px;
-      box-shadow:var(--shadow);
-    }
+    /* YouTube */
+    .yt-grid{ display:grid; grid-template-columns:1fr 1fr; gap:26px; max-width:1200px; margin:0 auto;}
+    .card{ background:var(--glass); border:1px solid var(--cardBorder); border-radius:18px; padding:16px; box-shadow:var(--shadow);}
     iframe{width:100%; height:420px; border-radius:14px}
+    @media (max-width:900px){ .yt-grid{display:none;} }
 
-    /* Mobile Flip Card (<= 900px) */
-    .mobile-flip-wrap{
-      max-width:980px; margin:0 auto; perspective: 1200px;
-      margin-bottom: 64px; /* space for button */
-    }
-    .flipbox{
-      position:relative; width:100%; height:460px;
-      transform-style:preserve-3d;
-      transition: transform .75s ease;
-    }
-    .flipface{
-      position:absolute; inset:0;
-      background:var(--glass);
-      border:1px solid var(--cardBorder);
-      border-radius:18px; padding:14px;
-      box-shadow:var(--shadow);
-      backface-visibility:hidden;
-    }
-    .flipface.back{ transform: rotateY(180deg); }
-    .flipbox.flipped{ transform: rotateY(180deg); }
-    .flip-controls{
-      display:flex; justify-content:center; gap:12px; margin-top:16px;
-      position: relative; z-index: 200;
-    }
-    .btn{
-      padding:10px 16px; border:none; border-radius:12px; cursor:pointer;
-      background: radial-gradient(circle at 30% 30%, var(--accentA), var(--accentB));
-      color:#111; font-weight:800; box-shadow:0 0 16px rgba(0,234,255,.45);
-      transition:.2s transform, .2s box-shadow, .2s opacity;
-      z-index: 210; position: relative;
-    }
-    .btn:hover{ transform: translateY(-2px); box-shadow:0 0 20px rgba(138,43,226,.55); }
-
-    /* Music grid */
-    .music-grid{
-      max-width:1200px; margin:0 auto; padding:6px;
-      display:grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap:18px;
-    }
-    .music-card{
-      background:var(--glass);
-      border:1px solid var(--cardBorder);
-      border-radius:16px; padding:14px;
-      box-shadow:var(--shadow);
+    /* Music */
+    .music-grid{ max-width:1200px; margin:0 auto; padding:6px; display:grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap:18px;}
+    .music-card{ background:var(--glass); border:1px solid var(--cardBorder); border-radius:16px; padding:14px; box-shadow:var(--shadow);
       transition:.25s transform, .25s box-shadow, .25s border-color;
-      display:flex; flex-direction:column; justify-content:space-between;
-      height:360px;
-    }
+      display:flex; flex-direction:column; justify-content:space-between; height:360px;}
     .music-card:hover{ transform: translateY(-4px); box-shadow:0 14px 34px rgba(0,0,0,.55);}
-    .music-card.playing{ border-color: rgba(0,234,255,.6); box-shadow: var(--glowPlaying); }
-
+    .music-card.playing{ border-color: rgba(0,234,255,.6); box-shadow: var(--glowPlaying);}
     .thumb-container{ position:relative }
-    .thumb-container img:first-child{
-      width:100%; height:200px; object-fit:cover;
-      border-radius:12px; display:block; margin-bottom:10px
-    }
-    .rotating-logo{
-      position:absolute; bottom:10px; right:10px;
-      width:42px; height:42px; border-radius:50%;
-      opacity:0; transform:rotate(0deg);
-      transition: opacity .3s, transform .4s ease-out;
-    }
-    .rotating-logo.playing{ opacity:1; animation: spin 3s linear infinite; }
+    .thumb-container img:first-child{ width:100%; height:200px; object-fit:cover; border-radius:12px; display:block; margin-bottom:10px}
+    .rotating-logo{ position:absolute; bottom:10px; right:10px; width:42px; height:42px; border-radius:50%; opacity:0;
+      transform:rotate(0deg); transition: opacity .3s, transform .4s ease-out;}
+    .rotating-logo.playing{ opacity:1; animation: spin 3s linear infinite;}
     @keyframes spin{ from{transform:rotate(0deg)} to{transform:rotate(360deg)} }
-
-    .music-card h4{
-      margin:6px 0 8px;
-      font-family:"Great Vibes", cursive; font-size:22px; color:#fff; text-align:center
-    }
+    .music-card h4{ margin:6px 0 8px; font-family:"Great Vibes", cursive; font-size:22px; text-align:center}
     audio{ width:100%; margin-top:6px; border-radius:10px }
 
-    /* Quote (Love Notes) */
-    .quotes-wrap{
-      max-width:900px; margin:0 auto; display:grid; gap:16px;
-      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-    }
-    .quote-card{
-      background:var(--glass); border:1px solid var(--cardBorder); border-radius:14px;
-      padding:16px; box-shadow:var(--shadow); font-style:italic; color:#eafaff;
-    }
-    .quote-card .by{ display:block; margin-top:10px; color:#bdeaff; font-style:normal; font-weight:600; }
+    /* Love Notes */
+    .quotes-wrap{ max-width:900px; margin:0 auto; display:grid; gap:18px; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); }
+    .quote-card{ background: var(--whiteGlass); border:1px solid var(--whiteBorder); border-radius:14px; padding:16px; color:#fff;
+      backdrop-filter: blur(8px); box-shadow: 0 10px 28px rgba(0,0,0,.28);
+      animation: floaty 6s ease-in-out infinite;}
+    .quote-card:nth-child(2){ animation-delay:.6s } .quote-card:nth-child(3){ animation-delay:1.2s }
+    @keyframes floaty{ 0%,100%{ transform: translateY(0)} 50%{ transform: translateY(-6px)} }
+    .quote-card .by{ display:block; margin-top:10px; color:#e9f7ff; font-weight:600; font-style:normal;}
 
-    /* Single-page "routing" helper */
-    .page-hidden{ display:none !important; }
-
-    /* Visibility rules */
-    @media (min-width: 901px){
-      .yt-grid{ display:grid }
-      .mobile-only{ display:none !important }
-    }
-    @media (max-width: 900px){
-      .yt-grid{ display:none }
-      .mobile-only{ display:block }
-      iframe{ height:380px }
-      .flipbox{ height:420px }
-    }
-
-    footer{
-      text-align:center; color:#bcd; opacity:.8; padding:24px 10px; margin-top:10px;
-      border-top:1px solid rgba(255,255,255,.08)
-    }
+    .page-hidden{ display:none !important;}
+    footer{ text-align:center; color:#bcd; opacity:.8; padding:24px 10px; margin-top:10px; border-top:1px solid rgba(255,255,255,.08)}
   </style>
 </head>
 <body>
-  <!-- HOME / BRAND -->
   <header id="home">
     <div class="brand">
-      <img src="assets/logo.png" alt="Oceanbeats Logo" onerror="this.style.display='none'">
-      <h1>Oceanbeats Studio</h1>
+      <img src="assets/logo.png" alt="Oceanbeats Logo">
+      <h1 class="title-logo">Oceanbeats Studio</h1>
     </div>
     <div class="tagline">Feel the love. Hear the vibe.</div>
   </header>
 
-  <!-- NAV -->
   <nav>
     <div class="nav-inner">
       <a class="nav-link" href="#home">Home</a>
@@ -257,142 +123,40 @@
   </nav>
 
   <main>
-    <!-- ========== MAIN CONTENT WRAPPER (hidden when in "page mode") ========== -->
     <div id="site-content">
-      <!-- YOUTUBE (HOME CONTENT) -->
+      <!-- YouTube -->
       <section id="youtube">
-        <h2 class="section-title">Oceanbeats on YouTube</h2>
-
-        <!-- Desktop / Widescreen -->
+        <h2 class="section-title title-section">Oceanbeats on YouTube</h2>
         <div class="yt-grid">
           <div class="card">
-            <h3 class="subhead">Shorts</h3>
+            <h3 class="subhead title-sub">Shorts</h3>
             <iframe src="https://www.youtube.com/embed?listType=playlist&list=UUSHY8hfNmsry6kxG1_DPChxqw&rel=0" allowfullscreen></iframe>
           </div>
           <div class="card">
-            <h3 class="subhead">Videos</h3>
+            <h3 class="subhead title-sub">Videos</h3>
             <iframe src="https://www.youtube.com/embed?listType=playlist&list=UUY8hfNmsry6kxG1_DPChxqw&rel=0" allowfullscreen></iframe>
           </div>
         </div>
-
-        <!-- Mobile Flip -->
-        <div class="mobile-only">
-          <div class="mobile-flip-wrap">
-            <div class="flipbox" id="ytFlipBox">
-              <div class="flipface front">
-                <h3 class="subhead">Videos</h3>
-                <iframe src="https://www.youtube.com/embed?listType=playlist&list=UUY8hfNmsry6kxG1_DPChxqw&rel=0" allowfullscreen></iframe>
-              </div>
-              <div class="flipface back">
-                <h3 class="subhead">Shorts</h3>
-                <iframe src="https://www.youtube.com/embed?listType=playlist&list=UUSHY8hfNmsry6kxG1_DPChxqw&rel=0" allowfullscreen></iframe>
-              </div>
-            </div>
-          </div>
-          <div class="flip-controls">
-            <button class="btn" id="flipBtn">Flip</button>
-          </div>
-        </div>
       </section>
 
-      <!-- MUSIC -->
+      <!-- Music -->
       <section id="music">
-        <h2 class="section-title">Oceanbeats Originals</h2>
+        <h2 class="section-title title-section">Oceanbeats Originals</h2>
         <div class="music-grid">
-          <!-- 1 -->
-          <div class="music-card">
-            <div class="thumb-container">
-              <img src="assets/thumb/Young Hearts Collide.jpg" loading="lazy" alt="">
-              <img class="rotating-logo" src="assets/logo.png" alt="logo">
-            </div>
-            <h4>Young Hearts Collide</h4>
-            <audio preload="none" controls>
-              <source src="assets/audio/Young Hearts Collide.mp3" type="audio/mpeg">
-            </audio>
-          </div>
-          <!-- 2 -->
-          <div class="music-card">
-            <div class="thumb-container">
-              <img src="assets/thumb/Your Eyes.jpg" loading="lazy" alt="">
-              <img class="rotating-logo" src="assets/logo.png" alt="logo">
-            </div>
-            <h4>Your Eyes</h4>
-            <audio preload="none" controls>
-              <source src="assets/audio/Your_eyes.mp3" type="audio/mpeg">
-            </audio>
-          </div>
-          <!-- 3 -->
-          <div class="music-card">
-            <div class="thumb-container">
-              <img src="assets/thumb/Angel Piano.jpg" loading="lazy" alt="">
-              <img class="rotating-logo" src="assets/logo.png" alt="logo">
-            </div>
-            <h4>Angel’s Piano</h4>
-            <audio preload="none" controls>
-              <source src="assets/audio/Angel’s piano.mp3" type="audio/mpeg">
-            </audio>
-          </div>
-          <!-- 4 -->
-          <div class="music-card">
-            <div class="thumb-container">
-              <img src="assets/thumb/It's okay.png" loading="lazy" alt="">
-              <img class="rotating-logo" src="assets/logo.png" alt="logo">
-            </div>
-            <h4>It's a Little Thing</h4>
-            <audio preload="none" controls>
-              <source src="assets/audio/it is little thing.mp3" type="audio/mpeg">
-            </audio>
-          </div>
-          <!-- 5 -->
-          <div class="music-card">
-            <div class="thumb-container">
-              <img src="assets/thumb/Rekindled Hearts.png" loading="lazy" alt="">
-              <img class="rotating-logo" src="assets/logo.png" alt="logo">
-            </div>
-            <h4>It's Okay</h4>
-            <audio preload="none" controls>
-              <source src="assets/audio/It's okay.mp3" type="audio/mpeg">
-            </audio>
-          </div>
-          <!-- 6 -->
-          <div class="music-card">
-            <div class="thumb-container">
-              <img src="assets/thumb/it's a little thing.png" loading="lazy" alt="">
-              <img class="rotating-logo" src="assets/logo.png" alt="logo">
-            </div>
-            <h4>Rekindled Hearts</h4>
-            <audio preload="none" controls>
-              <source src="assets/audio/Rekindled Hearts.mp3" type="audio/mpeg">
-            </audio>
-          </div>
-          <!-- 7 -->
-          <div class="music-card">
-            <div class="thumb-container">
-              <img src="assets/thumb/A singer voice.png" loading="lazy" alt="">
-              <img class="rotating-logo" src="assets/logo.png" alt="logo">
-            </div>
-            <h4>A Singer Voice</h4>
-            <audio preload="none" controls>
-              <source src="assets/audio/A Singer Voice.mp3" type="audio/mpeg">
-            </audio>
-          </div>
-          <!-- 8 -->
-          <div class="music-card">
-            <div class="thumb-container">
-              <img src="assets/thumb/Blue line.png" loading="lazy" alt="">
-              <img class="rotating-logo" src="assets/logo.png" alt="logo">
-            </div>
-            <h4>Blue Line</h4>
-            <audio preload="none" controls>
-              <source src="assets/audio/Blue line.mp3" type="audio/mpeg">
-            </audio>
-          </div>
+          <div class="music-card"><div class="thumb-container"><img src="assets/thumb/Young Hearts Collide.jpg"><img class="rotating-logo" src="assets/logo.png"></div><h4>Young Hearts Collide</h4><audio controls><source src="assets/audio/Young Hearts Collide.mp3"></audio></div>
+          <div class="music-card"><div class="thumb-container"><img src="assets/thumb/Your Eyes.jpg"><img class="rotating-logo" src="assets/logo.png"></div><h4>Your Eyes</h4><audio controls><source src="assets/audio/Your_eyes.mp3"></audio></div>
+          <div class="music-card"><div class="thumb-container"><img src="assets/thumb/Angel Piano.jpg"><img class="rotating-logo" src="assets/logo.png"></div><h4>Angel’s Piano</h4><audio controls><source src="assets/audio/Angel’s piano.mp3"></audio></div>
+          <div class="music-card"><div class="thumb-container"><img src="assets/thumb/It's okay.png"><img class="rotating-logo" src="assets/logo.png"></div><h4>It's Okay</h4><audio controls><source src="assets/audio/It's okay.mp3"></audio></div>
+          <div class="music-card"><div class="thumb-container"><img src="assets/thumb/Rekindled Hearts.png"><img class="rotating-logo" src="assets/logo.png"></div><h4>Rekindled Hearts</h4><audio controls><source src="assets/audio/Rekindled Hearts.mp3"></audio></div>
+          <div class="music-card"><div class="thumb-container"><img src="assets/thumb/it's a little thing.png"><img class="rotating-logo" src="assets/logo.png"></div><h4>It's a Little Thing</h4><audio controls><source src="assets/audio/it is little thing.mp3"></audio></div>
+          <div class="music-card"><div class="thumb-container"><img src="assets/thumb/A singer voice.png"><img class="rotating-logo" src="assets/logo.png"></div><h4>A Singer Voice</h4><audio controls><source src="assets/audio/A Singer Voice.mp3"></audio></div>
+          <div class="music-card"><div class="thumb-container"><img src="assets/thumb/Blue line.png"><img class="rotating-logo" src="assets/logo.png"></div><h4>Blue Line</h4><audio controls><source src="assets/audio/Blue line.mp3"></audio></div>
         </div>
       </section>
 
-      <!-- LOVE NOTES -->
+      <!-- Love Notes -->
       <section id="love-notes">
-        <h2 class="section-title">Love Notes</h2>
+        <h2 class="section-title title-section">Love Notes</h2>
         <div class="quotes-wrap">
           <div class="quote-card">“Where words fail, music speaks.” <span class="by">— Hans Christian Andersen</span></div>
           <div class="quote-card">“Every love story is beautiful, but ours is my favorite.” <span class="by">— Unknown</span></div>
@@ -401,120 +165,66 @@
         </div>
       </section>
     </div>
-    <!-- ========== /site-content ========== -->
 
-    <!-- ========== SINGLE PAGE SECTIONS (show alone) ========== -->
+    <!-- Contact -->
     <section id="contact" class="page-hidden">
-      <h2 class="section-title">Contact Oceanbeats</h2>
-      <div style="max-width:900px;margin:0 auto">
-        <div style="background:var(--glass);border:1px solid rgba(255,255,255,.12);border-radius:16px;padding:18px;box-shadow:var(--shadow)">
-          <p>Email us at <a href="mailto:oceanbeats.studio@gmail.com" style="color:var(--link)">oceanbeats.studio@gmail.com</a></p>
-          <form onsubmit="location.href='mailto:oceanbeats.studio@gmail.com?subject=' + encodeURIComponent(this.name.value + ' — Oceanbeats Website') + '&body=' + encodeURIComponent(this.message.value); return false;">
-            <div style="display:flex;flex-direction:column;gap:10px">
-              <input name="name" required placeholder="Your name" style="padding:12px;border-radius:10px;border:1px solid rgba(255,255,255,.2);background:rgba(255,255,255,.06);color:#fff">
-              <textarea name="message" required rows="5" placeholder="Your message…" style="padding:12px;border-radius:10px;border:1px solid rgba(255,255,255,.2);background:rgba(255,255,255,.06);color:#fff"></textarea>
-              <button class="btn" type="submit">Send Email</button>
-            </div>
-          </form>
-        </div>
-      </div>
+      <h2 class="section-title title-section">Contact</h2>
+      <p style="text-align:center">Email us at <a href="mailto:oceanbeats.studio@gmail.com">oceanbeats.studio@gmail.com</a></p>
     </section>
 
+    <!-- Privacy -->
     <section id="privacy" class="page-hidden">
-      <h2 class="section-title">Privacy Policy</h2>
-      <div style="max-width:900px;margin:0 auto">
-        <div style="background:var(--glass);border:1px solid rgba(255,255,255,.12);border-radius:16px;padding:18px;box-shadow:var(--shadow);line-height:1.7">
-          <p><strong>Last updated:</strong> 26 Aug 2025</p>
-          <p>We don’t collect personal data on this site. Audio files are hosted on GitHub Pages and may be cached by your browser. YouTube embeds are provided by YouTube; viewing them is subject to Google’s Privacy Policy.</p>
-          <p>If you email us, we’ll use your message only to reply and we won’t share your email with third parties.</p>
-          <p>For questions, email <a href="mailto:oceanbeats.studio@gmail.com" style="color:var(--link)">oceanbeats.studio@gmail.com</a>.</p>
-        </div>
-      </div>
+      <h2 class="section-title title-section">Privacy Policy</h2>
+      <p style="max-width:800px;margin:0 auto;text-align:center;line-height:1.6">
+        We don’t collect personal data. Audio files are hosted on GitHub Pages and may be cached by your browser. 
+        YouTube embeds are subject to Google’s Privacy Policy.
+      </p>
     </section>
-    <!-- ========== /single pages ========== -->
   </main>
 
   <footer>© 2025 Oceanbeats Studio • All rights reserved</footer>
 
   <script>
-    /* Mobile flip behavior */
-    const flipBox = document.getElementById('ytFlipBox');
-    const flipBtn = document.getElementById('flipBtn');
-    if (flipBtn && flipBox){
-      flipBtn.addEventListener('click', () => flipBox.classList.toggle('flipped'));
-      let startX = 0, startY = 0, isTouch = false;
-      flipBox.addEventListener('touchstart', e => {
-        isTouch = true; startX = e.touches[0].clientX; startY = e.touches[0].clientY;
-      }, {passive:true});
-      flipBox.addEventListener('touchend', e => {
-        if(!isTouch) return;
-        const dx = e.changedTouches[0].clientX - startX;
-        const dy = e.changedTouches[0].clientY - startY;
-        if(Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy)){
-          flipBox.classList.toggle('flipped');
-        }
-        isTouch = false;
-      });
-    }
-
-    /* Music logic: rotate logo while playing; reset angle when stop; only one audio at a time */
+    // Music control
     const cards = document.querySelectorAll('.music-card');
     cards.forEach(card => {
       const audio = card.querySelector('audio');
       const logo  = card.querySelector('.rotating-logo');
-
       audio.addEventListener('play', () => {
         cards.forEach(c => {
           const a = c.querySelector('audio');
           const l = c.querySelector('.rotating-logo');
-          if (a !== audio) { a.pause(); }
+          if(a!==audio){ a.pause(); if(l){ l.classList.remove('playing'); l.style.transform="rotate(0deg)";}}
           c.classList.remove('playing');
-          if (l) { l.classList.remove('playing'); l.style.transform = 'rotate(0deg)'; }
         });
-        logo.classList.add('playing');
-        card.classList.add('playing');
+        logo.classList.add('playing'); card.classList.add('playing');
       });
-
-      ['pause','ended'].forEach(ev => {
-        audio.addEventListener(ev, () => {
-          logo.classList.remove('playing');
-          logo.style.transform = 'rotate(0deg)';
-          card.classList.remove('playing');
+      ['pause','ended'].forEach(ev=>{
+        audio.addEventListener(ev,()=>{
+          logo.classList.remove('playing'); logo.style.transform="rotate(0deg)"; card.classList.remove('playing');
         });
       });
     });
 
-    /* SPA-style routing:
-       - Default: show full site (site-content), hide contact/privacy sections
-       - If hash is #contact or #privacy: show only that section, hide site-content
-    */
-    const sectionsSinglePage = ['contact','privacy'];
-    const siteContent = document.getElementById('site-content');
-    const navLinks = document.querySelectorAll('.nav-link');
-
+    // SPA routing
+    const sectionsSinglePage=['contact','privacy'];
+    const siteContent=document.getElementById('site-content');
+    const navLinks=document.querySelectorAll('.nav-link');
     function updateRoute(){
-      const hash = (location.hash || '#home').replace('#','');
-      const isPage = sectionsSinglePage.includes(hash);
-
-      // Toggle which big blocks are visible
-      siteContent.classList.toggle('page-hidden', isPage);
+      const hash=(location.hash||'#home').replace('#','');
+      const isPage=sectionsSinglePage.includes(hash);
+      siteContent.classList.toggle('page-hidden',isPage);
       sectionsSinglePage.forEach(id=>{
-        const el = document.getElementById(id);
-        if (!el) return;
-        el.classList.toggle('page-hidden', !(isPage && hash===id));
+        const el=document.getElementById(id);
+        if(el) el.classList.toggle('page-hidden',!(isPage&&hash===id));
       });
-
-      // Active nav style
       navLinks.forEach(a=>{
-        if (!a.getAttribute('href')) return;
-        const target = a.getAttribute('href').replace('#','');
-        a.classList.toggle('active', target===hash);
+        const target=a.getAttribute('href').replace('#','');
+        a.classList.toggle('active',target===hash);
       });
-
-      if (isPage) window.scrollTo({top:0, behavior:'instant'});
     }
-    window.addEventListener('hashchange', updateRoute);
-    document.addEventListener('DOMContentLoaded', updateRoute);
+    window.addEventListener('hashchange',updateRoute);
+    document.addEventListener('DOMContentLoaded',updateRoute);
   </script>
 </body>
 </html>
