@@ -170,7 +170,6 @@
       box-shadow: var(--ob-shadow);
       padding: 14px 16px;
       display:none; /* hidden until user plays something */
-      display:grid;
       grid-template-columns: 72px 1fr auto; /* cover | title+controls | menu */
       align-items:center; gap:16px;
     }
@@ -315,7 +314,7 @@
       <section id="music">
         <h2 class="section-title title-section title-small">ob originals</h2>
         <div class="music-grid">
-          <!-- Repeat your 8 cards exactly as before -->
+          <!-- 8 cards -->
           <div class="music-card" data-title="Young Hearts Collide" data-src="assets/audio/Young Hearts Collide.mp3" data-thumb="assets/thumb/Young Hearts Collide.jpg">
             <div class="thumb-container">
               <img src="assets/thumb/Young Hearts Collide.jpg" alt="">
@@ -495,7 +494,7 @@
     <div class="ob-shell">
       <div class="ob-player" id="obPlayer">
         <!-- Cover -->
-        <img class="obp-cover" id="obpCover" src="assets/thumb/Young Hearts Collide.jpg" alt="Cover">
+        <img class="obp-cover" id="obpCover" src="" alt="Cover">
 
         <!-- Center: title + controls (Next - Play/Pause - Prev) -->
         <div class="obp-center">
@@ -532,7 +531,8 @@
         </div>
 
         <!-- Single audio element for ALL cards -->
-        <audio id="obpAudio" preload="metadata"></audio>
+        <!-- preload changed to auto for faster first play -->
+        <audio id="obpAudio" preload="auto"></audio>
       </div>
     </div>
   </main>
@@ -612,7 +612,7 @@
     const $prev    = document.getElementById('obpPrev');
 
     const $menuWrap= document.getElementById('obpMenu');
-    const $menuBtn = document.getElementById('obpMenuBtn');
+    theMenuBtn = document.getElementById('obpMenuBtn');
     const $menu    = document.getElementById('obpMenuList');
     const $mShare  = document.getElementById('obpShare');
     const $mDown   = document.getElementById('obpDownload');
@@ -654,37 +654,53 @@
     function load(i, autoplay=false){
       index = (i + tracks.length) % tracks.length;
       const t = tracks[index];
-      $audio.src = t.src;
-      $title.textContent = t.title;
-      $cover.src = t.cover;
-      $cover.alt = t.title + ' cover';
 
-      // set download link to current file
+      // update media
+      $audio.src = t.src;
+      $audio.load(); // ensure fast start
+      $title.textContent = t.title;
+      $cover.src = t.cover || '';
+      $cover.alt = t.title ? (t.title + ' cover') : 'Cover';
+
+      // update download link
       if ($mDown){
         $mDown.href = t.src;
         const name = t.title.replace(/[^\w\s-]/g,'').replace(/\s+/g,'_') + '.mp3';
         $mDown.setAttribute('download', name);
       }
 
+      // show player now that something was selected
       $player.classList.add('show');
       currentCard = cards[index];
 
-      if(autoplay){ setPlay(true); } else { setPlay(false, true); }
-    }
-
-    function setPlay(playing, pauseOnly=false){
-      if(playing){
-        $audio.play().catch(()=>{});
-        isPlaying = true;
-        $playIc.innerHTML = '<path d="M6 5h4v14H6zM14 5h4v14h-4z"/>'; // pause icon
-        selectCardUI(index, true);
+      if(autoplay){
+        setPlay(true);
       }else{
-        if(pauseOnly) $audio.pause();
-        isPlaying = false;
-        $playIc.innerHTML = '<path d="M8 5v14l11-7z"/>'; // play icon
-        selectCardUI(index, false);
+        setPlay(false);
       }
     }
+
+    // Always pause when playing=false, always play when true.
+    function setPlay(playing){
+      if(playing){
+        $audio.play().catch(()=>{});
+      }else{
+        $audio.pause();
+      }
+    }
+
+    // Keep UI in sync with REAL audio state.
+    $audio.addEventListener('play', ()=>{
+      isPlaying = true;
+      $playIc.innerHTML = '<path d="M6 5h4v14H6zM14 5h4v14h-4z"/>'; // pause icon
+      selectCardUI(index, true);
+    });
+
+    $audio.addEventListener('pause', ()=>{
+      isPlaying = false;
+      $playIc.innerHTML = '<path d="M8 5v14l11-7z"/>'; // play icon
+      selectCardUI(index, false);
+    });
 
     // Card controls -> player
     cards.forEach((card, ci)=>{
@@ -692,21 +708,27 @@
       const bar = card.querySelector('.bar');
 
       btn.addEventListener('click', ()=>{
-        if(index !== ci){ load(ci, true); }
-        else{ setPlay(!isPlaying); }
+        if(index !== ci){
+          load(ci, true);
+        }else{
+          setPlay(!isPlaying);
+        }
       });
 
       bar.addEventListener('click', (e)=>{
-        if(index !== ci) return;
+        if(index !== ci || !$audio.duration) return;
         const rect = bar.getBoundingClientRect();
         const x = e.clientX - rect.left;
-        const pct = x / rect.width;
-        $audio.currentTime = ($audio.duration||0) * pct;
+        const pct = Math.max(0, Math.min(1, x / rect.width));
+        $audio.currentTime = ($audio.duration) * pct;
       });
     });
 
     // Player controls -> cards
-    $play.addEventListener('click', ()=>{ if(!$audio.src) load(index); setPlay(!isPlaying); });
+    $play.addEventListener('click', ()=>{ 
+      if(!$audio.src){ load(index); }
+      setPlay(!isPlaying); 
+    });
     $next.addEventListener('click', ()=>{ load(index+1, true); });
     $prev.addEventListener('click', ()=>{ load(index-1, true); });
 
@@ -723,18 +745,27 @@
         time.textContent = m + ':' + (r<10 ? '0'+r : r);
       }
     });
-    $audio.addEventListener('ended', ()=> setPlay(false, true));
+
+    // Stay stopped at end (no auto-advance). If you want next track, replace with: load(index+1, true)
+    $audio.addEventListener('ended', ()=> { 
+      // Pause state UI will be handled by 'pause' event fired by browsers after ended.
+      // Some browsers don't fire 'pause' on 'ended', so do it explicitly:
+      $audio.pause();
+      $audio.currentTime = 0;
+    });
 
     // 3-dots menu
-    function closeMenu(){ $menuWrap.classList.remove('open'); $menuBtn.setAttribute('aria-expanded','false'); }
-    function openMenu(){ $menuWrap.classList.add('open'); $menuBtn.setAttribute('aria-expanded','true'); }
+    function closeMenu(){ document.getElementById('obpMenu').classList.remove('open'); theMenuBtn.setAttribute('aria-expanded','false'); }
+    function openMenu(){ document.getElementById('obpMenu').classList.add('open'); theMenuBtn.setAttribute('aria-expanded','true'); }
     document.addEventListener('click', (e)=>{
-      if($menuWrap.contains(e.target)) return;
+      const wrap = document.getElementById('obpMenu');
+      if(wrap.contains(e.target)) return;
       closeMenu();
     });
-    $menuBtn.addEventListener('click', (e)=>{
+    theMenuBtn.addEventListener('click', (e)=>{
       e.stopPropagation();
-      if($menuWrap.classList.contains('open')) closeMenu(); else openMenu();
+      const wrap = document.getElementById('obpMenu');
+      if(wrap.classList.contains('open')) closeMenu(); else openMenu();
     });
     $mShare.addEventListener('click', ()=>{
       const t = tracks[index] || {title:'Oceanbeats'};
@@ -743,16 +774,7 @@
       closeMenu();
     });
 
-    // Init first track (no autoplay)
-    if(tracks.length){
-      $title.textContent = tracks[0].title;
-      $cover.src = tracks[0].cover;
-      $audio.src = tracks[0].src;
-      if ($mDown){
-        $mDown.href = tracks[0].src;
-        $mDown.setAttribute('download', tracks[0].title.replace(/[^\w\s-]/g,'').replace(/\s+/g,'_') + '.mp3');
-      }
-    }
+    // NOTE: Removed the old "Init first track" block so the player stays hidden until first play.
   </script>
 </body>
 </html>
