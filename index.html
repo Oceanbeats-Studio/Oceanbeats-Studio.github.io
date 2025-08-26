@@ -20,18 +20,18 @@
       --link: #00eaff;
       --btn: radial-gradient(circle at 30% 30%, var(--accentA), var(--accentB));
 
-      /* Player (rounded rectangle) */
-      --ob-bg: rgba(255,255,255,.92);
-      --ob-border: rgba(0,0,0,.08);
-      --ob-shadow: 0 10px 26px rgba(0,0,0,.20);
+      /* Player (rounded rectangle) – glass, not white */
+      --ob-bg: rgba(255,255,255,.06);
+      --ob-border: rgba(255,255,255,.14);
+      --ob-shadow: 0 10px 26px rgba(0,0,0,.25);
       --ob-radius: 22px;
-      --ob-accent: #111;
-      --ob-muted: rgba(0,0,0,.55);
+      --ob-accent: #fff;
+      --ob-muted: rgba(255,255,255,.85);
 
       /* CD + progress */
-      --cd-ring: rgba(255,255,255,.85);
-      --progress-bg:#e6e9ee;
-      --progress-fill:#111;
+      --cd-ring: rgba(0,0,0,.7); /* thin dark ring */
+      --progress-bg: rgba(255,255,255,.22);
+      --progress-fill: linear-gradient(90deg,#00eaff,#8a2be2);
     }
     *{box-sizing:border-box}
     html,body{margin:0;height:100%}
@@ -162,7 +162,7 @@
     .bar > .fill{ position:absolute; left:0; top:0; height:100%; width:0%; background:linear-gradient(90deg,#00eaff,#8a2be2); border-radius:6px; }
     .time{ font-size:12px; opacity:.85; text-align:right }
 
-    /* ===== OB Rounded-Rect Music Player (sticky bottom) ===== */
+    /* ===== OB Rounded-Rect Music Player (sticky bottom) – glass ===== */
     .ob-shell{
       position:sticky; bottom:0; z-index:95;
       margin:20px auto 0; max-width:1200px; padding:0 12px 12px;
@@ -170,72 +170,74 @@
     .ob-player{
       position:relative;
       max-width: 920px; margin: 0 auto;
-      background: var(--ob-bg);
+      background: var(--ob-bg); backdrop-filter: blur(8px);
       border: 1px solid var(--ob-border);
       border-radius: var(--ob-radius);
       box-shadow: var(--ob-shadow);
-      padding: 12px 14px;
-      display:none; /* hidden until user plays something */
+      padding: 10px 12px;
+      display:none; /* hidden until user plays */
       grid-template-columns: 80px 1fr auto; /* cover | title+controls | right */
-      align-items:center; gap:16px;
+      align-items:center; gap:14px;
     }
     .ob-player.show{ display:grid; }
 
-    /* Top strip / drawer opened by 3-dots (icon buttons) */
+    /* Top strip / drawer (transparent glass, fade) */
     .obp-strip{
-      display:none;
-      position:absolute;
-      left:12px; right:12px;
-      bottom:100%;
-      margin-bottom:10px;
-      background:#fff; color:#111; border:1px solid var(--ob-border);
-      border-radius:12px; box-shadow:0 10px 24px rgba(0,0,0,.18);
-      padding:10px;
+      position:absolute; left:12px; right:12px; bottom:100%; margin-bottom:10px;
+      background: rgba(255,255,255,.06); backdrop-filter: blur(8px);
+      color:#fff; border:1px solid rgba(255,255,255,.16);
+      border-radius:12px; box-shadow:0 10px 24px rgba(0,0,0,.25);
+      padding:8px; display:flex; gap:12px; justify-content:center;
+      opacity:0; pointer-events:none; transform: translateY(6px); transition: opacity .2s ease, transform .2s ease;
       z-index:12;
-      justify-content:center; gap:14px;
     }
-    .obp-strip.show{ display:flex; }
+    .obp-strip.show{ opacity:1; pointer-events:auto; transform: translateY(0); }
     .strip-icon{
-      width:44px; height:44px; border-radius:10px; border:1px solid var(--ob-border);
-      background:#f7f9fb; display:grid; place-items:center; cursor:pointer;
+      width:44px; height:44px; border-radius:10px;
+      background: rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.18);
+      display:grid; place-items:center; cursor:pointer;
+      transition:transform .15s, background .15s;
     }
-    .strip-icon:hover{ background:#eef2f6; }
-    .strip-icon svg{ width:22px; height:22px; fill:#111; }
+    .strip-icon:hover{ transform: translateY(-2px); background: rgba(255,255,255,.14); }
+    .strip-icon svg{ width:22px; height:22px; fill:#fff; }
 
-    /* CD cover (circular, light ring; no dark border) */
+    /* CD cover (circular, thin dark ring) */
     .obp-cover-wrap{
-      width:68px; height:68px; display:grid; place-items:center;
-      border-radius:50%;
-      background: radial-gradient(circle at 30% 30%, #ffffff, #f3f6fb);
-      border:2px solid var(--cd-ring);
-      box-shadow: inset 0 2px 6px rgba(0,0,0,.04), 0 2px 8px rgba(0,0,0,.06);
+      width:68px; height:68px; display:grid; place-items:center; border-radius:50%;
+      background: radial-gradient(circle at 30% 30%, rgba(255,255,255,.35), rgba(255,255,255,.08));
+      border:1px solid var(--cd-ring);
+      box-shadow: inset 0 2px 6px rgba(0,0,0,.15), 0 2px 8px rgba(0,0,0,.25);
     }
     .obp-cover{
       width:60px; height:60px; border-radius:50%;
       object-fit:cover; display:block;
-      border:2px solid var(--cd-ring);
-      background:#fff;  /* ensures no dark edge shows through transparent art */
+      border:1px solid var(--cd-ring);
+      background:#fff; /* avoids dark edge on transparent art */
       animation:none;
     }
     .cd-rotate{ animation: spin 6s linear infinite; }
 
     .obp-center{ display:flex; flex-direction:column; align-items:center; gap:8px; min-width:0; }
     .obp-title{
-      margin:0; font-weight:700; font-size:18px; color:#111; text-align:center;
+      margin:0; font-weight:700; font-size:18px; color:#fff; text-align:center;
       white-space:nowrap; overflow:hidden; text-overflow:ellipsis; width:100%;
     }
 
     .obp-controls-row{ width:100%; display:flex; align-items:center; justify-content:center; gap:10px; }
     .obp-controls{ display:flex; align-items:center; gap:10px; }
+
+    /* Buttons – transparent */
     .obp-btn{
-      width:42px; height:42px; border-radius:10px; border:1px solid var(--ob-border);
-      background:#fff; display:grid; place-items:center; cursor:pointer;
-      box-shadow:0 4px 12px rgba(0,0,0,.10);
-      transition: transform .15s, box-shadow .15s;
+      min-width:42px; height:42px; border-radius:10px;
+      border:1px solid rgba(255,255,255,.25);
+      background: transparent; color:#fff;
+      display:grid; place-items:center; cursor:pointer;
+      box-shadow: none;
+      transition: transform .15s, background .15s, border-color .15s;
     }
-    .obp-btn:hover{ transform: translateY(-2px); box-shadow: 0 8px 18px rgba(0,0,0,.16); }
-    .obp-btn:active{ transform: translateY(0); box-shadow: 0 2px 8px rgba(0,0,0,.12); }
-    .obp-btn svg{ width:20px; height:20px; fill: var(--ob-accent); }
+    .obp-btn:hover{ transform: translateY(-2px); background: rgba(255,255,255,.10); border-color: rgba(255,255,255,.35); }
+    .obp-btn svg{ width:20px; height:20px; fill:#fff; }
+    .obp-btn .label{ font-weight:800; font-size:13px; letter-spacing:.5px; }
 
     /* Progress */
     .obp-progress{ width:100%; display:flex; align-items:center; gap:8px; }
@@ -243,14 +245,13 @@
     .obp-bar{ position:relative; height:8px; flex:1; background:var(--progress-bg); border-radius:6px; cursor:pointer; }
     .obp-bar .fill{ position:absolute; left:0; top:0; height:100%; width:0%; background:var(--progress-fill); border-radius:6px; }
 
-    /* Right side: mode + three-dots (aligned with buttons) */
+    /* Right side: mode ([R]/[NR]/[S]) + three-dots */
     .obp-right{ display:flex; align-items:center; gap:8px; }
     .obp-menu-btn{
-      width:42px; height:42px; border-radius:10px; border:1px solid var(--ob-border);
-      background:#fff; display:grid; place-items:center; cursor:pointer;
-      box-shadow:0 4px 12px rgba(0,0,0,.10);
+      width:42px; height:42px; border-radius:10px; border:1px solid rgba(255,255,255,.25);
+      background: transparent; display:grid; place-items:center; cursor:pointer;
     }
-    .obp-menu-btn svg{ width:20px; height:20px; fill:#111; }
+    .obp-menu-btn svg{ width:20px; height:20px; fill:#fff; }
 
     .page-hidden{ display:none !important;}
 
@@ -266,7 +267,7 @@
       .obp-cover-wrap{ width:62px; height:62px; }
       .obp-cover{ width:54px; height:54px; }
       .obp-title{ font-size:16px; }
-      .obp-btn, .obp-menu-btn{ width:40px; height:40px; }
+      .obp-btn, .obp-menu-btn{ min-width:40px; height:40px; }
       .obp-controls{ gap:8px; }
     }
 
@@ -284,19 +285,19 @@
 
   <nav>
     <div class="nav-inner">
-      <a class="nav-link" href="#home" title="Home" aria-label="Home">
+      <a class="nav-link" data-target="home" href="#home" title="Home" aria-label="Home">
         <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 3l9 8h-3v9h-5v-6H11v6H6v-9H3l9-8z"/></svg>
       </a>
-      <a class="nav-link" href="#music" title="Music" aria-label="Music">
+      <a class="nav-link" data-target="music" href="#music" title="Music" aria-label="Music">
         <svg viewBox="0 0 24 24" fill="currentColor"><path d="M19 3v10.26a4 4 0 1 1-2-3.46V7.5l-8 1.6V16.26a4 4 0 1 1-2-3.46V6l12-3z"/></svg>
       </a>
-      <a class="nav-link" href="#love-quotes" title="Love Quotes" aria-label="Love Quotes">
+      <a class="nav-link" data-target="love-quotes" href="#love-quotes" title="Love Quotes" aria-label="Love Quotes">
         <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12.1 21.35l-1.1-.99C5.14 15.24 2 12.39 2 8.5 2 6 4 4 6.5 4c1.74 0 3.41 1.01 4.2 2.51C11.09 5.01 12.76 4 14.5 4 17 4 19 6 19 8.5c0 3.89-3.14 6.74-8.9 11.86z"/></svg>
       </a>
-      <a class="nav-link" href="#contact" title="Contact" aria-label="Contact">
+      <a class="nav-link" data-target="contact" href="#contact" title="Contact" aria-label="Contact">
         <svg viewBox="0 0 24 24" fill="currentColor"><path d="M2 6h20v12H2z"/><path d="M2 6l10 7L22 6"/></svg>
       </a>
-      <a class="nav-link" href="#privacy" title="Privacy Policy" aria-label="Privacy Policy">
+      <a class="nav-link" data-target="privacy" href="#privacy" title="Privacy Policy" aria-label="Privacy Policy">
         <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l7 3v6c0 5-3.5 9.7-7 11-3.5-1.3-7-6-7-11V5l7-3z"/></svg>
       </a>
     </div>
@@ -304,7 +305,7 @@
 
   <main>
     <div id="site-content">
-      <!-- YOUTUBE -->
+      <!-- YOUTUBE (considered part of "home" for scroll spy) -->
       <section id="youtube">
         <div class="yt-grid">
           <div class="card">
@@ -527,9 +528,10 @@
     <!-- ===== OB Rounded-Rect Music Player (sticky bottom) ===== -->
     <div class="ob-shell">
       <div class="ob-player" id="obPlayer">
-        <!-- Top strip opened by 3-dots (icons) -->
+        <!-- Top strip opened by 3-dots (transparent glass, icons) -->
         <div class="obp-strip" id="obpStrip">
-          <a class="strip-icon" href="#home" title="Home" aria-label="Home">
+          <!-- Go to YT area (so "home" shows the videos as you wanted) -->
+          <a class="strip-icon" href="#youtube" title="Home" aria-label="Home">
             <svg viewBox="0 0 24 24"><path d="M12 3l9 8h-3v9h-5v-6H11v6H6v-9H3l9-8z"/></svg>
           </a>
           <a class="strip-icon" href="#music" title="Music" aria-label="Music">
@@ -578,14 +580,10 @@
           </div>
         </div>
 
-        <!-- Right: playback mode + 3-dots -->
+        <!-- Right: playback mode ([R]/[NR]/[S]) + three-dots -->
         <div class="obp-right">
-          <!-- Mode: Repeat ▶ No-Repeat ▶ Shuffle -->
           <button class="obp-btn" id="obpMode" title="Repeat" aria-label="Playback mode">
-            <svg id="obpModeIcon" viewBox="0 0 24 24">
-              <!-- repeat -->
-              <path d="M17 3l4 4-4 4V8H7a3 3 0 0 0-3 3v2H2v-2a5 5 0 0 1 5-5h10V3zM7 21l-4-4 4-4v3h10a3 3 0 0 0 3-3v-2h2v2a5 5 0 0 1-5 5H7v3z"/>
-            </svg>
+            <span id="obpModeLabel" class="label">[R]</span>
           </button>
 
           <button class="obp-menu-btn" id="obpMenuBtn" title="More" aria-haspopup="true" aria-expanded="false">
@@ -642,10 +640,16 @@
       btn.addEventListener('click', ()=> shareSomething('Oceanbeats on YouTube', btn.dataset.share) );
     });
 
-    /* ---- SPA routing (Contact/Privacy) ---- */
+    /* ---- SPA route for contact/privacy + scroll-spy for top nav ---- */
     const sectionsSinglePage=['contact','privacy'];
     const siteContent=document.getElementById('site-content');
-    const navLinks=document.querySelectorAll('.nav-link');
+    const navLinks=[...document.querySelectorAll('.nav-link')];
+    function setActive(targetId){
+      navLinks.forEach(a=>{
+        const target=a.getAttribute('data-target');
+        a.classList.toggle('active', target===targetId);
+      });
+    }
     function updateRoute(){
       const hash=(location.hash||'#home').replace('#','');
       const isPage=sectionsSinglePage.includes(hash);
@@ -654,14 +658,28 @@
         const el=document.getElementById(id);
         if(el) el.classList.toggle('page-hidden',!(isPage&&hash===id));
       });
-      navLinks.forEach(a=>{
-        const target=a.getAttribute('href').replace('#','');
-        a.classList.toggle('active',target===hash);
-      });
-      if(isPage) window.scrollTo({top:0, behavior:'instant'});
+      if(isPage){ setActive(hash); window.scrollTo({top:0, behavior:'instant'}); }
     }
     window.addEventListener('hashchange',updateRoute);
     document.addEventListener('DOMContentLoaded',updateRoute);
+
+    // Scroll spy: home is active when #home OR #youtube is in view
+    const spyTargets = [
+      {id:'home', el: document.getElementById('home')},
+      {id:'youtube', el: document.getElementById('youtube')},
+      {id:'music', el: document.getElementById('music')},
+      {id:'love-quotes', el: document.getElementById('love-quotes')}
+    ].filter(x=>x.el);
+    const spy = new IntersectionObserver((entries)=>{
+      // pick the one with largest intersection ratio
+      let best = entries.filter(e=>e.isIntersecting).sort((a,b)=>b.intersectionRatio - a.intersectionRatio)[0];
+      if(best){
+        const id = best.target.id;
+        if(id==='home' || id==='youtube'){ setActive('home'); }
+        else { setActive(id); }
+      }
+    }, {root:null, rootMargin:'-40% 0px -50% 0px', threshold:[0, .25, .5, .75, 1]});
+    spyTargets.forEach(t=> spy.observe(t.el));
 
     /* ---- Player wiring ---- */
     const $player  = document.getElementById('obPlayer');
@@ -673,7 +691,7 @@
     const $playIc  = document.getElementById('obpPlayIcon');
     const $prev    = document.getElementById('obpPrev');
     const $modeBtn = document.getElementById('obpMode');
-    const $modeIc  = document.getElementById('obpModeIcon');
+    const $modeLabel= document.getElementById('obpModeLabel');
     const $menuBtn = document.getElementById('obpMenuBtn');
     const $strip   = document.getElementById('obpStrip');
     const $stripShare = document.getElementById('stripShare');
@@ -694,31 +712,16 @@
 
     // playbackMode: 'repeat' | 'norepeat' | 'shuffle'
     let playbackMode = 'repeat';
-    function setModeIcon(){
-      if(playbackMode==='repeat'){
-        // loop arrows
-        $modeIc.innerHTML = '<path d="M17 3l4 4-4 4V8H7a3 3 0 0 0-3 3v2H2v-2a5 5 0 0 1 5-5h10V3zM7 21l-4-4 4-4v3h10a3 3 0 0 0 3-3v-2h2v2a5 5 0 0 1-5 5H7v3z"/>';
-        $modeBtn.title='Repeat';
-      }else if(playbackMode==='norepeat'){
-        // loop with slash
-        $modeIc.innerHTML =
-          '<g><path d="M17 3l4 4-4 4V8H9l2 2H7a3 3 0 0 0-3 3v1H2v-1a5 5 0 0 1 5-5h8V3zM7 21v-3h9l2 2h-9a2 2 0 0 1-2-2v3z"/>' +
-          '<path d="M3 4l18 18" stroke="#111" stroke-width="2" stroke-linecap="round"/></g>';
-        $modeBtn.title='No Repeat';
-      }else{
-        // shuffle (crossed arrows)
-        $modeIc.innerHTML =
-          '<path d="M4 7h3.5a5 5 0 0 1 4.2 2.3l1.6 2.4A5 5 0 0 0 17.5 14H20v-2h-2.5a3 3 0 0 1-2.5-1.4l-1.6-2.4A7 7 0 0 0 7.5 5H4v2z"/>' +
-          '<path d="M4 17h3.5a7 7 0 0 0 5.9-3.3l.2-.3 1.6 2.4A5 5 0 0 0 17.5 19H20v-2h-2.5a3 3 0 0 1-2.5-1.4l-1.6-2.4A7 7 0 0 1 7.5 17H4v2z"/>' +
-          '<path d="M18 6l2 2-2 2V6zM18 14l2 2-2 2v-4z"/>';
-        $modeBtn.title='Shuffle';
-      }
+    function setModeLabel(){
+      if(playbackMode==='repeat'){ $modeLabel.textContent='[R]'; $modeBtn.title='Repeat'; }
+      else if(playbackMode==='norepeat'){ $modeLabel.textContent='[NR]'; $modeBtn.title='No Repeat'; }
+      else { $modeLabel.textContent='[S]'; $modeBtn.title='Shuffle'; }
     }
     $modeBtn.addEventListener('click', ()=>{
       playbackMode = playbackMode==='repeat' ? 'norepeat' : (playbackMode==='norepeat' ? 'shuffle' : 'repeat');
-      setModeIcon();
+      setModeLabel();
     });
-    setModeIcon();
+    setModeLabel();
 
     function selectCardUI(ci, playing){
       cards.forEach((c, i)=>{
@@ -745,7 +748,6 @@
           if(btn)  btn.textContent='▶';
         }
       });
-      // cover rotation
       if(playing){ $cover.classList.add('cd-rotate'); } else { $cover.classList.remove('cd-rotate'); }
     }
 
@@ -777,18 +779,13 @@
       index = ( (i%tracks.length)+tracks.length ) % tracks.length;
       const t = tracks[index];
 
-      // update media
-      $audio.src = t.src;
-      $audio.load();
+      $audio.src = t.src; $audio.load();
       $title.textContent = t.title;
-      $cover.src = t.cover || '';
-      $cover.alt = t.title ? (t.title + ' cover') : 'Cover';
+      $cover.src = t.cover || ''; $cover.alt = t.title ? (t.title + ' cover') : 'Cover';
 
-      // show player
       $player.classList.add('show');
       currentCard = cards[index];
 
-      // update Media Session
       updateMediaSessionForTrack(t);
 
       if(autoplay){ setPlay(true); } else { setPlay(false); }
@@ -859,20 +856,16 @@
       if(playbackMode==='shuffle'){
         let n; do{ n = Math.floor(Math.random()*tracks.length); } while(n===index && tracks.length>1);
         load(n, true);
-      }else{
-        load(index+1, true);
-      }
+      }else{ load(index+1, true); }
     });
     $prev.addEventListener('click', ()=>{ 
       if(playbackMode==='shuffle'){
         let n; do{ n = Math.floor(Math.random()*tracks.length); } while(n===index && tracks.length>1);
         load(n, true);
-      }else{
-        load(index-1, true);
-      }
+      }else{ load(index-1, true); }
     });
 
-    // Three dots -> show/hide top strip (no bottom popup anymore)
+    // Three dots -> show/hide transparent strip (fade) ; auto-close after click
     function closeStrip(){ $strip.classList.remove('show'); $menuBtn.setAttribute('aria-expanded','false'); }
     function openStrip(){ $strip.classList.add('show'); $menuBtn.setAttribute('aria-expanded','true'); }
     document.addEventListener('click', (e)=>{
@@ -884,11 +877,12 @@
       if($strip.classList.contains('show')) closeStrip(); else openStrip();
     });
 
-    // Share/Download (strip)
+    // Share/Download (strip) – fade out after action
     function doShare(){
       const t = tracks[index] || {title:'Oceanbeats'};
       const url = window.location.href.split('#')[0] + '#music';
       shareSomething(`${t.title} — Oceanbeats`, url);
+      closeStrip();
     }
     function doDownload(){
       const t = tracks[index]; if(!t) return;
@@ -896,11 +890,12 @@
       a.href = t.src;
       a.download = (t.title||'Oceanbeats').replace(/[^\w\s-]/g,'').replace(/\s+/g,'_') + '.mp3';
       a.click();
+      closeStrip();
     }
-    document.getElementById('stripShare').addEventListener('click', ()=>{ doShare(); closeStrip(); });
-    document.getElementById('stripDownload').addEventListener('click', ()=>{ doDownload(); closeStrip(); });
+    document.getElementById('stripShare').addEventListener('click', doShare);
+    document.getElementById('stripDownload').addEventListener('click', doDownload);
 
-    // No pre-init — player stays hidden until first play.
+    // Keep player hidden until first manual play: no pre-init
   </script>
 </body>
 </html>
