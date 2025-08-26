@@ -27,6 +27,10 @@
       --ob-radius: 22px;
       --ob-accent: #111;
       --ob-muted: rgba(0,0,0,.55);
+
+      --cd-ring:#e9eef3;
+      --progress-bg:#e6e9ee;
+      --progress-fill:#111; /* dark accent inside light player */
     }
     *{box-sizing:border-box}
     html,body{margin:0;height:100%}
@@ -163,33 +167,66 @@
       margin:20px auto 0; max-width:1200px; padding:0 12px 12px;
     }
     .ob-player{
-      max-width: 820px; margin: 0 auto;
+      position:relative;
+      max-width: 920px; margin: 0 auto;
       background: var(--ob-bg);
       border: 1px solid var(--ob-border);
       border-radius: var(--ob-radius);
       box-shadow: var(--ob-shadow);
-      padding: 14px 16px;
+      padding: 12px 14px;
       display:none; /* hidden until user plays something */
-      grid-template-columns: 72px 1fr auto; /* cover | title+controls | menu */
+      grid-template-columns: 80px 1fr auto; /* cover | title+controls | right */
       align-items:center; gap:16px;
     }
     .ob-player.show{ display:grid; }
 
-    .obp-cover{
-      width:64px; height:64px; border-radius:12px;
-      object-fit:cover; display:block; border:1px solid var(--ob-border);
+    /* Top strip / drawer opened by 3-dots */
+    .obp-strip{
+      display:none;
+      position:absolute;
+      left:12px; right:12px;
+      bottom:100%;
+      margin-bottom:10px;
+      background:#fff; color:#111; border:1px solid var(--ob-border);
+      border-radius:12px; box-shadow:0 10px 24px rgba(0,0,0,.18);
+      padding:8px;
+      z-index:12;
     }
+    .obp-strip.show{ display:flex; gap:10px; flex-wrap:wrap; align-items:center; justify-content:center; }
+    .strip-btn{
+      display:flex; align-items:center; gap:8px;
+      padding:8px 12px; border-radius:10px; border:1px solid var(--ob-border);
+      background:#f7f9fb; color:#111; cursor:pointer; text-decoration:none;
+    }
+    .strip-btn:hover{ background:#eef2f6; }
 
-    .obp-center{ display:flex; flex-direction:column; align-items:center; gap:10px; min-width:0; }
+    /* CD cover */
+    .obp-cover-wrap{
+      width:68px; height:68px; display:grid; place-items:center;
+      border-radius:50%; background: radial-gradient(circle at 30% 30%, #fff, #f2f5f9);
+      border:2px solid var(--cd-ring);
+      box-shadow: inset 0 2px 6px rgba(0,0,0,.05), 0 2px 8px rgba(0,0,0,.06);
+    }
+    .obp-cover{
+      width:60px; height:60px; border-radius:50%;
+      object-fit:cover; display:block; border:2px solid var(--cd-ring);
+      animation:none;
+    }
+    .cd-rotate{ animation: spin 6s linear infinite; }
+
+    .obp-center{ display:flex; flex-direction:column; align-items:center; gap:8px; min-width:0; }
     .obp-title{
-      margin:0; font-weight:700; font-size:20px; color:#111; text-align:center;
+      margin:0; font-weight:700; font-size:18px; color:#111; text-align:center;
       white-space:nowrap; overflow:hidden; text-overflow:ellipsis; width:100%;
     }
 
-    /* Controls: Next - Play/Pause - Prev (swapped order as requested) */
-    .obp-controls{ display:flex; align-items:center; gap:12px; }
+    .obp-controls-row{
+      width:100%;
+      display:flex; align-items:center; justify-content:center; gap:10px;
+    }
+    .obp-controls{ display:flex; align-items:center; gap:10px; }
     .obp-btn{
-      width:44px; height:44px; border-radius:10px; border:1px solid var(--ob-border);
+      width:42px; height:42px; border-radius:10px; border:1px solid var(--ob-border);
       background:#fff; display:grid; place-items:center; cursor:pointer;
       box-shadow:0 4px 12px rgba(0,0,0,.10);
       transition: transform .15s, box-shadow .15s;
@@ -198,10 +235,25 @@
     .obp-btn:active{ transform: translateY(0); box-shadow: 0 2px 8px rgba(0,0,0,.12); }
     .obp-btn svg{ width:20px; height:20px; fill: var(--ob-accent); }
 
-    /* Three-dots menu (Share + Download) */
+    /* Progress */
+    .obp-progress{
+      width:100%; display:flex; align-items:center; gap:8px;
+    }
+    .obp-time{ font-size:12px; color:var(--ob-muted); min-width:40px; text-align:center; }
+    .obp-bar{
+      position:relative; height:8px; flex:1;
+      background:var(--progress-bg); border-radius:6px; cursor:pointer;
+    }
+    .obp-bar .fill{
+      position:absolute; left:0; top:0; height:100%; width:0%;
+      background:var(--progress-fill); border-radius:6px;
+    }
+
+    /* Right side: mode + menu aligned with buttons */
+    .obp-right{ display:flex; align-items:center; gap:8px; }
     .obp-menu{ position:relative; }
     .obp-menu-btn{
-      width:44px; height:44px; border-radius:10px; border:1px solid var(--ob-border);
+      width:42px; height:42px; border-radius:10px; border:1px solid var(--ob-border);
       background:#fff; display:grid; place-items:center; cursor:pointer;
       box-shadow:0 4px 12px rgba(0,0,0,.10);
     }
@@ -229,11 +281,12 @@
       .nav-inner{ gap:8px }
       .nav-link{ width:44px; height:44px }
 
-      .ob-player{ gap:12px; padding:12px; }
-      .obp-cover{ width:56px; height:56px; }
-      .obp-title{ font-size:18px; }
+      .ob-player{ gap:12px; padding:10px; grid-template-columns:70px 1fr auto; }
+      .obp-cover-wrap{ width:62px; height:62px; }
+      .obp-cover{ width:54px; height:54px; }
+      .obp-title{ font-size:16px; }
       .obp-btn, .obp-menu-btn{ width:40px; height:40px; }
-      .obp-controls{ gap:10px; }
+      .obp-controls{ gap:8px; }
     }
 
     footer{ text-align:center; color:#bcd; opacity:.8; padding:24px 10px; margin-top:10px; border-top:1px solid rgba(255,255,255,.08)}
@@ -493,45 +546,73 @@
     <!-- ===== OB Rounded-Rect Music Player (sticky bottom) ===== -->
     <div class="ob-shell">
       <div class="ob-player" id="obPlayer">
-        <!-- Cover -->
-        <img class="obp-cover" id="obpCover" src="" alt="Cover">
+        <!-- Top strip opened by 3-dots -->
+        <div class="obp-strip" id="obpStrip">
+          <a class="strip-btn" href="#home">🏠 Home</a>
+          <a class="strip-btn" href="#music">🎵 Music</a>
+          <a class="strip-btn" href="#love-quotes">💌 Love Note</a>
+          <button class="strip-btn" id="stripDownload">⬇️ Download</button>
+          <button class="strip-btn" id="stripShare">🔗 Share</button>
+        </div>
 
-        <!-- Center: title + controls (Next - Play/Pause - Prev) -->
+        <!-- Cover (CD) -->
+        <div class="obp-cover-wrap">
+          <img class="obp-cover" id="obpCover" src="" alt="Cover">
+        </div>
+
+        <!-- Center -->
         <div class="obp-center">
           <h3 class="obp-title" id="obpTitle">Oceanbeats</h3>
-          <div class="obp-controls">
-            <button class="obp-btn" id="obpNext" title="Next" aria-label="Next">
-              <svg viewBox="0 0 24 24"><path d="M16 6h2v12h-2V6zM6 12l10 6V6L6 12z"/></svg>
-            </button>
-            <button class="obp-btn" id="obpPlay" title="Play/Pause" aria-label="Play or pause">
-              <svg id="obpPlayIcon" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-            </button>
-            <button class="obp-btn" id="obpPrev" title="Previous" aria-label="Previous">
-              <svg viewBox="0 0 24 24"><path d="M6 6h2v12H6V6zm12 6L8 18V6l10 6z"/></svg>
-            </button>
+
+          <div class="obp-controls-row">
+            <div class="obp-controls">
+              <!-- Order: Next – Play/Pause – Prev (as you wanted) -->
+              <button class="obp-btn" id="obpNext" title="Next" aria-label="Next">
+                <svg viewBox="0 0 24 24"><path d="M16 6h2v12h-2V6zM6 12l10 6V6L6 12z"/></svg>
+              </button>
+              <button class="obp-btn" id="obpPlay" title="Play/Pause" aria-label="Play or pause">
+                <svg id="obpPlayIcon" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+              </button>
+              <button class="obp-btn" id="obpPrev" title="Previous" aria-label="Previous">
+                <svg viewBox="0 0 24 24"><path d="M6 6h2v12H6V6zm12 6L8 18V6l10 6z"/></svg>
+              </button>
+            </div>
+          </div>
+
+          <!-- Progress -->
+          <div class="obp-progress">
+            <div class="obp-time" id="obpCur">0:00</div>
+            <div class="obp-bar" id="obpBar"><div class="fill" id="obpFill"></div></div>
+            <div class="obp-time" id="obpDur">0:00</div>
           </div>
         </div>
 
-        <!-- 3-dots menu -->
-        <div class="obp-menu" id="obpMenu">
-          <button class="obp-menu-btn" id="obpMenuBtn" title="More" aria-haspopup="true" aria-expanded="false">
-            <!-- three dots -->
-            <svg viewBox="0 0 24 24"><path d="M5 10a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4z"/></svg>
+        <!-- Right: mode + menu -->
+        <div class="obp-right">
+          <!-- Mode: Repeat ▶ No-Repeat ▶ Shuffle -->
+          <button class="obp-btn" id="obpMode" title="Playback mode" aria-label="Playback mode">
+            <!-- default: repeat -->
+            <svg id="obpModeIcon" viewBox="0 0 24 24"><path d="M17 1l4 4-4 4V6H7a3 3 0 0 0-3 3v1H2V9a5 5 0 0 1 5-5h10V1zm-10 22l-4-4 4-4v3h10a3 3 0 0 0 3-3v-1h2v1a5 5 0 0 1-5 5H7v3z"/></svg>
           </button>
-          <div class="obp-menu-list" id="obpMenuList">
-            <div class="obp-menu-item" id="obpShare">
-              <svg viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7a3.27 3.27 0 0 0 0-1.39l7-4.11A3 3 0 1 0 14 5a2.99 2.99 0 0 0 .04.49l-7 4.11a3 3 0 1 0 0 4.8l7.05 4.14c-.02.15-.04.31-.04.46a3 3 0 1 0 3-3z"/></svg>
-              <span>Share</span>
+
+          <div class="obp-menu" id="obpMenu">
+            <button class="obp-menu-btn" id="obpMenuBtn" title="More" aria-haspopup="true" aria-expanded="false">
+              <svg viewBox="0 0 24 24"><path d="M5 10a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4z"/></svg>
+            </button>
+            <div class="obp-menu-list" id="obpMenuList">
+              <div class="obp-menu-item" id="obpShare">
+                <svg viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7a3.27 3.27 0 0 0 0-1.39l7-4.11A3 3 0 1 0 14 5a2.99 2.99 0 0 0 .04.49l-7 4.11a3 3 0 1 0 0 4.8l7.05 4.14c-.02.15-.04.31-.04.46a3 3 0 1 0 3-3z"/></svg>
+                <span>Share</span>
+              </div>
+              <a class="obp-menu-item" id="obpDownload" download>
+                <svg viewBox="0 0 24 24"><path d="M5 20h14v-2H5v2zM11 4v8H8l4 4 4-4h-3V4h-2z"/></svg>
+                <span>Download</span>
+              </a>
             </div>
-            <a class="obp-menu-item" id="obpDownload" download>
-              <svg viewBox="0 0 24 24"><path d="M5 20h14v-2H5v2zM11 4v8H8l4 4 4-4h-3V4h-2z"/></svg>
-              <span>Download</span>
-            </a>
           </div>
         </div>
 
         <!-- Single audio element for ALL cards -->
-        <!-- preload changed to auto for faster first play -->
         <audio id="obpAudio" preload="auto"></audio>
       </div>
     </div>
@@ -541,11 +622,13 @@
 
   <script>
     /* ---- helpers ---- */
+    const $$ = s => document.querySelector(s);
     function shareSomething(title, url){
       if (navigator.share){ navigator.share({title, url}).catch(()=>{}); }
       else if (navigator.clipboard){ navigator.clipboard.writeText(url).then(()=>alert('Link copied!')).catch(()=>alert(url)); }
       else { alert(url); }
     }
+    const fmt = (sec=0)=>{ sec=Math.floor(sec||0); const m=Math.floor(sec/60), s=sec%60; return m+':'+(s<10?'0'+s:s); };
 
     /* ---- Mobile flip (YouTube) ---- */
     const flipBox = document.getElementById('ytFlipBox');
@@ -611,18 +694,52 @@
     const $playIc  = document.getElementById('obpPlayIcon');
     const $prev    = document.getElementById('obpPrev');
 
+    const $modeBtn = document.getElementById('obpMode');
+    const $modeIc  = document.getElementById('obpModeIcon');
+
     const $menuWrap= document.getElementById('obpMenu');
-    theMenuBtn = document.getElementById('obpMenuBtn');
+    const $menuBtn = document.getElementById('obpMenuBtn');
     const $menu    = document.getElementById('obpMenuList');
     const $mShare  = document.getElementById('obpShare');
     const $mDown   = document.getElementById('obpDownload');
 
-    const cards = Array.from(document.querySelectorAll('.music-card'));
+    const $strip   = document.getElementById('obpStrip');
+    const $stripShare = document.getElementById('stripShare');
+    const $stripDown  = document.getElementById('stripDownload');
+
+    // progress
+    const $bar  = document.getElementById('obpBar');
+    const $fill = document.getElementById('obpFill');
+    const $curT = document.getElementById('obpCur');
+    const $durT = document.getElementById('obpDur');
+
+    const cards  = Array.from(document.querySelectorAll('.music-card'));
     const tracks = cards.map(c=>({ title:c.dataset.title, src:c.dataset.src, cover:c.dataset.thumb }));
 
     let index = 0;
     let isPlaying = false;
     let currentCard = null;
+
+    // playbackMode: 'repeat' | 'norepeat' | 'shuffle'
+    let playbackMode = 'repeat';
+    function setModeIcon(){
+      if(playbackMode==='repeat'){
+        $modeIc.innerHTML = '<path d="M17 1l4 4-4 4V6H7a3 3 0 0 0-3 3v1H2V9a5 5 0 0 1 5-5h10V1zm-10 22l-4-4 4-4v3h10a3 3 0 0 0 3-3v-1h2v1a5 5 0 0 1-5 5H7v3z"/>';
+        $modeBtn.title='Repeat';
+      }else if(playbackMode==='norepeat'){
+        $modeIc.innerHTML = '<path d="M17 1l4 4-4 4V6H9l2 2H7a3 3 0 0 0-3 3v1H2V9a5 5 0 0 1 5-5h8V1zM7 23v-3h9l2 2h-9a2 2 0 0 1-2-2v3H7z"/><path d="M3 4l18 18" stroke="#111" stroke-width="2"/>';
+        $modeBtn.title='No Repeat';
+      }else{
+        // shuffle
+        $modeIc.innerHTML = '<path d="M4 7h3.5a5 5 0 0 1 4.2 2.3l1.6 2.4A5 5 0 0 0 17.5 14H20v-2h-2.5a3 3 0 0 1-2.5-1.4l-1.6-2.4A7 7 0 0 0 7.5 5H4v2zm0 10h3.5a7 7 0 0 0 5.9-3.3l.2-.3 1.6 2.4A5 5 0 0 0 17.5 19H20v-2h-2.5a3 3 0 0 1-2.5-1.4l-1.6-2.4A7 7 0 0 1 7.5 17H4v2zm12-8l2-2v4l-2-2zM16 15l2-2v4l-2-2z"/>';
+        $modeBtn.title='Shuffle';
+      }
+    }
+    $modeBtn.addEventListener('click', ()=>{
+      playbackMode = playbackMode==='repeat' ? 'norepeat' : (playbackMode==='norepeat' ? 'shuffle' : 'repeat');
+      setModeIcon();
+    });
+    setModeIcon();
 
     function selectCardUI(ci, playing){
       cards.forEach((c, i)=>{
@@ -649,57 +766,95 @@
           if(btn)  btn.textContent='▶';
         }
       });
+      // cover rotation
+      if(playing){ $cover.classList.add('cd-rotate'); } else { $cover.classList.remove('cd-rotate'); }
+    }
+
+    function updateMediaSessionForTrack(t){
+      if (!('mediaSession' in navigator)) return;
+      const coverUrl = t.cover && t.cover.trim() ? t.cover : 'assets/logo.png';
+      const artworks = [96,128,192,256,384,512].map(sz=>({src:coverUrl, sizes:`${sz}x${sz}`, type:'image/png'}));
+      navigator.mediaSession.metadata = new MediaMetadata({
+        title: t.title || 'Oceanbeats',
+        artist: 'Oceanbeats Studio',
+        album: 'OB Originals',
+        artwork: artworks
+      });
+      navigator.mediaSession.setActionHandler('play',  () => setPlay(true));
+      navigator.mediaSession.setActionHandler('pause', () => setPlay(false));
+      navigator.mediaSession.setActionHandler('previoustrack', () => load(index-1, true));
+      navigator.mediaSession.setActionHandler('nexttrack',     () => load(index+1, true));
+      navigator.mediaSession.setActionHandler('seekto', (d) => {
+        if (d.seekTime != null){ $audio.currentTime = d.seekTime; }
+      });
+      navigator.mediaSession.setActionHandler('seekbackward', (d)=>{ $audio.currentTime = Math.max(0, $audio.currentTime - (d.seekOffset||10)); });
+      navigator.mediaSession.setActionHandler('seekforward',  (d)=>{ $audio.currentTime = Math.min(($audio.duration||0), $audio.currentTime + (d.seekOffset||10)); });
+    }
+    function updateMediaSessionPlaybackState(){
+      if (!('mediaSession' in navigator)) return;
+      navigator.mediaSession.playbackState = $audio.paused ? 'paused' : 'playing';
     }
 
     function load(i, autoplay=false){
-      index = (i + tracks.length) % tracks.length;
+      index = ( (i%tracks.length)+tracks.length ) % tracks.length;
       const t = tracks[index];
 
       // update media
       $audio.src = t.src;
-      $audio.load(); // ensure fast start
+      $audio.load();
       $title.textContent = t.title;
       $cover.src = t.cover || '';
       $cover.alt = t.title ? (t.title + ' cover') : 'Cover';
 
-      // update download link
+      // download link
       if ($mDown){
         $mDown.href = t.src;
         const name = t.title.replace(/[^\w\s-]/g,'').replace(/\s+/g,'_') + '.mp3';
         $mDown.setAttribute('download', name);
       }
 
-      // show player now that something was selected
+      // show player
       $player.classList.add('show');
       currentCard = cards[index];
 
-      if(autoplay){
-        setPlay(true);
-      }else{
-        setPlay(false);
-      }
+      // media session
+      updateMediaSessionForTrack(t);
+
+      if(autoplay){ setPlay(true); } else { setPlay(false); }
     }
 
-    // Always pause when playing=false, always play when true.
     function setPlay(playing){
-      if(playing){
-        $audio.play().catch(()=>{});
-      }else{
-        $audio.pause();
-      }
+      if(playing){ $audio.play().catch(()=>{}); }
+      else { $audio.pause(); }
     }
 
-    // Keep UI in sync with REAL audio state.
-    $audio.addEventListener('play', ()=>{
-      isPlaying = true;
-      $playIc.innerHTML = '<path d="M6 5h4v14H6zM14 5h4v14h-4z"/>'; // pause icon
-      selectCardUI(index, true);
+    // Real audio state keeps UI in sync
+    $audio.addEventListener('play',  ()=>{ isPlaying=true;  $playIc.innerHTML='<path d="M6 5h4v14H6zM14 5h4v14h-4z"/>'; selectCardUI(index, true); updateMediaSessionPlaybackState(); });
+    $audio.addEventListener('pause', ()=>{ isPlaying=false; $playIc.innerHTML='<path d="M8 5v14l11-7z"/>'; selectCardUI(index, false); updateMediaSessionPlaybackState(); });
+
+    // Progress + duration/time text
+    $audio.addEventListener('durationchange', ()=>{
+      $durT.textContent = fmt($audio.duration||0);
+    });
+    $audio.addEventListener('timeupdate', ()=>{
+      if(!$audio.duration || !currentCard) return;
+      const pct = ($audio.currentTime/$audio.duration)*100;
+      const cardFill = currentCard.querySelector('.fill');
+      const cardTime = currentCard.querySelector('.time');
+      if(cardFill) cardFill.style.width = pct + '%';
+      if(cardTime) cardTime.textContent = fmt($audio.currentTime||0);
+
+      $fill.style.width = pct + '%';
+      $curT.textContent = fmt($audio.currentTime||0);
     });
 
-    $audio.addEventListener('pause', ()=>{
-      isPlaying = false;
-      $playIc.innerHTML = '<path d="M8 5v14l11-7z"/>'; // play icon
-      selectCardUI(index, false);
+    // Seek on main progress
+    $bar.addEventListener('click', (e)=>{
+      if(!$audio.duration) return;
+      const r = $bar.getBoundingClientRect();
+      const x = e.clientX - r.left;
+      const pct = Math.max(0, Math.min(1, x / r.width));
+      $audio.currentTime = $audio.duration * pct;
     });
 
     // Card controls -> player
@@ -708,11 +863,8 @@
       const bar = card.querySelector('.bar');
 
       btn.addEventListener('click', ()=>{
-        if(index !== ci){
-          load(ci, true);
-        }else{
-          setPlay(!isPlaying);
-        }
+        if(index !== ci){ load(ci, true); }
+        else{ setPlay(!isPlaying); }
       });
 
       bar.addEventListener('click', (e)=>{
@@ -724,57 +876,73 @@
       });
     });
 
-    // Player controls -> cards
-    $play.addEventListener('click', ()=>{ 
-      if(!$audio.src){ load(index); }
-      setPlay(!isPlaying); 
+    // Player controls
+    $play.addEventListener('click', ()=>{ if(!$audio.src) load(index); setPlay(!isPlaying); });
+    $next.addEventListener('click', ()=>{ 
+      if(playbackMode==='shuffle'){
+        let n; do{ n = Math.floor(Math.random()*tracks.length); } while(n===index && tracks.length>1);
+        load(n, true);
+      }else{
+        load(index+1, true);
+      }
     });
-    $next.addEventListener('click', ()=>{ load(index+1, true); });
-    $prev.addEventListener('click', ()=>{ load(index-1, true); });
-
-    // Sync progress/time to active card
-    $audio.addEventListener('timeupdate', ()=>{
-      if(!$audio.duration || !currentCard) return;
-      const pct = ($audio.currentTime/$audio.duration)*100;
-      const fill = currentCard.querySelector('.fill');
-      const time = currentCard.querySelector('.time');
-      if(fill) fill.style.width = pct + '%';
-      if(time){
-        const s = Math.floor($audio.currentTime||0);
-        const m = Math.floor(s/60), r = s%60;
-        time.textContent = m + ':' + (r<10 ? '0'+r : r);
+    $prev.addEventListener('click', ()=>{ 
+      if(playbackMode==='shuffle'){
+        let n; do{ n = Math.floor(Math.random()*tracks.length); } while(n===index && tracks.length>1);
+        load(n, true);
+      }else{
+        load(index-1, true);
       }
     });
 
-    // Stay stopped at end (no auto-advance). If you want next track, replace with: load(index+1, true)
-    $audio.addEventListener('ended', ()=> { 
-      // Pause state UI will be handled by 'pause' event fired by browsers after ended.
-      // Some browsers don't fire 'pause' on 'ended', so do it explicitly:
-      $audio.pause();
-      $audio.currentTime = 0;
+    // Ended behavior per mode
+    $audio.addEventListener('ended', ()=>{
+      if(playbackMode==='shuffle'){
+        let n; do{ n = Math.floor(Math.random()*tracks.length); } while(n===index && tracks.length>1);
+        load(n, true);
+      }else if(playbackMode==='repeat'){
+        load(index+1, true);
+      }else{
+        // no-repeat: stop at end
+        $audio.pause(); $audio.currentTime = 0;
+      }
+      updateMediaSessionPlaybackState();
     });
 
-    // 3-dots menu
-    function closeMenu(){ document.getElementById('obpMenu').classList.remove('open'); theMenuBtn.setAttribute('aria-expanded','false'); }
-    function openMenu(){ document.getElementById('obpMenu').classList.add('open'); theMenuBtn.setAttribute('aria-expanded','true'); }
+    // 3-dots menu (inline list) + top strip
+    function closeMenu(){ $menuWrap.classList.remove('open'); $menuBtn.setAttribute('aria-expanded','false'); }
+    function openMenu(){ $menuWrap.classList.add('open'); $menuBtn.setAttribute('aria-expanded','true'); }
     document.addEventListener('click', (e)=>{
-      const wrap = document.getElementById('obpMenu');
-      if(wrap.contains(e.target)) return;
-      closeMenu();
+      if($menuWrap.contains(e.target) || $strip.contains(e.target) || e.target===document.getElementById('obpMenuBtn')) return;
+      closeMenu(); $strip.classList.remove('show');
     });
-    theMenuBtn.addEventListener('click', (e)=>{
+    $menuBtn.addEventListener('click', (e)=>{
       e.stopPropagation();
-      const wrap = document.getElementById('obpMenu');
-      if(wrap.classList.contains('open')) closeMenu(); else openMenu();
+      // toggle top strip; also keep small dropdown if you want both
+      if($strip.classList.contains('show')){ $strip.classList.remove('show'); closeMenu(); }
+      else { $strip.classList.add('show'); openMenu(); }
     });
-    $mShare.addEventListener('click', ()=>{
+
+    // Share/Download (menu + strip)
+    function doShare(){
       const t = tracks[index] || {title:'Oceanbeats'};
       const url = window.location.href.split('#')[0] + '#music';
       shareSomething(`${t.title} — Oceanbeats`, url);
-      closeMenu();
-    });
+    }
+    function doDownload(){
+      const t = tracks[index];
+      if(!t) return;
+      const a = document.createElement('a');
+      a.href = t.src;
+      a.download = (t.title||'Oceanbeats').replace(/[^\w\s-]/g,'').replace(/\s+/g,'_') + '.mp3';
+      a.click();
+    }
+    document.getElementById('obpShare').addEventListener('click', ()=>{ doShare(); closeMenu(); $strip.classList.remove('show'); });
+    document.getElementById('obpDownload').addEventListener('click', (e)=>{ e.preventDefault(); doDownload(); closeMenu(); $strip.classList.remove('show'); });
+    document.getElementById('stripShare').addEventListener('click', ()=>{ doShare(); $strip.classList.remove('show'); closeMenu(); });
+    document.getElementById('stripDownload').addEventListener('click', ()=>{ doDownload(); $strip.classList.remove('show'); closeMenu(); });
 
-    // NOTE: Removed the old "Init first track" block so the player stays hidden until first play.
+    // NOTE: No pre-init — player stays hidden until first play.
   </script>
 </body>
 </html>
