@@ -62,6 +62,7 @@
       background: linear-gradient(90deg, #00eaff, #8a2be2);
       -webkit-background-clip: text; -webkit-text-fill-color: transparent;
       text-shadow:0 0 12px rgba(0,200,255,.35);}
+
     /* Subheads */
     .subhead{ margin:10px 0 16px; text-align:center; font-size:18px; color:#fff; position:relative; display:inline-block;}
     .subhead::after{ content:""; display:block; width:42px; height:3px;
@@ -71,7 +72,26 @@
     .yt-grid{ display:grid; grid-template-columns:1fr 1fr; gap:26px; max-width:1200px; margin:0 auto;}
     .card{ background:var(--glass); border:1px solid var(--cardBorder); border-radius:18px; padding:16px; box-shadow:var(--shadow);}
     iframe{width:100%; height:420px; border-radius:14px}
-    @media (max-width:900px){ .yt-grid{display:none;} }
+
+    /* Mobile Flip (YouTube) */
+    .mobile-only{ display:none; }
+    .mobile-flip-wrap{ max-width:980px; margin:0 auto 64px; perspective: 1200px; }
+    .flipbox{ position:relative; width:100%; height:460px; transform-style:preserve-3d; transition: transform .75s ease; }
+    .flipface{
+      position:absolute; inset:0; background:var(--glass); border:1px solid var(--cardBorder);
+      border-radius:18px; padding:14px; box-shadow:var(--shadow); backface-visibility:hidden;
+    }
+    .flipface.back{ transform: rotateY(180deg); }
+    .flipbox.flipped{ transform: rotateY(180deg); }
+    .flip-controls{ display:flex; justify-content:center; gap:12px; margin-top:16px; position: relative; z-index: 200; }
+    .btn{
+      padding:10px 16px; border:none; border-radius:12px; cursor:pointer;
+      background: radial-gradient(circle at 30% 30%, var(--accentA), var(--accentB));
+      color:#111; font-weight:800; box-shadow:0 0 16px rgba(0,234,255,.45);
+      transition:.2s transform, .2s box-shadow, .2s opacity;
+      z-index: 210; position: relative;
+    }
+    .btn:hover{ transform: translateY(-2px); box-shadow:0 0 20px rgba(138,43,226,.55); }
 
     /* Music */
     .music-grid{ max-width:1200px; margin:0 auto; padding:6px; display:grid;
@@ -99,7 +119,17 @@
     @keyframes floaty{ 0%,100%{ transform: translateY(0)} 50%{ transform: translateY(-6px)} }
     .quote-card .by{ display:block; margin-top:10px; color:#e9f7ff; font-weight:600; font-style:normal;}
 
+    /* SPA helpers */
     .page-hidden{ display:none !important;}
+
+    /* Responsive visibility */
+    @media (max-width:900px){
+      .yt-grid{ display:none; }        /* hide desktop grid on mobile */
+      .mobile-only{ display:block; }   /* show mobile flip on mobile */
+      iframe{ height:380px }
+      .flipbox{ height:420px }
+    }
+
     footer{ text-align:center; color:#bcd; opacity:.8; padding:24px 10px; margin-top:10px; border-top:1px solid rgba(255,255,255,.08)}
   </style>
 </head>
@@ -127,6 +157,8 @@
       <!-- YouTube -->
       <section id="youtube">
         <h2 class="section-title title-section">Oceanbeats on YouTube</h2>
+
+        <!-- Desktop / Widescreen -->
         <div class="yt-grid">
           <div class="card">
             <h3 class="subhead title-sub">Shorts</h3>
@@ -137,20 +169,39 @@
             <iframe src="https://www.youtube.com/embed?listType=playlist&list=UUY8hfNmsry6kxG1_DPChxqw&rel=0" allowfullscreen></iframe>
           </div>
         </div>
+
+        <!-- Mobile Flip -->
+        <div class="mobile-only">
+          <div class="mobile-flip-wrap">
+            <div class="flipbox" id="ytFlipBox">
+              <div class="flipface front">
+                <h3 class="subhead title-sub">Videos</h3>
+                <iframe src="https://www.youtube.com/embed?listType=playlist&list=UUY8hfNmsry6kxG1_DPChxqw&rel=0" allowfullscreen></iframe>
+              </div>
+              <div class="flipface back">
+                <h3 class="subhead title-sub">Shorts</h3>
+                <iframe src="https://www.youtube.com/embed?listType=playlist&list=UUSHY8hfNmsry6kxG1_DPChxqw&rel=0" allowfullscreen></iframe>
+              </div>
+            </div>
+          </div>
+          <div class="flip-controls">
+            <button class="btn" id="flipBtn">Flip</button>
+          </div>
+        </div>
       </section>
 
       <!-- Music -->
       <section id="music">
         <h2 class="section-title title-section">Oceanbeats Originals</h2>
         <div class="music-grid">
-          <div class="music-card"><div class="thumb-container"><img src="assets/thumb/Young Hearts Collide.jpg"><img class="rotating-logo" src="assets/logo.png"></div><h4>Young Hearts Collide</h4><audio controls><source src="assets/audio/Young Hearts Collide.mp3"></audio></div>
-          <div class="music-card"><div class="thumb-container"><img src="assets/thumb/Your Eyes.jpg"><img class="rotating-logo" src="assets/logo.png"></div><h4>Your Eyes</h4><audio controls><source src="assets/audio/Your_eyes.mp3"></audio></div>
-          <div class="music-card"><div class="thumb-container"><img src="assets/thumb/Angel Piano.jpg"><img class="rotating-logo" src="assets/logo.png"></div><h4>Angel’s Piano</h4><audio controls><source src="assets/audio/Angel’s piano.mp3"></audio></div>
-          <div class="music-card"><div class="thumb-container"><img src="assets/thumb/It's okay.png"><img class="rotating-logo" src="assets/logo.png"></div><h4>It's Okay</h4><audio controls><source src="assets/audio/It's okay.mp3"></audio></div>
-          <div class="music-card"><div class="thumb-container"><img src="assets/thumb/Rekindled Hearts.png"><img class="rotating-logo" src="assets/logo.png"></div><h4>Rekindled Hearts</h4><audio controls><source src="assets/audio/Rekindled Hearts.mp3"></audio></div>
-          <div class="music-card"><div class="thumb-container"><img src="assets/thumb/it's a little thing.png"><img class="rotating-logo" src="assets/logo.png"></div><h4>It's a Little Thing</h4><audio controls><source src="assets/audio/it is little thing.mp3"></audio></div>
-          <div class="music-card"><div class="thumb-container"><img src="assets/thumb/A singer voice.png"><img class="rotating-logo" src="assets/logo.png"></div><h4>A Singer Voice</h4><audio controls><source src="assets/audio/A Singer Voice.mp3"></audio></div>
-          <div class="music-card"><div class="thumb-container"><img src="assets/thumb/Blue line.png"><img class="rotating-logo" src="assets/logo.png"></div><h4>Blue Line</h4><audio controls><source src="assets/audio/Blue line.mp3"></audio></div>
+          <div class="music-card"><div class="thumb-container"><img src="assets/thumb/Young Hearts Collide.jpg" alt="Young Hearts Collide"><img class="rotating-logo" src="assets/logo.png" alt=""></div><h4>Young Hearts Collide</h4><audio controls><source src="assets/audio/Young Hearts Collide.mp3" type="audio/mpeg"></audio></div>
+          <div class="music-card"><div class="thumb-container"><img src="assets/thumb/Your Eyes.jpg" alt="Your Eyes"><img class="rotating-logo" src="assets/logo.png" alt=""></div><h4>Your Eyes</h4><audio controls><source src="assets/audio/Your_eyes.mp3" type="audio/mpeg"></audio></div>
+          <div class="music-card"><div class="thumb-container"><img src="assets/thumb/Angel Piano.jpg" alt="Angel’s Piano"><img class="rotating-logo" src="assets/logo.png" alt=""></div><h4>Angel’s Piano</h4><audio controls><source src="assets/audio/Angel’s piano.mp3" type="audio/mpeg"></audio></div>
+          <div class="music-card"><div class="thumb-container"><img src="assets/thumb/It's okay.png" alt="It's Okay"><img class="rotating-logo" src="assets/logo.png" alt=""></div><h4>It's Okay</h4><audio controls><source src="assets/audio/It's okay.mp3" type="audio/mpeg"></audio></div>
+          <div class="music-card"><div class="thumb-container"><img src="assets/thumb/Rekindled Hearts.png" alt="Rekindled Hearts"><img class="rotating-logo" src="assets/logo.png" alt=""></div><h4>Rekindled Hearts</h4><audio controls><source src="assets/audio/Rekindled Hearts.mp3" type="audio/mpeg"></audio></div>
+          <div class="music-card"><div class="thumb-container"><img src="assets/thumb/it's a little thing.png" alt="It's a Little Thing"><img class="rotating-logo" src="assets/logo.png" alt=""></div><h4>It's a Little Thing</h4><audio controls><source src="assets/audio/it is little thing.mp3" type="audio/mpeg"></audio></div>
+          <div class="music-card"><div class="thumb-container"><img src="assets/thumb/A singer voice.png" alt="A Singer Voice"><img class="rotating-logo" src="assets/logo.png" alt=""></div><h4>A Singer Voice</h4><audio controls><source src="assets/audio/A Singer Voice.mp3" type="audio/mpeg"></audio></div>
+          <div class="music-card"><div class="thumb-container"><img src="assets/thumb/Blue line.png" alt="Blue Line"><img class="rotating-logo" src="assets/logo.png" alt=""></div><h4>Blue Line</h4><audio controls><source src="assets/audio/Blue line.mp3" type="audio/mpeg"></audio></div>
         </div>
       </section>
 
@@ -185,6 +236,26 @@
   <footer>© 2025 Oceanbeats Studio • All rights reserved</footer>
 
   <script>
+    // Mobile flip behavior
+    const flipBox = document.getElementById('ytFlipBox');
+    const flipBtn = document.getElementById('flipBtn');
+    if (flipBtn && flipBox){
+      flipBtn.addEventListener('click', () => flipBox.classList.toggle('flipped'));
+      let startX = 0, startY = 0, isTouch = false;
+      flipBox.addEventListener('touchstart', e => {
+        isTouch = true; startX = e.touches[0].clientX; startY = e.touches[0].clientY;
+      }, {passive:true});
+      flipBox.addEventListener('touchend', e => {
+        if(!isTouch) return;
+        const dx = e.changedTouches[0].clientX - startX;
+        const dy = e.changedTouches[0].clientY - startY;
+        if(Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy)){
+          flipBox.classList.toggle('flipped');
+        }
+        isTouch = false;
+      });
+    }
+
     // Music control
     const cards = document.querySelectorAll('.music-card');
     cards.forEach(card => {
@@ -222,6 +293,7 @@
         const target=a.getAttribute('href').replace('#','');
         a.classList.toggle('active',target===hash);
       });
+      if(isPage) window.scrollTo({top:0, behavior:'instant'});
     }
     window.addEventListener('hashchange',updateRoute);
     document.addEventListener('DOMContentLoaded',updateRoute);
