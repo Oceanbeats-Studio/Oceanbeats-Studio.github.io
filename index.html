@@ -69,8 +69,7 @@
       -webkit-background-clip: text; -webkit-text-fill-color: transparent;
       text-shadow:0 0 12px rgba(0,200,255,.35);
     }
-    /* 15% smaller for OB titles only */
-    .title-small{ font-size:32px; }
+    .title-small{ font-size:32px; } /* 15% smaller */
 
     /* Subheads */
     .subhead{ margin:10px 0 16px; text-align:center; font-size:18px; color:#fff; position:relative; display:inline-block;}
@@ -88,18 +87,27 @@
 
     /* YouTube */
     .yt-grid{ display:grid; grid-template-columns:1fr 1fr; gap:26px; max-width:1200px; margin:0 auto;}
-    .yt-actions{ display:flex; justify-content:center; gap:10px; margin-top:10px;}
+    .yt-actions{ display:flex; justify-content:center; gap:10px; margin:12px 0 0; }
     iframe{width:100%; height:420px; border-radius:14px}
 
     /* Mobile Flip (YouTube) */
     .mobile-only{ display:none; }
-    .mobile-flip-wrap{ max-width:980px; margin:0 auto 64px; perspective: 1200px; }
-    .flipbox{ position:relative; width:100%; height:460px; transform-style:preserve-3d; transition: transform .75s ease; }
+    .mobile-flip-wrap{ max-width:980px; margin:0 auto 74px; perspective: 1200px; } /* extra bottom space so buttons don't overlap */
+    .flipbox{ position:relative; width:100%; height:460px; transform-style:preserve-3d; transition: transform .75s ease; z-index:1; }
     .flipface{ position:absolute; inset:0; background:var(--glass); border:1px solid var(--cardBorder);
-      border-radius:18px; padding:14px; box-shadow:var(--shadow); backface-visibility:hidden; }
+      border-radius:18px; padding:14px 14px 64px; /* extra bottom padding inside */ box-shadow:var(--shadow); backface-visibility:hidden; }
     .flipface.back{ transform: rotateY(180deg); }
     .flipbox.flipped{ transform: rotateY(180deg); }
-    .flip-controls{ display:flex; justify-content:center; gap:12px; margin-top:16px; position: relative; z-index: 200; }
+    .flip-controls{ display:flex; justify-content:center; gap:12px; margin-top:-46px; /* pull closer */
+      position: relative; z-index: 3; } /* above any content */
+    .flip-controls .btn{ padding:12px 18px; }
+
+    /* Share button */
+    .share-btn{
+      border:none; cursor:pointer; border-radius:10px; padding:8px 10px; background:rgba(255,255,255,.08);
+      color:#eafcff; display:flex; align-items:center; gap:6px;
+    }
+    .share-btn:hover{ background:rgba(255,255,255,.16); }
 
     /* Music */
     .music-grid{ max-width:1200px; margin:0 auto; padding:6px; display:grid;
@@ -117,7 +125,7 @@
     @keyframes spin{ from{transform:rotate(0deg)} to{transform:rotate(360deg)} }
     .music-card h4{ margin:0; font-family:"Great Vibes", cursive; font-size:22px; text-align:center}
 
-    /* Custom mini player INSIDE each card */
+    /* Custom mini player inside card */
     .player{
       display:grid; grid-template-columns:40px 1fr 48px; align-items:center; gap:10px;
       background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.12);
@@ -130,13 +138,6 @@
     .bar{ position:relative; height:8px; background:rgba(255,255,255,.15); border-radius:6px; cursor:pointer; }
     .bar > .fill{ position:absolute; left:0; top:0; height:100%; width:0%; background:linear-gradient(90deg,#00eaff,#8a2be2); border-radius:6px; }
     .time{ font-size:12px; opacity:.85; text-align:right }
-
-    /* Share button (card & youtube) */
-    .share-btn{
-      border:none; cursor:pointer; border-radius:10px; padding:8px 10px; background:rgba(255,255,255,.08);
-      color:#eafcff; display:flex; align-items:center; gap:6px;
-    }
-    .share-btn:hover{ background:rgba(255,255,255,.16); }
 
     /* Sticky global mini-player */
     .global-player{
@@ -165,15 +166,6 @@
       box-shadow: 0 16px 36px rgba(0,0,0,.35);
     }
     .quote-card .by{ display:block; margin-top:10px; color:#e9f7ff; font-weight:600; font-style:normal;}
-
-    /* Find Me (socials) */
-    .socials{ max-width:1000px; margin:0 auto; display:grid; gap:16px; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); }
-    .social-card{
-      background:var(--glass); border:1px solid var(--cardBorder); border-radius:14px; padding:14px; display:flex; align-items:center; gap:12px;
-      transition:.2s transform, .2s box-shadow;
-    }
-    .social-card:hover{ transform: translateY(-4px); box-shadow:0 14px 34px rgba(0,0,0,.55);}
-    .soc-ico{ width:36px; height:36px; border-radius:10px; display:grid; place-items:center; background:var(--btn); color:#111; font-weight:900; }
 
     /* SPA helpers */
     .page-hidden{ display:none !important;}
@@ -206,21 +198,29 @@
       <a class="nav-link" href="#home" title="Home" aria-label="Home">
         <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 3l9 8h-3v9h-5v-6H11v6H6v-9H3l9-8z"/></svg>
       </a>
-      <!-- Music -->
+      <!-- Music (clean music note icon) -->
       <a class="nav-link" href="#music" title="Music" aria-label="Music">
-        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
+        <svg viewBox="0 0 24 24" fill="currentColor">
+          <path d="M19 3v10.26a4 4 0 1 1-2-3.46V7.5l-8 1.6V16.26a4 4 0 1 1-2-3.46V6l12-3z"/>
+        </svg>
       </a>
-      <!-- Love Quotes (LQ) -->
+      <!-- Love Quotes (heart icon fixed) -->
       <a class="nav-link" href="#love-quotes" title="LQ" aria-label="Love Quotes">
-        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 21s-6.7-4.35-9.33-7A5.33 5.33 0 017.33 2 6 6 0 0112 5.14 6 6 0 0116.67 2a5.33 5.33 0 014.66 11.99C18.7 16.64 12 21 12 21z"/></svg>
+        <svg viewBox="0 0 24 24" fill="currentColor">
+          <path d="M12.1 21.35l-1.1-.99C5.14 15.24 2 12.39 2 8.5 2 6 4 4 6.5 4c1.74 0 3.41 1.01 4.2 2.51C11.09 5.01 12.76 4 14.5 4 17 4 19 6 19 8.5c0 3.89-3.14 6.74-8.9 11.86z"/>
+        </svg>
       </a>
-      <!-- Contact (Con) -->
+      <!-- Contact (envelope) -->
       <a class="nav-link" href="#contact" title="Con" aria-label="Contact">
-        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M2 6l10 7L22 6v12H2z"/><path d="M2 6l10 7L22 6"/></svg>
+        <svg viewBox="0 0 24 24" fill="currentColor">
+          <path d="M2 6h20v12H2z"/><path d="M2 6l10 7L22 6"/>
+        </svg>
       </a>
-      <!-- Privacy Policy (PP) -->
+      <!-- Privacy Policy (shield) -->
       <a class="nav-link" href="#privacy" title="PP" aria-label="Privacy Policy">
-        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l7 3v6c0 5-3.5 9.7-7 11-3.5-1.3-7-6-7-11V5l7-3z"/></svg>
+        <svg viewBox="0 0 24 24" fill="currentColor">
+          <path d="M12 2l7 3v6c0 5-3.5 9.7-7 11-3.5-1.3-7-6-7-11V5l7-3z"/>
+        </svg>
       </a>
     </div>
   </nav>
@@ -256,19 +256,20 @@
               <div class="flipface front">
                 <h3 class="subhead title-sub">Videos</h3>
                 <iframe src="https://www.youtube.com/embed?listType=playlist&list=UUY8hfNmsry6kxG1_DPChxqw&rel=0" allowfullscreen></iframe>
-                <div class="yt-actions">
+                <div class="yt-actions" style="margin-bottom:6px;">
                   <button class="share-btn" data-share="https://www.youtube.com/playlist?list=UUY8hfNmsry6kxG1_DPChxqw">Share</button>
                 </div>
               </div>
               <div class="flipface back">
                 <h3 class="subhead title-sub">Shorts</h3>
                 <iframe src="https://www.youtube.com/embed?listType=playlist&list=UUSHY8hfNmsry6kxG1_DPChxqw&rel=0" allowfullscreen></iframe>
-                <div class="yt-actions">
+                <div class="yt-actions" style="margin-bottom:6px;">
                   <button class="share-btn" data-share="https://www.youtube.com/playlist?list=UUSHY8hfNmsry6kxG1_DPChxqw">Share</button>
                 </div>
               </div>
             </div>
           </div>
+          <!-- Ensure this sits ABOVE and not overlapping -->
           <div class="flip-controls">
             <button class="btn" id="flipBtn">Flip</button>
           </div>
@@ -279,7 +280,7 @@
       <section id="music">
         <h2 class="section-title title-section title-small">ob originals</h2>
         <div class="music-grid">
-          <!-- CARD TEMPLATE (repeat for 8 songs) -->
+          <!-- 8 music cards (unchanged content) -->
           <div class="music-card" data-title="Young Hearts Collide" data-src="assets/audio/Young Hearts Collide.mp3" data-thumb="assets/thumb/Young Hearts Collide.jpg">
             <div class="thumb-container">
               <img src="assets/thumb/Young Hearts Collide.jpg" alt="Young Hearts Collide">
@@ -544,7 +545,6 @@
         let card = btn.closest('.music-card');
         let title = card ? (card.dataset.title + ' — Oceanbeats') : 'Oceanbeats';
         if(card){
-          // Share current page with track name (no direct file link to avoid hotlink issues)
           url = window.location.href.split('#')[0] + '#music';
         }
         shareSomething(title, url);
@@ -559,7 +559,7 @@
     const gpFill = document.getElementById('gpFill');
     const gpThumb = gp.querySelector('.gp-thumb');
     const gpTitle = gp.querySelector('.gp-title');
-    let current = null; // {audio, card, fill, time, btn}
+    let current = null; // {audio, card, fill, time, btn, logo}
 
     function formatTime(s){
       s = Math.floor(s||0);
@@ -588,7 +588,6 @@
       // Prepare current
       const audio = card.querySelector('audio');
       const btn = card.querySelector('.pp-btn');
-      const bar = card.querySelector('.bar');
       const fill = card.querySelector('.fill');
       const time = card.querySelector('.time');
       const logo = card.querySelector('.rotating-logo');
@@ -623,7 +622,7 @@
       audio.addEventListener('play', ()=>{
         card.classList.add('playing');
         logo.classList.add('playing');
-        if(current && current.btn) current.btn.textContent='▶'; // reset previous text
+        if(current && current.btn) current.btn.textContent='▶';
         btn.textContent='⏸';
       });
       audio.addEventListener('pause', ()=>{
@@ -667,8 +666,6 @@
       const pct = x / rect.width;
       current.audio.currentTime = (current.audio.duration||0) * pct;
     });
-
   </script>
 </body>
 </html>
-
