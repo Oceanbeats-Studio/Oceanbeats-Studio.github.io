@@ -82,17 +82,42 @@
     main{padding:16px}
 
     section{padding:36px 10px}
-    /* Stylish section titles (no emojis) */
+
+    /* Section main titles (applied to YouTube, Originals, Love Notes) */
     .section-title{
-      text-align:center; margin:6px 0 22px; font-size:32px;
-      background: linear-gradient(90deg, #e6fbff, #9be7ff, #c7a4ff);
-      -webkit-background-clip: text; background-clip: text; color: transparent;
-      letter-spacing:.3px;
+      text-align:center;
+      margin:10px 0 26px;
+      font-size:36px;
+      font-family: "Great Vibes", cursive;
+      letter-spacing:1px;
+      background: linear-gradient(90deg, #00eaff, #8a2be2);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      color: transparent;
+      text-shadow:0 0 12px rgba(0,200,255,.4);
     }
-    /* Subheads inside cards (Shorts, Videos) */
+
+    /* Subheads for "Shorts" and "Videos" */
     .subhead{
-      margin:6px 0 12px; text-align:center; font-weight:800; letter-spacing:.4px;
-      color:#e9faff; text-transform:uppercase;
+      margin:10px 0 16px;
+      text-align:center;
+      font-family: Inter, sans-serif;
+      font-size:18px;
+      font-weight:800;
+      text-transform:uppercase;
+      letter-spacing:3px;
+      color:#ffffff;
+      position:relative;
+      display:inline-block;
+    }
+    .subhead::after{
+      content:"";
+      display:block;
+      width:40px;
+      height:3px;
+      background: linear-gradient(90deg, #00eaff, #8a2be2);
+      margin:6px auto 0;
+      border-radius:2px;
     }
 
     /* Desktop grid (>= 901px) */
@@ -314,9 +339,9 @@
               <img src="assets/thumb/It's okay.png" loading="lazy" alt="">
               <img class="rotating-logo" src="assets/logo.png" alt="logo">
             </div>
-            <h4>It's Okay</h4>
+            <h4>It's a Little Thing</h4>
             <audio preload="none" controls>
-              <source src="assets/audio/It's okay.mp3" type="audio/mpeg">
+              <source src="assets/audio/it is little thing.mp3" type="audio/mpeg">
             </audio>
           </div>
           <!-- 5 -->
@@ -336,9 +361,9 @@
               <img src="assets/thumb/it's a little thing.png" loading="lazy" alt="">
               <img class="rotating-logo" src="assets/logo.png" alt="logo">
             </div>
-            <h4>It's a Little Thing</h4>
+            <h4>It's Okay</h4>
             <audio preload="none" controls>
-              <source src="assets/audio/it is little thing.mp3" type="audio/mpeg">
+              <source src="assets/audio/It's okay.mp3" type="audio/mpeg">
             </audio>
           </div>
           <!-- 7 -->
@@ -480,7 +505,7 @@
         el.classList.toggle('page-hidden', !(isPage && hash===id));
       });
 
-      // Active nav style (for hash links only)
+      // Active nav style (for hash links)
       navLinks.forEach(a=>{
         if (!a.getAttribute('href')) return;
         const target = a.getAttribute('href').replace('#','');
