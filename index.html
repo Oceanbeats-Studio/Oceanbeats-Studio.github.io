@@ -45,7 +45,7 @@
     .brand h1{
       margin:0; line-height:1;
       font-family: "Great Vibes", cursive;
-      font-size: 64px; /* ↑ bigger name */
+      font-size: 64px; /* bigger */
       color:#fff; text-shadow:0 0 18px rgba(0,200,255,.6);
     }
     .tagline{
@@ -82,20 +82,17 @@
     main{padding:16px}
 
     section{padding:36px 10px}
-    /* Stylish section title (no emojis) */
+    /* Stylish section titles (no emojis) */
     .section-title{
       text-align:center; margin:6px 0 22px; font-size:32px;
       background: linear-gradient(90deg, #e6fbff, #9be7ff, #c7a4ff);
       -webkit-background-clip: text; background-clip: text; color: transparent;
-      text-shadow: 0 0 0 transparent;
       letter-spacing:.3px;
     }
-
     /* Subheads inside cards (Shorts, Videos) */
     .subhead{
       margin:6px 0 12px; text-align:center; font-weight:800; letter-spacing:.4px;
-      color:#e9faff;
-      text-transform:uppercase;
+      color:#e9faff; text-transform:uppercase;
     }
 
     /* Desktop grid (>= 901px) */
@@ -114,7 +111,7 @@
     /* Mobile Flip Card (<= 900px) */
     .mobile-flip-wrap{
       max-width:980px; margin:0 auto; perspective: 1200px;
-      margin-bottom: 64px;
+      margin-bottom: 64px; /* space for button */
     }
     .flipbox{
       position:relative; width:100%; height:460px;
@@ -192,6 +189,9 @@
     }
     .quote-card .by{ display:block; margin-top:10px; color:#bdeaff; font-style:normal; font-weight:600; }
 
+    /* Single-page "routing" helper */
+    .page-hidden{ display:none !important; }
+
     /* Visibility rules */
     @media (min-width: 901px){
       .yt-grid{ display:grid }
@@ -226,160 +226,194 @@
       <a class="nav-link" href="#home">Home</a>
       <a class="nav-link" href="#music">Music</a>
       <a class="nav-link" href="#love-notes">Love Notes</a>
-      <!-- separate pages -->
-      <a class="nav-link" href="contact.html">Contact</a>
-      <a class="nav-link" href="privacy.html">Privacy Policy</a>
+      <!-- SPA links (show only that page) -->
+      <a class="nav-link" href="#contact">Contact</a>
+      <a class="nav-link" href="#privacy">Privacy Policy</a>
     </div>
   </nav>
 
   <main>
-    <!-- YOUTUBE (HOME CONTENT) -->
-    <section id="youtube">
-      <h2 class="section-title">Oceanbeats on YouTube</h2>
+    <!-- ========== MAIN CONTENT WRAPPER (hidden when in "page mode") ========== -->
+    <div id="site-content">
+      <!-- YOUTUBE (HOME CONTENT) -->
+      <section id="youtube">
+        <h2 class="section-title">Oceanbeats on YouTube</h2>
 
-      <!-- Desktop / Widescreen -->
-      <div class="yt-grid">
-        <div class="card">
-          <h3 class="subhead">Shorts</h3>
-          <iframe src="https://www.youtube.com/embed?listType=playlist&list=UUSHY8hfNmsry6kxG1_DPChxqw&rel=0" allowfullscreen></iframe>
+        <!-- Desktop / Widescreen -->
+        <div class="yt-grid">
+          <div class="card">
+            <h3 class="subhead">Shorts</h3>
+            <iframe src="https://www.youtube.com/embed?listType=playlist&list=UUSHY8hfNmsry6kxG1_DPChxqw&rel=0" allowfullscreen></iframe>
+          </div>
+          <div class="card">
+            <h3 class="subhead">Videos</h3>
+            <iframe src="https://www.youtube.com/embed?listType=playlist&list=UUY8hfNmsry6kxG1_DPChxqw&rel=0" allowfullscreen></iframe>
+          </div>
         </div>
-        <div class="card">
-          <h3 class="subhead">Videos</h3>
-          <iframe src="https://www.youtube.com/embed?listType=playlist&list=UUY8hfNmsry6kxG1_DPChxqw&rel=0" allowfullscreen></iframe>
-        </div>
-      </div>
 
-      <!-- Mobile Flip -->
-      <div class="mobile-only">
-        <div class="mobile-flip-wrap">
-          <div class="flipbox" id="ytFlipBox">
-            <div class="flipface front">
-              <h3 class="subhead">Videos</h3>
-              <iframe src="https://www.youtube.com/embed?listType=playlist&list=UUY8hfNmsry6kxG1_DPChxqw&rel=0" allowfullscreen></iframe>
+        <!-- Mobile Flip -->
+        <div class="mobile-only">
+          <div class="mobile-flip-wrap">
+            <div class="flipbox" id="ytFlipBox">
+              <div class="flipface front">
+                <h3 class="subhead">Videos</h3>
+                <iframe src="https://www.youtube.com/embed?listType=playlist&list=UUY8hfNmsry6kxG1_DPChxqw&rel=0" allowfullscreen></iframe>
+              </div>
+              <div class="flipface back">
+                <h3 class="subhead">Shorts</h3>
+                <iframe src="https://www.youtube.com/embed?listType=playlist&list=UUSHY8hfNmsry6kxG1_DPChxqw&rel=0" allowfullscreen></iframe>
+              </div>
             </div>
-            <div class="flipface back">
-              <h3 class="subhead">Shorts</h3>
-              <iframe src="https://www.youtube.com/embed?listType=playlist&list=UUSHY8hfNmsry6kxG1_DPChxqw&rel=0" allowfullscreen></iframe>
+          </div>
+          <div class="flip-controls">
+            <button class="btn" id="flipBtn">Flip</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- MUSIC -->
+      <section id="music">
+        <h2 class="section-title">Oceanbeats Originals</h2>
+        <div class="music-grid">
+          <!-- 1 -->
+          <div class="music-card">
+            <div class="thumb-container">
+              <img src="assets/thumb/Young Hearts Collide.jpg" loading="lazy" alt="">
+              <img class="rotating-logo" src="assets/logo.png" alt="logo">
             </div>
+            <h4>Young Hearts Collide</h4>
+            <audio preload="none" controls>
+              <source src="assets/audio/Young Hearts Collide.mp3" type="audio/mpeg">
+            </audio>
+          </div>
+          <!-- 2 -->
+          <div class="music-card">
+            <div class="thumb-container">
+              <img src="assets/thumb/Your Eyes.jpg" loading="lazy" alt="">
+              <img class="rotating-logo" src="assets/logo.png" alt="logo">
+            </div>
+            <h4>Your Eyes</h4>
+            <audio preload="none" controls>
+              <source src="assets/audio/Your_eyes.mp3" type="audio/mpeg">
+            </audio>
+          </div>
+          <!-- 3 -->
+          <div class="music-card">
+            <div class="thumb-container">
+              <img src="assets/thumb/Angel Piano.jpg" loading="lazy" alt="">
+              <img class="rotating-logo" src="assets/logo.png" alt="logo">
+            </div>
+            <h4>Angel’s Piano</h4>
+            <audio preload="none" controls>
+              <source src="assets/audio/Angel’s piano.mp3" type="audio/mpeg">
+            </audio>
+          </div>
+          <!-- 4 -->
+          <div class="music-card">
+            <div class="thumb-container">
+              <img src="assets/thumb/It's okay.png" loading="lazy" alt="">
+              <img class="rotating-logo" src="assets/logo.png" alt="logo">
+            </div>
+            <h4>It's Okay</h4>
+            <audio preload="none" controls>
+              <source src="assets/audio/It's okay.mp3" type="audio/mpeg">
+            </audio>
+          </div>
+          <!-- 5 -->
+          <div class="music-card">
+            <div class="thumb-container">
+              <img src="assets/thumb/Rekindled Hearts.png" loading="lazy" alt="">
+              <img class="rotating-logo" src="assets/logo.png" alt="logo">
+            </div>
+            <h4>Rekindled Hearts</h4>
+            <audio preload="none" controls>
+              <source src="assets/audio/Rekindled Hearts.mp3" type="audio/mpeg">
+            </audio>
+          </div>
+          <!-- 6 -->
+          <div class="music-card">
+            <div class="thumb-container">
+              <img src="assets/thumb/it's a little thing.png" loading="lazy" alt="">
+              <img class="rotating-logo" src="assets/logo.png" alt="logo">
+            </div>
+            <h4>It's a Little Thing</h4>
+            <audio preload="none" controls>
+              <source src="assets/audio/it is little thing.mp3" type="audio/mpeg">
+            </audio>
+          </div>
+          <!-- 7 -->
+          <div class="music-card">
+            <div class="thumb-container">
+              <img src="assets/thumb/A singer voice.png" loading="lazy" alt="">
+              <img class="rotating-logo" src="assets/logo.png" alt="logo">
+            </div>
+            <h4>A Singer Voice</h4>
+            <audio preload="none" controls>
+              <source src="assets/audio/A Singer Voice.mp3" type="audio/mpeg">
+            </audio>
+          </div>
+          <!-- 8 -->
+          <div class="music-card">
+            <div class="thumb-container">
+              <img src="assets/thumb/Blue line.png" loading="lazy" alt="">
+              <img class="rotating-logo" src="assets/logo.png" alt="logo">
+            </div>
+            <h4>Blue Line</h4>
+            <audio preload="none" controls>
+              <source src="assets/audio/Blue line.mp3" type="audio/mpeg">
+            </audio>
           </div>
         </div>
-        <div class="flip-controls">
-          <button class="btn" id="flipBtn">Flip</button>
+      </section>
+
+      <!-- LOVE NOTES -->
+      <section id="love-notes">
+        <h2 class="section-title">Love Notes</h2>
+        <div class="quotes-wrap">
+          <div class="quote-card">“Where words fail, music speaks.” <span class="by">— Hans Christian Andersen</span></div>
+          <div class="quote-card">“Every love story is beautiful, but ours is my favorite.” <span class="by">— Unknown</span></div>
+          <div class="quote-card">“You are the song my heart loves to sing.” <span class="by">— Oceanbeats</span></div>
+          <div class="quote-card">“In case I forget to tell you later, I had a really good time today.” <span class="by">— Pretty Woman</span></div>
+        </div>
+      </section>
+    </div>
+    <!-- ========== /site-content ========== -->
+
+    <!-- ========== SINGLE PAGE SECTIONS (show alone) ========== -->
+    <section id="contact" class="page-hidden">
+      <h2 class="section-title">Contact Oceanbeats</h2>
+      <div style="max-width:900px;margin:0 auto">
+        <div style="background:var(--glass);border:1px solid rgba(255,255,255,.12);border-radius:16px;padding:18px;box-shadow:var(--shadow)">
+          <p>Email us at <a href="mailto:oceanbeats.studio@gmail.com" style="color:var(--link)">oceanbeats.studio@gmail.com</a></p>
+          <form onsubmit="location.href='mailto:oceanbeats.studio@gmail.com?subject=' + encodeURIComponent(this.name.value + ' — Oceanbeats Website') + '&body=' + encodeURIComponent(this.message.value); return false;">
+            <div style="display:flex;flex-direction:column;gap:10px">
+              <input name="name" required placeholder="Your name" style="padding:12px;border-radius:10px;border:1px solid rgba(255,255,255,.2);background:rgba(255,255,255,.06);color:#fff">
+              <textarea name="message" required rows="5" placeholder="Your message…" style="padding:12px;border-radius:10px;border:1px solid rgba(255,255,255,.2);background:rgba(255,255,255,.06);color:#fff"></textarea>
+              <button class="btn" type="submit">Send Email</button>
+            </div>
+          </form>
         </div>
       </div>
     </section>
 
-    <!-- MUSIC -->
-    <section id="music">
-      <h2 class="section-title">Oceanbeats Originals</h2>
-      <div class="music-grid">
-        <!-- 1 -->
-        <div class="music-card">
-          <div class="thumb-container">
-            <img src="assets/thumb/Young Hearts Collide.jpg" loading="lazy" alt="">
-            <img class="rotating-logo" src="assets/logo.png" alt="logo">
-          </div>
-          <h4>Young Hearts Collide</h4>
-          <audio preload="none" controls>
-            <source src="assets/audio/Young Hearts Collide.mp3" type="audio/mpeg">
-          </audio>
-        </div>
-        <!-- 2 -->
-        <div class="music-card">
-          <div class="thumb-container">
-            <img src="assets/thumb/Your Eyes.jpg" loading="lazy" alt="">
-            <img class="rotating-logo" src="assets/logo.png" alt="logo">
-          </div>
-          <h4>Your Eyes</h4>
-          <audio preload="none" controls>
-            <source src="assets/audio/Your_eyes.mp3" type="audio/mpeg">
-          </audio>
-        </div>
-        <!-- 3 -->
-        <div class="music-card">
-          <div class="thumb-container">
-            <img src="assets/thumb/Angel Piano.jpg" loading="lazy" alt="">
-            <img class="rotating-logo" src="assets/logo.png" alt="logo">
-          </div>
-          <h4>Angel’s Piano</h4>
-          <audio preload="none" controls>
-            <source src="assets/audio/Angel’s piano.mp3" type="audio/mpeg">
-          </audio>
-        </div>
-        <!-- 4 -->
-        <div class="music-card">
-          <div class="thumb-container">
-            <img src="assets/thumb/It's okay.png" loading="lazy" alt="">
-            <img class="rotating-logo" src="assets/logo.png" alt="logo">
-          </div>
-          <h4>It's Okay</h4>
-          <audio preload="none" controls>
-            <source src="assets/audio/It's okay.mp3" type="audio/mpeg">
-          </audio>
-        </div>
-        <!-- 5 -->
-        <div class="music-card">
-          <div class="thumb-container">
-            <img src="assets/thumb/Rekindled Hearts.png" loading="lazy" alt="">
-            <img class="rotating-logo" src="assets/logo.png" alt="logo">
-          </div>
-          <h4>Rekindled Hearts</h4>
-          <audio preload="none" controls>
-            <source src="assets/audio/Rekindled Hearts.mp3" type="audio/mpeg">
-          </audio>
-        </div>
-        <!-- 6 -->
-        <div class="music-card">
-          <div class="thumb-container">
-            <img src="assets/thumb/it's a little thing.png" loading="lazy" alt="">
-            <img class="rotating-logo" src="assets/logo.png" alt="logo">
-          </div>
-          <h4>It's a Little Thing</h4>
-          <audio preload="none" controls>
-            <source src="assets/audio/it is little thing.mp3" type="audio/mpeg">
-          </audio>
-        </div>
-        <!-- 7 -->
-        <div class="music-card">
-          <div class="thumb-container">
-            <img src="assets/thumb/A singer voice.png" loading="lazy" alt="">
-            <img class="rotating-logo" src="assets/logo.png" alt="logo">
-          </div>
-          <h4>A Singer Voice</h4>
-          <audio preload="none" controls>
-            <source src="assets/audio/A Singer Voice.mp3" type="audio/mpeg">
-          </audio>
-        </div>
-        <!-- 8 -->
-        <div class="music-card">
-          <div class="thumb-container">
-            <img src="assets/thumb/Blue line.png" loading="lazy" alt="">
-            <img class="rotating-logo" src="assets/logo.png" alt="logo">
-          </div>
-          <h4>Blue Line</h4>
-          <audio preload="none" controls>
-            <source src="assets/audio/Blue line.mp3" type="audio/mpeg">
-          </audio>
+    <section id="privacy" class="page-hidden">
+      <h2 class="section-title">Privacy Policy</h2>
+      <div style="max-width:900px;margin:0 auto">
+        <div style="background:var(--glass);border:1px solid rgba(255,255,255,.12);border-radius:16px;padding:18px;box-shadow:var(--shadow);line-height:1.7">
+          <p><strong>Last updated:</strong> 26 Aug 2025</p>
+          <p>We don’t collect personal data on this site. Audio files are hosted on GitHub Pages and may be cached by your browser. YouTube embeds are provided by YouTube; viewing them is subject to Google’s Privacy Policy.</p>
+          <p>If you email us, we’ll use your message only to reply and we won’t share your email with third parties.</p>
+          <p>For questions, email <a href="mailto:oceanbeats.studio@gmail.com" style="color:var(--link)">oceanbeats.studio@gmail.com</a>.</p>
         </div>
       </div>
     </section>
-
-    <!-- LOVE NOTES -->
-    <section id="love-notes">
-      <h2 class="section-title">Love Notes</h2>
-      <div class="quotes-wrap">
-        <div class="quote-card">“Where words fail, music speaks.” <span class="by">— Hans Christian Andersen</span></div>
-        <div class="quote-card">“Every love story is beautiful, but ours is my favorite.” <span class="by">— Unknown</span></div>
-        <div class="quote-card">“You are the song my heart loves to sing.” <span class="by">— Oceanbeats</span></div>
-        <div class="quote-card">“In case I forget to tell you later, I had a really good time today.” <span class="by">— Pretty Woman</span></div>
-      </div>
-    </section>
+    <!-- ========== /single pages ========== -->
   </main>
 
   <footer>© 2025 Oceanbeats Studio • All rights reserved</footer>
 
   <script>
-    // Mobile flip behavior
+    /* Mobile flip behavior */
     const flipBox = document.getElementById('ytFlipBox');
     const flipBtn = document.getElementById('flipBtn');
     if (flipBtn && flipBox){
@@ -399,7 +433,7 @@
       });
     }
 
-    // Music logic
+    /* Music logic: rotate logo while playing; reset angle when stop; only one audio at a time */
     const cards = document.querySelectorAll('.music-card');
     cards.forEach(card => {
       const audio = card.querySelector('audio');
@@ -426,17 +460,38 @@
       });
     });
 
-    // Nav active link on scroll (only hash links)
-    const links = [...document.querySelectorAll('.nav-link')].filter(a=>a.getAttribute('href').startsWith('#'));
-    const sections = links.map(a => document.querySelector(a.getAttribute('href')));
-    const onScroll = () => {
-      const pos = window.scrollY + 140;
-      let active = 0;
-      sections.forEach((sec, i) => { if (sec && sec.offsetTop <= pos) active = i; });
-      links.forEach((a,i)=> a.classList.toggle('active', i===active));
-    };
-    window.addEventListener('scroll', onScroll, {passive:true});
-    onScroll();
+    /* SPA-style routing:
+       - Default: show full site (site-content), hide contact/privacy sections
+       - If hash is #contact or #privacy: show only that section, hide site-content
+    */
+    const sectionsSinglePage = ['contact','privacy'];
+    const siteContent = document.getElementById('site-content');
+    const navLinks = document.querySelectorAll('.nav-link');
+
+    function updateRoute(){
+      const hash = (location.hash || '#home').replace('#','');
+      const isPage = sectionsSinglePage.includes(hash);
+
+      // Toggle which big blocks are visible
+      siteContent.classList.toggle('page-hidden', isPage);
+      sectionsSinglePage.forEach(id=>{
+        const el = document.getElementById(id);
+        if (!el) return;
+        el.classList.toggle('page-hidden', !(isPage && hash===id));
+      });
+
+      // Active nav style (for hash links only)
+      navLinks.forEach(a=>{
+        if (!a.getAttribute('href')) return;
+        const target = a.getAttribute('href').replace('#','');
+        a.classList.toggle('active', target===hash);
+      });
+
+      // Scroll to top when entering page mode
+      if (isPage) window.scrollTo({top:0, behavior:'instant'});
+    }
+    window.addEventListener('hashchange', updateRoute);
+    document.addEventListener('DOMContentLoaded', updateRoute);
   </script>
 </body>
 </html>
