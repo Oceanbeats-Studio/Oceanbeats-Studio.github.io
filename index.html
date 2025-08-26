@@ -19,6 +19,14 @@
       --glowPlaying: 0 0 18px rgba(0,234,255,.55), 0 0 36px rgba(138,43,226,.35);
       --link: #00eaff;
       --btn: radial-gradient(circle at 30% 30%, var(--accentA), var(--accentB));
+
+      /* Pill player vars */
+      --ob-bg: rgba(255,255,255,.92);
+      --ob-border: rgba(0,0,0,.08);
+      --ob-shadow: 0 10px 26px rgba(0,0,0,.20);
+      --ob-pill: 999px;
+      --ob-accent: #111;
+      --ob-muted: rgba(0,0,0,.55);
     }
     *{box-sizing:border-box}
     html,body{margin:0;height:100%}
@@ -145,7 +153,7 @@
       font-family:"Great Vibes", cursive; font-size:22px; color:#fff; text-align:center
     }
 
-    /* Inline mini player in each card */
+    /* Inline mini player in each card (controls the pill) */
     .player{
       display:grid; grid-template-columns:40px 1fr 48px; align-items:center; gap:10px;
       background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.12);
@@ -159,40 +167,76 @@
     .bar > .fill{ position:absolute; left:0; top:0; height:100%; width:0%; background:linear-gradient(90deg,#00eaff,#8a2be2); border-radius:6px; }
     .time{ font-size:12px; opacity:.85; text-align:right }
 
-    /* Sticky Global Player (shows when a track is activated) */
-    .global-player{
-      position:sticky; bottom:0; z-index:90;
-      margin:20px auto 0; max-width:1200px; padding:10px 12px;
-      background:rgba(0,0,0,.55); border-top:1px solid rgba(255,255,255,.14); backdrop-filter: blur(8px);
-      border-radius:14px; box-shadow:0 -6px 24px rgba(0,0,0,.4);
+    /* ===== OB Pill Music Player (sticky bottom) ===== */
+    .ob-shell{
+      position:sticky; bottom:0; z-index:95;
+      margin:20px auto 0; max-width:1200px; padding:0 12px 12px;
     }
-    .gp-inner{
-      display:grid; grid-template-columns:48px 1fr auto auto auto auto; /* thumb, info, prev, play, repeat, volume */
-      align-items:center; gap:12px;
+    .ob-player{
+      max-width: 720px; margin: 0 auto;
+      background: var(--ob-bg);
+      border: 1px solid var(--ob-border);
+      border-radius: var(--ob-pill);
+      box-shadow: var(--ob-shadow);
+      padding: 14px 16px;
+      display: grid;
+      grid-template-columns: 88px 1fr 64px;
+      align-items: center; gap: 16px;
+      display:none; /* hidden until user plays something */
     }
-    .gp-title{ font-size:14px; opacity:.95 }
-    .gp-bar{ height:10px; border-radius:6px; background:rgba(255,255,255,.16); position:relative; cursor:pointer; margin-top:6px; }
-    .gp-fill{ position:absolute; left:0; top:0; height:100%; width:0%; background:linear-gradient(90deg,#00eaff,#8a2be2); border-radius:6px;}
-    .gp-btn, .gp-icon{
-      min-width:48px; height:48px; border-radius:12px; border:none; background:var(--btn); color:#111; font-weight:900; cursor:pointer; display:grid; place-items:center; padding:0 12px;
-    }
-    .gp-icon{ min-width:44px; height:44px; border-radius:10px; background:rgba(255,255,255,.12); color:#fff; }
-    .gp-thumb{ width:48px; height:48px; border-radius:10px; object-fit:cover; }
+    .ob-player.show{ display:grid; }
 
-    .gp-vol{
-      display:flex; align-items:center; gap:8px; background:rgba(255,255,255,.12); padding:6px 10px; border-radius:10px;
+    .obp-cover{
+      width:72px; height:72px; border-radius:16px;
+      object-fit:cover; display:block; border:1px solid var(--ob-border);
     }
-    .gp-vol input[type="range"]{ width:90px; }
+    .obp-center{ display:flex; flex-direction:column; align-items:center; gap:10px; min-width:0; }
+    .obp-title{
+      margin:0; font-weight:700; font-size:20px; color:#111; text-align:center;
+      white-space:nowrap; overflow:hidden; text-overflow:ellipsis; width:100%;
+    }
+    .obp-controls{ display:flex; align-items:center; gap:18px; }
+    .obp-btn{
+      width:44px; height:44px; border-radius:12px; border:1px solid var(--ob-border);
+      background:#fff; display:grid; place-items:center; cursor:pointer;
+      box-shadow:0 4px 12px rgba(0,0,0,.10);
+      transition: transform .15s, box-shadow .15s;
+    }
+    .obp-btn:hover{ transform: translateY(-2px); box-shadow: 0 8px 18px rgba(0,0,0,.16); }
+    .obp-btn:active{ transform: translateY(0); box-shadow: 0 2px 8px rgba(0,0,0,.12); }
+    .obp-btn svg{ width:20px; height:20px; fill: var(--ob-accent); }
 
-    /* Love Quotes */
-    .quotes-wrap{ max-width:900px; margin:0 auto; display:grid; gap:18px; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); }
-    .quote-card{
-      background: rgba(255,255,255,.14); border:1px solid rgba(255,255,255,.28); border-radius:14px; padding:16px; color:#fff;
-      backdrop-filter: blur(10px); box-shadow: 0 10px 28px rgba(0,0,0,.28);
-      transform: translateY(0); transition: transform .25s ease, box-shadow .25s ease, background .25s ease;
+    .obp-right{ position:relative; height:72px; display:flex; align-items:center; justify-content:center; }
+    .obp-speak-btn{
+      width:44px; height:44px; border-radius:12px; border:1px solid var(--ob-border);
+      background:#fff; display:grid; place-items:center; cursor:pointer;
+      box-shadow:0 4px 12px rgba(0,0,0,.10);
     }
-    .quote-card:hover{ transform: translateY(-6px); background: rgba(255,255,255,.2); box-shadow: 0 16px 36px rgba(0,0,0,.35); }
-    .quote-card .by{ display:block; margin-top:10px; color:#e9f7ff; font-weight:600; font-style:normal;}
+    .obp-speak-btn svg{ width:20px; height:20px; fill:#111; }
+    .obp-vol-wrap{
+      position:absolute; right:10px; top:50%; transform: translateY(-50%);
+      width:28px; height:84px; display:flex; align-items:center; justify-content:center;
+      pointer-events:none; opacity:0; transition:opacity .15s ease;
+    }
+    .obp-right.open .obp-vol-wrap{ pointer-events:auto; opacity:1; }
+    .obp-volume{
+      -webkit-appearance:none; appearance:none;
+      width:84px; height:28px; transform: rotate(-90deg);
+      background: transparent;
+    }
+    .obp-volume::-webkit-slider-runnable-track{ height:6px; background: var(--ob-muted); border-radius:999px; }
+    .obp-volume::-moz-range-track{ height:6px; background: var(--ob-muted); border-radius:999px; }
+    .obp-volume::-webkit-slider-thumb{
+      -webkit-appearance:none; appearance:none;
+      width:16px; height:16px; border-radius:50%; background:#111; border:2px solid #fff;
+      margin-top:-5px; box-shadow:0 2px 6px rgba(0,0,0,.25);
+    }
+    .obp-volume::-moz-range-thumb{
+      width:16px; height:16px; border-radius:50%; background:#111; border:2px solid #fff;
+      box-shadow:0 2px 6px rgba(0,0,0,.25);
+    }
+    .obp-progress{ width:100%; height:4px; border-radius:999px; background:rgba(0,0,0,.08); overflow:hidden; display:none; }
+    .obp-progress > span{ display:block; height:100%; width:0%; background:rgba(0,0,0,.7); }
 
     /* SPA helpers */
     .page-hidden{ display:none !important;}
@@ -205,9 +249,14 @@
       .flipbox{ height:400px }
       .nav-inner{ gap:8px }
       .nav-link{ width:44px; height:44px }
-      .gp-inner{ grid-template-columns:40px 1fr auto auto auto auto; }
-      .gp-btn, .gp-icon{ min-width:40px; height:40px; }
-      .gp-vol input[type="range"]{ width:70px; }
+
+      .ob-player{
+        grid-template-columns: 74px 1fr 54px; gap:12px; padding:12px;
+      }
+      .obp-cover{ width:64px; height:64px; border-radius:14px; }
+      .obp-title{ font-size:18px; }
+      .obp-btn, .obp-speak-btn{ width:40px; height:40px; border-radius:10px; }
+      .obp-controls{ gap:12px; }
     }
 
     footer{ text-align:center; color:#bcd; opacity:.8; padding:24px 10px; margin-top:10px; border-top:1px solid rgba(255,255,255,.08)}
@@ -249,7 +298,7 @@
 
   <main>
     <div id="site-content">
-      <!-- YOUTUBE (no section title) -->
+      <!-- YOUTUBE -->
       <section id="youtube">
         <!-- Desktop grid -->
         <div class="yt-grid">
@@ -283,7 +332,6 @@
               </div>
             </div>
           </div>
-          <!-- Buttons BELOW flipbox, centered: [Share] [Flip] -->
           <div class="flip-controls">
             <button class="share-btn" id="mobileShare">Share</button>
             <button class="btn" id="flipBtn">Flip</button>
@@ -295,7 +343,7 @@
       <section id="music">
         <h2 class="section-title title-section title-small">ob originals</h2>
         <div class="music-grid">
-          <!-- Song cards -->
+          <!-- 1 -->
           <div class="music-card" data-title="Young Hearts Collide" data-src="assets/audio/Young Hearts Collide.mp3" data-thumb="assets/thumb/Young Hearts Collide.jpg">
             <div class="thumb-container">
               <img src="assets/thumb/Young Hearts Collide.jpg" alt="">
@@ -308,9 +356,8 @@
               <div class="time">0:00</div>
             </div>
             <button class="share-btn">Share</button>
-            <audio preload="none"></audio>
           </div>
-
+          <!-- 2 -->
           <div class="music-card" data-title="Your Eyes" data-src="assets/audio/Your_eyes.mp3" data-thumb="assets/thumb/Your Eyes.jpg">
             <div class="thumb-container">
               <img src="assets/thumb/Your Eyes.jpg" alt="">
@@ -323,9 +370,8 @@
               <div class="time">0:00</div>
             </div>
             <button class="share-btn">Share</button>
-            <audio preload="none"></audio>
           </div>
-
+          <!-- 3 -->
           <div class="music-card" data-title="Angel’s Piano" data-src="assets/audio/Angel’s piano.mp3" data-thumb="assets/thumb/Angel Piano.jpg">
             <div class="thumb-container">
               <img src="assets/thumb/Angel Piano.jpg" alt="">
@@ -338,9 +384,8 @@
               <div class="time">0:00</div>
             </div>
             <button class="share-btn">Share</button>
-            <audio preload="none"></audio>
           </div>
-
+          <!-- 4 -->
           <div class="music-card" data-title="It's Okay" data-src="assets/audio/It's okay.mp3" data-thumb="assets/thumb/It's okay.png">
             <div class="thumb-container">
               <img src="assets/thumb/It's okay.png" alt="">
@@ -353,9 +398,8 @@
               <div class="time">0:00</div>
             </div>
             <button class="share-btn">Share</button>
-            <audio preload="none"></audio>
           </div>
-
+          <!-- 5 -->
           <div class="music-card" data-title="Rekindled Hearts" data-src="assets/audio/Rekindled Hearts.mp3" data-thumb="assets/thumb/Rekindled Hearts.png">
             <div class="thumb-container">
               <img src="assets/thumb/Rekindled Hearts.png" alt="">
@@ -368,9 +412,8 @@
               <div class="time">0:00</div>
             </div>
             <button class="share-btn">Share</button>
-            <audio preload="none"></audio>
           </div>
-
+          <!-- 6 -->
           <div class="music-card" data-title="It's a Little Thing" data-src="assets/audio/it is little thing.mp3" data-thumb="assets/thumb/it's a little thing.png">
             <div class="thumb-container">
               <img src="assets/thumb/it's a little thing.png" alt="">
@@ -383,9 +426,8 @@
               <div class="time">0:00</div>
             </div>
             <button class="share-btn">Share</button>
-            <audio preload="none"></audio>
           </div>
-
+          <!-- 7 -->
           <div class="music-card" data-title="A Singer Voice" data-src="assets/audio/A Singer Voice.mp3" data-thumb="assets/thumb/A singer voice.png">
             <div class="thumb-container">
               <img src="assets/thumb/A singer voice.png" alt="">
@@ -398,9 +440,8 @@
               <div class="time">0:00</div>
             </div>
             <button class="share-btn">Share</button>
-            <audio preload="none"></audio>
           </div>
-
+          <!-- 8 -->
           <div class="music-card" data-title="Blue Line" data-src="assets/audio/Blue line.mp3" data-thumb="assets/thumb/Blue line.png">
             <div class="thumb-container">
               <img src="assets/thumb/Blue line.png" alt="">
@@ -413,7 +454,6 @@
               <div class="time">0:00</div>
             </div>
             <button class="share-btn">Share</button>
-            <audio preload="none"></audio>
           </div>
         </div>
       </section>
@@ -487,21 +527,44 @@
       </div>
     </section>
 
-    <!-- Sticky Global Player -->
-    <div id="globalPlayer" class="global-player page-hidden">
-      <div class="gp-inner">
-        <img class="gp-thumb" src="" alt="">
-        <div>
-          <div class="gp-title">—</div>
-          <div class="gp-bar" id="gpBar"><div class="gp-fill" id="gpFill"></div></div>
+    <!-- ===== OB Pill Music Player (sticky bottom) ===== -->
+    <div class="ob-shell">
+      <div class="ob-player" id="obPlayer">
+        <!-- Left: cover -->
+        <img class="obp-cover" id="obpCover" src="assets/thumb/Young Hearts Collide.jpg" alt="Cover">
+
+        <!-- Center: title + controls -->
+        <div class="obp-center">
+          <h3 class="obp-title" id="obpTitle">Oceanbeats</h3>
+          <div class="obp-controls">
+            <!-- Prev -->
+            <button class="obp-btn" id="obpPrev" title="Previous" aria-label="Previous">
+              <svg viewBox="0 0 24 24"><path d="M6 6h2v12H6V6zm12 6L8 18V6l10 6z"/></svg>
+            </button>
+            <!-- Stop -->
+            <button class="obp-btn" id="obpStop" title="Stop" aria-label="Stop">
+              <svg viewBox="0 0 24 24"><path d="M6 6h12v12H6z"/></svg>
+            </button>
+            <!-- Play/Pause -->
+            <button class="obp-btn" id="obpPlay" title="Play/Pause" aria-label="Play or pause">
+              <svg id="obpPlayIcon" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+            </button>
+          </div>
+          <div class="obp-progress" id="obpProgress"><span></span></div>
         </div>
-        <button class="gp-icon" id="gpPrev" title="Previous">⏮</button>
-        <button class="gp-btn" id="gpPlay">▶</button>
-        <button class="gp-icon" id="gpRepeat" title="Repeat Off">🔁</button>
-        <div class="gp-vol">
-          <button class="gp-icon" id="gpMute" title="Mute/Unmute">🔊</button>
-          <input id="gpVolume" type="range" min="0" max="1" step="0.01" value="1">
+
+        <!-- Right: speaker with popup vertical volume -->
+        <div class="obp-right" id="obpRight">
+          <button class="obp-speak-btn" id="obpSpeak" title="Volume" aria-haspopup="true" aria-expanded="false">
+            <svg viewBox="0 0 24 24"><path d="M4 9v6h4l5 5V4L8 9H4z"/></svg>
+          </button>
+          <div class="obp-vol-wrap">
+            <input class="obp-volume" id="obpVolume" type="range" min="0" max="1" step="0.01" value="0.9" aria-label="Volume slider">
+          </div>
         </div>
+
+        <!-- Hidden single audio element that ALL cards control -->
+        <audio id="obpAudio" preload="metadata"></audio>
       </div>
     </div>
   </main>
@@ -530,6 +593,11 @@
     }
     // Mobile share picks current side
     const mobileShareBtn = document.getElementById('mobileShare');
+    function shareSomething(title, url){
+      if (navigator.share){ navigator.share({title, url}).catch(()=>{}); }
+      else if (navigator.clipboard){ navigator.clipboard.writeText(url).then(()=>alert('Link copied!')).catch(()=>alert(url)); }
+      else { alert(url); }
+    }
     if (mobileShareBtn){
       mobileShareBtn.addEventListener('click', ()=>{
         const shortsURL = 'https://www.youtube.com/playlist?list=UUSHY8hfNmsry6kxG1_DPChxqw';
@@ -539,14 +607,12 @@
         shareSomething(title, url);
       });
     }
-    // Desktop YouTube share buttons
+    // Desktop YT shares
     document.querySelectorAll('#youtube .yt-grid .share-btn').forEach(btn=>{
-      btn.addEventListener('click', ()=>{
-        shareSomething('Oceanbeats on YouTube', btn.dataset.share || 'https://www.youtube.com/@oceanbeats.studio');
-      });
+      btn.addEventListener('click', ()=> shareSomething('Oceanbeats on YouTube', btn.dataset.share) );
     });
 
-    /* ------ SPA routing ------ */
+    /* ------ SPA routing (Contact/Privacy pages) ------ */
     const sectionsSinglePage=['contact','privacy'];
     const siteContent=document.getElementById('site-content');
     const navLinks=document.querySelectorAll('.nav-link');
@@ -567,185 +633,168 @@
     window.addEventListener('hashchange',updateRoute);
     document.addEventListener('DOMContentLoaded',updateRoute);
 
-    /* ------ Share helper ------ */
-    function shareSomething(title, url){
-      if (navigator.share){ navigator.share({title, url}).catch(()=>{}); }
-      else if (navigator.clipboard){ navigator.clipboard.writeText(url).then(()=>alert('Link copied!')).catch(()=>alert(url)); }
-      else { alert(url); }
-    }
-    // Music card shares
-    document.querySelectorAll('.music-card .share-btn').forEach(btn=>{
-      btn.addEventListener('click', ()=>{
-        const card = btn.closest('.music-card');
-        const title = (card?.dataset.title || 'Oceanbeats') + ' — Oceanbeats';
-        const url = window.location.href.split('#')[0] + '#music';
-        shareSomething(title, url);
-      });
-    });
+    /* ------ OB Pill Music Player (single audio) ------ */
+    const $obShell  = document.getElementById('obPlayer');
+    const $audio   = document.getElementById('obpAudio');
+    const $title   = document.getElementById('obpTitle');
+    const $cover   = document.getElementById('obpCover');
+    const $prev    = document.getElementById('obpPrev');
+    const $stop    = document.getElementById('obpStop');
+    const $play    = document.getElementById('obpPlay');
+    const $playIc  = document.getElementById('obpPlayIcon');
+    const $volume  = document.getElementById('obpVolume');
+    const $right   = document.getElementById('obpRight');
+    const $speak   = document.getElementById('obpSpeak');
+    const $prog    = document.getElementById('obpProgress');
+    const $progFill= $prog.querySelector('span');
 
-    /* ------ Music players + global player ------ */
+    // Build playlist from music cards (keeps order in the grid)
     const cards = Array.from(document.querySelectorAll('.music-card'));
-    const gp = document.getElementById('globalPlayer');
-    const gpPlay = document.getElementById('gpPlay');
-    const gpPrev = document.getElementById('gpPrev');
-    const gpRepeat = document.getElementById('gpRepeat');
-    const gpMute = document.getElementById('gpMute');
-    const gpVolume = document.getElementById('gpVolume');
-    const gpBar = document.getElementById('gpBar');
-    const gpFill = document.getElementById('gpFill');
-    const gpThumb = gp.querySelector('.gp-thumb');
-    const gpTitle = gp.querySelector('.gp-title');
+    const tracks = cards.map(c=>({
+      title: c.dataset.title,
+      src:   c.dataset.src,
+      cover: c.dataset.thumb
+    }));
 
-    let current = null; // {audio, card, fill, time, btn, logo, index}
-    let repeatOn = false;
+    let index = 0;          // current track index
+    let isPlaying = false;
+    let hideTimer = null;   // for auto-hide volume
+    let currentCard = null; // DOM of the card currently active
 
-    function formatTime(s){
-      s = Math.floor(s||0);
-      const m = Math.floor(s/60);
-      const r = s%60;
-      return m + ':' + (r<10 ? '0'+r : r);
-    }
+    function load(i, fromClick=false){
+      index = (i + tracks.length) % tracks.length;
+      const t = tracks[index];
+      $audio.src = t.src;
+      $title.textContent = t.title;
+      $cover.src = t.cover;
+      $cover.alt = t.title + " cover";
+      $progFill.style.width = '0%';
+      setPlay(false, true);          // pause at load
+      $obShell.classList.add('show'); // reveal pill once used
 
-    function setActive(card){
-      // Stop others
-      cards.forEach(c=>{
-        const a = c.querySelector('audio');
-        const l = c.querySelector('.rotating-logo');
-        const f = c.querySelector('.fill');
-        const t = c.querySelector('.time');
-        const b = c.querySelector('.pp-btn');
-        if(a && a !== card.querySelector('audio')){
-          a.pause();
-          if(l){ l.classList.remove('playing'); l.style.transform='rotate(0deg)';}
+      // highlight the active card + reset others
+      cards.forEach((c, ci)=>{
+        const logo = c.querySelector('.rotating-logo');
+        const fill = c.querySelector('.fill');
+        const time = c.querySelector('.time');
+        const btn  = c.querySelector('.pp-btn');
+        if(ci === index){
+          currentCard = c;
+        }else{
           c.classList.remove('playing');
-          if(f) f.style.width='0%';
-          if(t) t.textContent='0:00';
-          if(b) b.textContent='▶';
+          if(logo){ logo.classList.remove('playing'); logo.style.transform='rotate(0deg)'; }
+          if(fill) fill.style.width='0%';
+          if(time) time.textContent='0:00';
+          if(btn)  btn.textContent='▶';
         }
       });
 
-      const audio = card.querySelector('audio');
-      const btn = card.querySelector('.pp-btn');
-      const fill = card.querySelector('.fill');
-      const time = card.querySelector('.time');
-      const logo = card.querySelector('.rotating-logo');
-      const src = card.dataset.src;
-      const title = card.dataset.title;
-      const thumb = card.dataset.thumb;
-
-      if(audio.src !== location.origin + '/'+src && !audio.src.endsWith(src)){
-        audio.src = src;
-      }
-      const index = cards.indexOf(card);
-      current = {audio, card, fill, time, btn, logo, index};
-
-      // Apply repeat & volume state
-      current.audio.loop = repeatOn;
-      current.audio.volume = parseFloat(gpVolume.value || '1');
-      current.audio.muted = gpMute.dataset.muted === '1';
-
-      // Global player UI
-      gpThumb.src = thumb;
-      gpTitle.textContent = title;
-      gp.classList.remove('page-hidden');
+      // If load triggered by clicking a card play button, immediately play
+      if (fromClick) setPlay(true);
     }
 
-    function wireCard(card){
-      const audio = card.querySelector('audio');
+    function setPlay(playing, pauseOnly=false){
+      if(playing){
+        $audio.play().catch(()=>{});
+        isPlaying = true;
+        $playIc.innerHTML = '<path d="M6 5h4v14H6zM14 5h4v14h-4z"/>'; // pause icon
+        if(currentCard){
+          currentCard.classList.add('playing');
+          const logo = currentCard.querySelector('.rotating-logo');
+          const btn  = currentCard.querySelector('.pp-btn');
+          if(logo){ logo.classList.add('playing'); }
+          if(btn){ btn.textContent='⏸'; }
+        }
+      }else{
+        if(pauseOnly) $audio.pause();
+        isPlaying = false;
+        $playIc.innerHTML = '<path d="M8 5v14l11-7z"/>'; // play icon
+        if(currentCard){
+          const logo = currentCard.querySelector('.rotating-logo');
+          const btn  = currentCard.querySelector('.pp-btn');
+          if(logo){ logo.classList.remove('playing'); logo.style.transform='rotate(0deg)'; }
+          if(btn){ btn.textContent='▶'; }
+          currentCard.classList.remove('playing');
+        }
+      }
+    }
+
+    // Hook up each card to control the pill
+    cards.forEach((card, ci)=>{
       const btn = card.querySelector('.pp-btn');
       const bar = card.querySelector('.bar');
-      const fill = card.querySelector('.fill');
-      const time = card.querySelector('.time');
-      const logo = card.querySelector('.rotating-logo');
-
       btn.addEventListener('click', ()=>{
-        setActive(card);
-        if (audio.paused){ audio.play(); } else { audio.pause(); }
+        // select this track
+        load(ci, true); // load and auto-play
       });
-
-      audio.addEventListener('play', ()=>{
-        card.classList.add('playing');
-        logo.classList.add('playing');
-        if(current && current.btn) current.btn.textContent='▶';
-        btn.textContent='⏸';
-        gpPlay.textContent='⏸';
-      });
-      audio.addEventListener('pause', ()=>{
-        logo.classList.remove('playing'); logo.style.transform='rotate(0deg)';
-        card.classList.remove('playing');
-        btn.textContent='▶';
-        gpPlay.textContent='▶';
-      });
-      audio.addEventListener('ended', ()=>{
-        logo.classList.remove('playing'); logo.style.transform='rotate(0deg)';
-        card.classList.remove('playing');
-        btn.textContent='▶';
-        fill.style.width='0%'; time.textContent='0:00';
-        gpPlay.textContent='▶';
-        // do not auto-advance (you didn't ask next), repeat handled by .loop
-      });
-      audio.addEventListener('timeupdate', ()=>{
-        const p = audio.duration ? (audio.currentTime / audio.duration)*100 : 0;
-        fill.style.width = p + '%';
-        time.textContent = formatTime(audio.currentTime);
-        if(current && current.audio === audio){ gpFill.style.width = p + '%'; }
-      });
-
       bar.addEventListener('click', (e)=>{
+        if(index !== ci) return; // only scrub when this card is active
         const rect = bar.getBoundingClientRect();
         const x = e.clientX - rect.left;
         const pct = x / rect.width;
-        audio.currentTime = (audio.duration||0) * pct;
+        $audio.currentTime = ($audio.duration||0) * pct;
       });
-    }
-    cards.forEach(wireCard);
+      // Share buttons on cards
+      const shareBtn = card.querySelector('.share-btn');
+      shareBtn.addEventListener('click', ()=>{
+        const url = window.location.href.split('#')[0] + '#music';
+        shareSomething(card.dataset.title + ' — Oceanbeats', url);
+      });
+    });
 
-    /* Global controls */
-    gpPlay.addEventListener('click', ()=>{
-      if(!current) return;
-      if(current.audio.paused){ current.audio.play(); } else { current.audio.pause(); }
+    // Pill controls
+    $play.addEventListener('click', ()=>{ if(!$audio.src) load(index); setPlay(!isPlaying); });
+    $prev.addEventListener('click', ()=>{ load(index-1, true); });
+    $stop.addEventListener('click', ()=>{ $audio.pause(); $audio.currentTime = 0; setPlay(false); });
+
+    // Volume popup (toggle + auto-hide)
+    function showVolume(){
+      $right.classList.add('open');
+      $speak.setAttribute('aria-expanded','true');
+      resetHideTimer();
+    }
+    function hideVolume(){
+      $right.classList.remove('open');
+      $speak.setAttribute('aria-expanded','false');
+      if(hideTimer){ clearTimeout(hideTimer); hideTimer=null; }
+    }
+    function resetHideTimer(){
+      if(hideTimer) clearTimeout(hideTimer);
+      hideTimer = setTimeout(hideVolume, 3000);
+    }
+    $speak.addEventListener('click', (e)=>{
+      e.stopPropagation();
+      if($right.classList.contains('open')) hideVolume(); else showVolume();
     });
-    gpPrev.addEventListener('click', ()=>{
-      if(!current) return;
-      let idx = current.index - 1;
-      if(idx < 0) idx = cards.length - 1;
-      const prevCard = cards[idx];
-      setActive(prevCard);
-      current.audio.currentTime = 0;
-      current.audio.play();
-    });
-    gpRepeat.addEventListener('click', ()=>{
-      repeatOn = !repeatOn;
-      gpRepeat.style.background = repeatOn ? 'var(--btn)' : 'rgba(255,255,255,.12)';
-      gpRepeat.style.color = repeatOn ? '#111' : '#fff';
-      gpRepeat.title = repeatOn ? 'Repeat On' : 'Repeat Off';
-      if(current) current.audio.loop = repeatOn;
-    });
-    gpMute.addEventListener('click', ()=>{
-      const muted = gpMute.dataset.muted === '1';
-      const newState = !muted;
-      gpMute.dataset.muted = newState ? '1' : '0';
-      gpMute.textContent = newState ? '🔇' : '🔊';
-      if(current) current.audio.muted = newState;
-    });
-    gpVolume.addEventListener('input', ()=>{
-      const vol = parseFloat(gpVolume.value || '1');
-      if(current){
-        current.audio.volume = vol;
-        if(vol === 0){
-          gpMute.dataset.muted = '1'; gpMute.textContent = '🔇'; current.audio.muted = true;
-        } else {
-          gpMute.dataset.muted = '0'; gpMute.textContent = '🔊'; current.audio.muted = false;
+    $volume.addEventListener('input', ()=>{ $audio.volume = +$volume.value; showVolume(); });
+    $volume.addEventListener('change', resetHideTimer);
+    document.addEventListener('click', (e)=>{ if(!$right.contains(e.target)) hideVolume(); });
+
+    // Progress + sync to active card
+    $audio.addEventListener('timeupdate', ()=>{
+      if(!$audio.duration) return;
+      const pct = ($audio.currentTime/$audio.duration)*100;
+      $progFill.style.width = pct + '%';
+
+      if(currentCard){
+        const fill = currentCard.querySelector('.fill');
+        const time = currentCard.querySelector('.time');
+        if(fill){ fill.style.width = pct + '%'; }
+        if(time){
+          const s = Math.floor($audio.currentTime||0);
+          const m = Math.floor(s/60), r = s%60;
+          time.textContent = m + ':' + (r<10 ? '0'+r : r);
         }
       }
     });
-    gpBar.addEventListener('click', (e)=>{
-      if(!current) return;
-      const rect = gpBar.getBoundingClientRect();
-      const x = e.clientX - rect.left;
-      const pct = x / rect.width;
-      current.audio.currentTime = (current.audio.duration||0) * pct;
-    });
+    $audio.addEventListener('ended', ()=> setPlay(false,true));
+
+    // Init: preload first track meta (no autoplay)
+    if(tracks.length){
+      $title.textContent = tracks[0].title;
+      $cover.src = tracks[0].cover;
+      $audio.src = tracks[0].src;
+    }
   </script>
 </body>
 </html>
