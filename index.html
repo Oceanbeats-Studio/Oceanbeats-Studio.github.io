@@ -1,140 +1,323 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Music Box Test</title>
-  <style>
-  /* --- local variables --- */
-  .ob-music{
-    --rowH: 136px;   /* <<< Music card height */
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Music Block — Oceanbeats</title>
+<style>
+/* =================== THEME & VARIABLES =================== */
+:root{
+  /* ----- Desktop tuning (edit numbers only) ----- */
+  --card-height: 136px;           /* <<< Music card HEIGHT (desktop) */
+  --thumb-w: 86px;                /* <<< Thumbnail WIDTH (desktop)  */
+  --thumb-h: 86px;                /* <<< Thumbnail HEIGHT (desktop) */
+  --thumb-up: -6px;               /* <<< Thumbnail lift (- = up)    */
+  --btn-w: 64px;                  /* <<< Play button WIDTH          */
+  --btn-h: 64px;                  /* <<< Play button HEIGHT         */
+  --btn-radius: 16px;             /* <<< Play button corner radius  */
+  --title-size: 20px;             /* <<< Title font size (desktop)  */
+  --title-active: 24px;           /* <<< Active (middle) title size */
+
+  /* Layout */
+  --gap: 18px;
+  --list-padding-x: 22px;
+  --list-padding-y: 18px;
+
+  /* Colors */
+  --bg1:#0f2027; --bg2:#203a43; --bg3:#2c5364;
+  --txt:#fff; --txt-sub:#dff7ff;
+}
+
+/* ===== MOBILE ADJUSTMENTS ONLY (≤600px) ===== */
+@media (max-width:600px){
+  :root{
+    --card-height: 132px;     /* <<< Music card HEIGHT (mobile) */
+    --thumb-w: 78px;          /* <<< Thumbnail WIDTH (mobile)   */
+    --thumb-h: 78px;          /* <<< Thumbnail HEIGHT (mobile)  */
+    --thumb-up: -4px;         /* <<< Thumbnail lift (mobile)    */
+    --btn-w: 58px;            /* <<< Play button WIDTH (mobile) */
+    --btn-h: 58px;            /* <<< Play button HEIGHT (mobile)*/
+    --btn-radius: 14px;
+    --title-size: 18px;       /* <<< Title font size (mobile)   */
+    --title-active: 22px;     /* <<< Active title on mobile     */
     --gap: 16px;
-    background:linear-gradient(135deg,#0f2027,#203a43,#2c5364);
-    min-height:100vh; padding:30px;
-    font-family: Inter, Arial, sans-serif;
+    --list-padding-x: 18px;
+    --list-padding-y: 16px;
   }
+}
 
-  /* container card */
-  .obm-block{
-    max-width: 760px; margin: 0 auto;
-    padding: 16px 12px;
-    background: linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.04));
-    border:1px solid rgba(255,255,255,.12);
-    border-radius: 28px;
-  }
-  .obm-title{
-    font-family:"Cinzel", serif;
-    text-align:center; letter-spacing:.14em; color:#fff; opacity:.95;
-    margin: 2px 0 12px;
-  }
+/* =================== PAGE FRAME (demo bg) =================== */
+body{
+  margin:0; font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial;
+  color:var(--txt);
+  background:linear-gradient(135deg,var(--bg1),var(--bg2),var(--bg3)) fixed;
+  -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;
+  padding:28px 14px;
+}
 
-  /* viewport containing songs */
-  .obm-viewport{
-    height: calc(var(--rowH) * 3 + var(--gap) * 2);
-    overflow:auto; border-radius:20px;
-    background: rgba(255,255,255,.04);
-    border:1px solid rgba(255,255,255,.08);
-    padding: 18px 22px;
-    -ms-overflow-style:none; scrollbar-width:none;
-  }
-  .obm-viewport::-webkit-scrollbar{ display:none }
+/* =================== MUSIC BLOCK =================== */
+.obx-wrap{
+  max-width: 820px; margin: 0 auto;
+  background:linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.04));
+  border:1px solid rgba(255,255,255,.12); border-radius:28px;
+  box-shadow: 0 14px 28px rgba(0,0,0,.35);
+  padding:16px 12px;
+}
+.obx-head{
+  text-align:center; letter-spacing:.14em; opacity:.95;
+  font-weight:900; margin:2px 0 12px; font-family:"Cinzel",serif;
+}
 
-  .obm-list{ display:grid; gap: var(--gap); }
+/* Viewport shows ~3 cards and scrolls infinitely */
+.obx-viewport{
+  height: calc(var(--card-height) * 3 + var(--gap) * 2);   /* visible area height */
+  overflow:auto; border-radius:20px;
+  background: rgba(255,255,255,.04);
+  border:1px solid rgba(255,255,255,.08);
+  padding: var(--list-padding-y) var(--list-padding-x);
+  -ms-overflow-style:none; scrollbar-width:none;
+}
+.obx-viewport::-webkit-scrollbar{ display:none }
 
-  /* ===== MUSIC CARD ===== */
-  .obm-song{
-    height: var(--rowH);       /* <<< Music card height */
-    display: grid;
-    grid-template-columns: 86px 1fr 72px; /* Thumbnail | Text | Button */
-    grid-template-rows: auto 1fr;         /* Text row + button row */
-    align-items: start;
-    gap: 18px;
+/* List grid with gaps */
+.obx-list{ display:grid; gap: var(--gap); }
 
-    padding: 18px 22px;
-    border-radius: 28px;
-    color: #fff;
-    background: linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.04));
-    border: 1px solid rgba(255,255,255,.18);
-    box-shadow: 0 14px 28px rgba(0,0,0,.35), 0 0 24px rgba(0,234,255,.12);
-  }
-  .obm-song.active{ transform: scale(1.08); }
+/* =================== CARD (editable sizes via variables) =================== */
+.obx-card{
+  position:relative; overflow:hidden;
+  height: var(--card-height);                     /* <<< Music card HEIGHT applies here */
+  display:grid;
+  grid-template-columns: var(--thumb-w) 1fr var(--btn-w);  /* thumb | text | button */
+  grid-template-rows: auto 1fr;                   /* text row on top, button row under */
+  gap: var(--gap);
+  padding: var(--list-padding-y) var(--list-padding-x);
+  border-radius: 28px;
+  background: linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.04));
+  border:1px solid rgba(255,255,255,.16);
+  box-shadow: 0 12px 26px rgba(0,0,0,.32), 0 0 22px rgba(0,234,255,.12);
+  transition: transform .28s, box-shadow .28s, border-color .28s, background .28s;
+}
+.obx-card.active{
+  transform: scale(1.08);                         /* middle card pop */
+  background: linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.05));
+  border-color: rgba(255,255,255,.24);
+  box-shadow: 0 22px 40px rgba(0,0,0,.45), 0 0 36px rgba(0,234,255,.20);
+}
 
-  /* THUMBNAIL */
-  .obm-thumb{
-    width: 86px;   /* <<< Thumbnail width */
-    height: 86px;  /* <<< Thumbnail height */
-    border-radius: 20px;
-    object-fit: cover;
-    margin-top: -6px; /* lift up slightly */
-  }
+/* Thumbnail */
+.obx-thumb{
+  width: var(--thumb-w);                           /* <<< Thumbnail WIDTH */
+  height: var(--thumb-h);                          /* <<< Thumbnail HEIGHT */
+  border-radius: 20px; object-fit:cover;
+  border:1px solid rgba(255,255,255,.28);
+  align-self:start; margin-top: var(--thumb-up);   /* <<< Lift thumbnail */
+}
 
-  /* TEXT */
-  .obm-meta{ grid-column: 2 / 3; grid-row: 1 / 2; }
-  .obm-name{
-    margin:0; font-weight:900; font-size:20px; line-height:1.15;
-    display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;
-    overflow: hidden;
-  }
-  .obm-song.active .obm-name{ font-size:24px; }
-  .obm-sub{ margin-top:8px; font-size:13px; color:#dff7ff; }
+/* Text block */
+.obx-meta{
+  grid-column:2 / 3; grid-row:1 / 2; align-self:start; min-width:0;
+}
+.obx-title{
+  margin:0; font-weight:900; color:#fff; line-height:1.15;
+  font-size: var(--title-size);                    /* <<< Title size */
+  display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden;
+}
+.obx-card.active .obx-title{ font-size: var(--title-active); }  /* <<< Active title size */
+.obx-sub{ margin-top:8px; font-size:13px; color:var(--txt-sub); }
 
-  /* PLAY/PAUSE BUTTON */
-  .obm-play{
-    grid-column: 3 / 4; grid-row: 2 / 3;
-    justify-self: end; align-self: end;
-    width: 64px;   /* <<< Play button width */
-    height: 64px;  /* <<< Play button height */
-    border-radius: 16px;
-    border: 2px solid rgba(255,255,255,.35);
-    background: transparent; color:#fff;
-    display:grid; place-items:center;
-    cursor: pointer;
-  }
+/* Play/Pause button */
+.obx-play{
+  grid-column:3 / 4; grid-row:2 / 3;
+  justify-self:end; align-self:end;
+  width: var(--btn-w);                              /* <<< Play button WIDTH */
+  height: var(--btn-h);                             /* <<< Play button HEIGHT */
+  border-radius: var(--btn-radius);                 /* <<< Button radius */
+  border:2px solid rgba(255,255,255,.35);
+  background: transparent; color:#fff;
+  display:grid; place-items:center; cursor:pointer;
+  transition: transform .2s, border-color .2s, background .2s, box-shadow .2s;
+}
+.obx-play:hover{ transform: translateY(-2px); border-color:rgba(255,255,255,.6); background:rgba(255,255,255,.06) }
+.obx-play svg{ width:22px; height:22px; fill:currentColor }
 
-  /* --- MOBILE ADJUSTMENTS START HERE --- */
-  @media (max-width: 600px){
-    .obm-song{ gap:16px; padding:16px 18px; }
-    .obm-thumb{ 
-      width:60px;   /* <<< Mobile thumbnail width */
-      height:60px;  /* <<< Mobile thumbnail height */
-      margin-top:-4px; 
-    }
-    .obm-name{ font-size:18px; }
-    .obm-song.active .obm-name{ font-size:22px; }
-    .obm-play{ 
-      width:47px;   /* <<< Mobile play button width */
-      height:47px;  /* <<< Mobile play button height */
-      border-radius:14px; 
-    }
-  }
-  </style>
+/* Small helper text */
+.obx-note{
+  text-align:center; font-size:12px; opacity:.8; margin-top:8px; color:#d6f3ff;
+}
+</style>
 </head>
 <body>
-  <section class="ob-music">
-    <div class="obm-block">
-      <div class="obm-title">MUSIC</div>
-      <div class="obm-viewport" id="obmViewport">
-        <div class="obm-list" id="obmList">
-          <article class="obm-song active">
-            <img class="obm-thumb" src="https://via.placeholder.com/150" alt="">
-            <div class="obm-meta">
-              <h4 class="obm-name">Blue Line</h4>
-              <div class="obm-sub">Oceanbeats original</div>
-            </div>
-            <button class="obm-play"><svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></button>
-          </article>
 
-          <article class="obm-song">
-            <img class="obm-thumb" src="https://via.placeholder.com/150/333" alt="">
-            <div class="obm-meta">
-              <h4 class="obm-name">Your Eyes</h4>
-              <div class="obm-sub">Oceanbeats original</div>
-            </div>
-            <button class="obm-play"><svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></button>
-          </article>
-        </div>
-      </div>
+<section class="obx-wrap">
+  <div class="obx-head">MUSIC</div>
+
+  <div class="obx-viewport" id="obxViewport">
+    <div class="obx-list" id="obxList">
+      <!-- ===== 8 CARDS (edit file names if needed) ===== -->
+      <article class="obx-card" data-title="Young Hearts Collide" data-src="assets/audio/Young Hearts Collide.mp3" data-thumb="assets/thumb/Young Hearts Collide.jpg">
+        <img class="obx-thumb" src="assets/thumb/Young Hearts Collide.jpg" alt="">
+        <div class="obx-meta"><h4 class="obx-title">Young Hearts Collide</h4><div class="obx-sub">Oceanbeats original</div></div>
+        <button class="obx-play" aria-label="Play"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></button>
+      </article>
+
+      <article class="obx-card" data-title="Your Eyes" data-src="assets/audio/Your_eyes.mp3" data-thumb="assets/thumb/Your Eyes.jpg">
+        <img class="obx-thumb" src="assets/thumb/Your Eyes.jpg" alt="">
+        <div class="obx-meta"><h4 class="obx-title">Your Eyes</h4><div class="obx-sub">Oceanbeats original</div></div>
+        <button class="obx-play" aria-label="Play"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></button>
+      </article>
+
+      <article class="obx-card" data-title="Angel’s Piano" data-src="assets/audio/Angel’s piano.mp3" data-thumb="assets/thumb/Angel Piano.jpg">
+        <img class="obx-thumb" src="assets/thumb/Angel Piano.jpg" alt="">
+        <div class="obx-meta"><h4 class="obx-title">Angel’s Piano</h4><div class="obx-sub">Oceanbeats original</div></div>
+        <button class="obx-play" aria-label="Play"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></button>
+      </article>
+
+      <article class="obx-card" data-title="It's Okay" data-src="assets/audio/It's okay.mp3" data-thumb="assets/thumb/It's okay.png">
+        <img class="obx-thumb" src="assets/thumb/It's okay.png" alt="">
+        <div class="obx-meta"><h4 class="obx-title">It's Okay</h4><div class="obx-sub">Oceanbeats original</div></div>
+        <button class="obx-play" aria-label="Play"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></button>
+      </article>
+
+      <article class="obx-card" data-title="Rekindled Hearts" data-src="assets/audio/Rekindled Hearts.mp3" data-thumb="assets/thumb/Rekindled Hearts.png">
+        <img class="obx-thumb" src="assets/thumb/Rekindled Hearts.png" alt="">
+        <div class="obx-meta"><h4 class="obx-title">Rekindled Hearts</h4><div class="obx-sub">Oceanbeats original</div></div>
+        <button class="obx-play" aria-label="Play"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></button>
+      </article>
+
+      <article class="obx-card" data-title="It's a Little Thing" data-src="assets/audio/it is little thing.mp3" data-thumb="assets/thumb/it's a little thing.png">
+        <img class="obx-thumb" src="assets/thumb/it's a little thing.png" alt="">
+        <div class="obx-meta"><h4 class="obx-title">It's a Little Thing</h4><div class="obx-sub">Oceanbeats original</div></div>
+        <button class="obx-play" aria-label="Play"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></button>
+      </article>
+
+      <article class="obx-card" data-title="A Singer Voice" data-src="assets/audio/A Singer Voice.mp3" data-thumb="assets/thumb/A singer voice.png">
+        <img class="obx-thumb" src="assets/thumb/A singer voice.png" alt="">
+        <div class="obx-meta"><h4 class="obx-title">A Singer Voice</h4><div class="obx-sub">Oceanbeats original</div></div>
+        <button class="obx-play" aria-label="Play"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></button>
+      </article>
+
+      <article class="obx-card" data-title="Blue Line" data-src="assets/audio/Blue line.mp3" data-thumb="assets/thumb/Blue line.png">
+        <img class="obx-thumb" src="assets/thumb/Blue line.png" alt="">
+        <div class="obx-meta"><h4 class="obx-title">Blue Line</h4><div class="obx-sub">Oceanbeats original</div></div>
+        <button class="obx-play" aria-label="Play"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></button>
+      </article>
     </div>
-  </section>
+  </div>
+
+  <div class="obx-note">Tip: tweak sizes in <code>:root</code> (desktop) and inside the mobile media query.</div>
+</section>
+
+<!-- Hidden audio element for simple demo playback -->
+<audio id="obxAudio" preload="auto"></audio>
+
+<script>
+/* =============== UTILS =============== */
+const fmt = sec => {
+  sec = Math.floor(sec||0);
+  const m = Math.floor(sec/60), s = sec%60;
+  return m + ':' + (s<10 ? '0'+s : s);
+};
+
+/* =============== ACTIVE (middle pop) =============== */
+const vp = document.getElementById('obxViewport');
+const list = document.getElementById('obxList');
+
+function updateActive(){
+  const vpRect = vp.getBoundingClientRect();
+  const midY = vpRect.top + vp.clientHeight/2;
+  let best=null, dist=1e9;
+  list.querySelectorAll('.obx-card').forEach(card=>{
+    const r = card.getBoundingClientRect();
+    const c = r.top + r.height/2;
+    const d = Math.abs(c - midY);
+    if(d < dist){ best = card; dist = d; }
+  });
+  list.querySelectorAll('.obx-card').forEach(card => card.classList.toggle('active', card===best));
+}
+vp.addEventListener('scroll', ()=>requestAnimationFrame(updateActive));
+window.addEventListener('resize', updateActive);
+
+/* =============== INFINITE SCROLL (looping) =============== */
+(function setupInfinite(){
+  if (list.dataset.loopReady === '1') return;
+  const original = Array.from(list.children);
+  const cloneBefore = original.map(n=>n.cloneNode(true));
+  const cloneAfter  = original.map(n=>n.cloneNode(true));
+  cloneBefore.forEach(n=>list.insertBefore(n, list.firstChild));
+  cloneAfter.forEach(n=>list.appendChild(n));
+  list.dataset.loopReady = '1';
+
+  // estimate one block height (card + gap)
+  const comp = getComputedStyle(list);
+  const gap = parseFloat(comp.gap) || 0;
+  const cardH = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--card-height')) || 136;
+  const blockH = cardH + gap;
+  const midOffset = original.length * blockH;
+
+  vp.scrollTop = midOffset; // start in the middle
+  vp.addEventListener('scroll', ()=>{
+    const t = vp.scrollTop;
+    if (t < blockH){ vp.scrollTop = t + midOffset; }
+    else if (t > midOffset*2){ vp.scrollTop = t - midOffset; }
+  }, {passive:true});
+})();
+
+/* =============== SIMPLE PLAYER (per-card) =============== */
+const audio = document.getElementById('obxAudio');
+
+function setButtonIcon(btn, playing){
+  btn.innerHTML = playing
+    ? '<svg viewBox="0 0 24 24"><path d="M6 5h4v14H6zM14 5h4v14h-4z"/></svg>'
+    : '<svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>';
+}
+
+// track currently playing card
+let currentCard = null;
+
+list.addEventListener('click', e=>{
+  const card = e.target.closest('.obx-card');
+  const btn  = e.target.closest('.obx-play');
+  if(!card || !btn) return;
+
+  const src = card.dataset.src || '';
+  if(!src){ // no file, just toggle icon for demo
+    const isPause = btn.dataset.state === 'playing';
+    btn.dataset.state = isPause ? 'stopped' : 'playing';
+    setButtonIcon(btn, !isPause);
+    return;
+  }
+
+  if(currentCard === card){             // toggle same card
+    if(audio.paused){ audio.play().catch(()=>{}); setButtonIcon(btn,true); btn.dataset.state='playing'; }
+    else            { audio.pause(); setButtonIcon(btn,false); btn.dataset.state='stopped'; }
+    return;
+  }
+
+  // switch to new card
+  if(currentCard){
+    const prevBtn = currentCard.querySelector('.obx-play');
+    if(prevBtn){ prevBtn.dataset.state='stopped'; setButtonIcon(prevBtn,false); }
+  }
+  currentCard = card;
+  audio.src = src;
+  audio.currentTime = 0;
+  audio.play().then(()=>{
+    btn.dataset.state='playing';
+    setButtonIcon(btn,true);
+  }).catch(()=>{
+    btn.dataset.state='stopped';
+    setButtonIcon(btn,false);
+  });
+});
+
+audio.addEventListener('ended', ()=>{
+  if(!currentCard) return;
+  const btn = currentCard.querySelector('.obx-play');
+  if(btn){ btn.dataset.state='stopped'; setButtonIcon(btn,false); }
+});
+
+/* Init */
+updateActive();
+</script>
 </body>
 </html>
