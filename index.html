@@ -149,29 +149,13 @@ iframe{ width:100%; height:420px; border-radius:14px }
   object-fit:cover;
   border:1px solid rgba(255,255,255,.22);
 }
-/* ⬇️ Move text stack slightly up and add divider between title and sub */
-.song .meta{
-  min-width:0;
-  align-self:start;
-  margin-top:-6px;                       /* moves the text up a little */
-  display:flex; flex-direction:column;
-}
+.song .meta{ min-width:0; align-self:center }
 .song .title{
   margin:0; font-weight:900; font-size:18px;  /* smaller so names fit */
   letter-spacing:.01em; color:#fff; white-space:nowrap; overflow:hidden; text-overflow:ellipsis
 }
-.song .sub{
-  margin-top:10px;                       /* space after divider */
-  font-size:12px; color:#d7f7ff; opacity:.95; position:relative; padding-top:10px;
-}
-.song .sub::before{
-  content:""; position:absolute; left:0; top:0;
-  width:64%; height:1px;
-  background:rgba(255,255,255,.28);
-  border-radius:1px;
-}
-.song.active .title{ font-size:22px }
-.song.active .sub::before{ width:72% }    /* a touch longer on pop-out */
+.song .sub{ margin-top:6px; font-size:12px; color:#d7f7ff; opacity:.95 }
+.song.active .title{ font-size:22px }         /* middle one pops */
 
 .song .playbtn{
   width:54px; height:54px;
@@ -249,7 +233,7 @@ iframe{ width:100%; height:420px; border-radius:14px }
 .obp-menu-btn{ width:42px;height:42px;border-radius:10px;border:1px solid rgba(255,255,255,.25); background:transparent; display:grid; place-items:center; cursor:pointer }
 .obp-menu-btn svg{ width:20px;height:20px; fill:#fff }
 
-/* ===== MOBILE TWEAKS (img1 layout) ===== */
+/* ===== MOBILE TWEAKS YOU ASKED (img1 layout) ===== */
 @media (max-width:900px){
   .yt-grid{ display:none }
   .mobile-only{ display:block }
@@ -257,20 +241,17 @@ iframe{ width:100%; height:420px; border-radius:14px }
 
   .duo-grid{ grid-template-columns:1fr; gap:20px }
 
-  /* Wider cards on mobile */
-  .viewport{ padding: 10px 14px }
+  /* Wider cards on mobile (less side padding in the viewport) */
+  .viewport{ padding: 10px 14px }             /* wider content */
   .song{ width:100%; grid-template-columns:78px 1fr 58px; gap:12px; height:140px; padding:12px 14px }
 
-  /* Thumb slightly up, play slightly down */
+  /* Move thumb slightly up, play button slightly down */
   .song .thumb{ width:78px; height:78px; border-radius:16px; align-self:start; margin-top:-4px }
   .song .playbtn{ width:58px; height:58px; border-radius:16px; align-self:end; margin-bottom:-6px }
 
-  /* Title area up a bit more on mobile; divider width a bit longer */
-  .song .meta{ margin-top:-8px }
+  /* Make title always visible */
   .song .title{ font-size:17px }
   .song.active .title{ font-size:20px }
-  .song .sub::before{ width:70% }
-  .song.active .sub::before{ width:78% }
 
   .ob-player{ grid-template-columns:70px 1fr auto }
   .obp-cover-wrap{ width:62px;height:62px } .obp-cover{ width:54px;height:54px }
