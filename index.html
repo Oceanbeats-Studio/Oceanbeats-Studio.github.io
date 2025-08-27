@@ -115,13 +115,13 @@ iframe{ width:100%; height:420px; border-radius:14px }
 }
 .viewport::-webkit-scrollbar{ display:none }
 
-/* MUSIC ROWS — img2 layout */
+/* MUSIC ROWS — base (will be overridden by img1 look below) */
 .song-list{ display:grid; gap:var(--gap) }
 .song{
   width: calc(100% - 8px);
   margin: 0 auto;
   display:grid;
-  grid-template-columns: 70px 1fr 54px;   /* thumb | text | play (rounded-square) */
+  grid-template-columns: 70px 1fr 54px;
   align-items:center;
   gap:14px;
 
@@ -145,21 +145,19 @@ iframe{ width:100%; height:420px; border-radius:14px }
 }
 .song .thumb{
   width:70px; height:70px;
-  border-radius:14px;                    /* rounded-square thumbnail */
+  border-radius:14px;
   object-fit:cover;
   border:1px solid rgba(255,255,255,.22);
 }
 .song .meta{ min-width:0; align-self:center }
 .song .title{
-  margin:0; font-weight:900; font-size:18px;  /* reduced so names fit on mobile */
+  margin:0; font-weight:900; font-size:18px;
   letter-spacing:.01em; color:#fff; white-space:nowrap; overflow:hidden; text-overflow:ellipsis
 }
 .song .sub{ margin-top:6px; font-size:12px; color:#d7f7ff; opacity:.95 }
-.song.active .title{ font-size:22px }         /* middle one pops */
-
 .song .playbtn{
   width:54px; height:54px;
-  border-radius:14px;                         /* rounded-square button (NOT circle) */
+  border-radius:14px;
   border:1px solid rgba(255,255,255,.28);
   background: rgba(255,255,255,.06);
   display:grid; place-items:center; cursor:pointer;
@@ -245,6 +243,88 @@ iframe{ width:100%; height:420px; border-radius:14px }
   .obp-bar{ flex:1.6 }
 }
 footer{ text-align:center; color:#bcd; opacity:.8; padding:24px 10px; margin-top:10px; border-top:1px solid rgba(255,255,255,.08)}
+
+/* ==== IMG1 LOOK OVERRIDES (thumb up, play down, wider, big active) ==== */
+.song{
+  width:100%;
+  transform:none;
+  grid-template-columns: 86px 1fr 64px;
+  grid-template-rows: auto 1fr;
+  gap:18px;
+  padding:18px 22px;
+  border-radius:28px;
+
+  background: linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.04));
+  border:1px solid rgba(255,255,255,.16);
+  box-shadow: 0 14px 28px rgba(0,0,0,.35), 0 0 24px rgba(0,234,255,.12);
+  opacity:.95;
+}
+.song.active{
+  transform: scale(1.08);
+  background: linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.05));
+  border-color: rgba(255,255,255,.24);
+  box-shadow: 0 22px 40px rgba(0,0,0,.45), 0 0 36px rgba(0,234,255,.20);
+}
+.song .thumb{
+  width:86px; height:86px;
+  border-radius:20px;
+  object-fit:cover;
+  border:1px solid rgba(255,255,255,.28);
+  align-self:start;
+  margin-top:-6px;
+}
+.song .meta{
+  grid-column: 2 / 3;
+  grid-row: 1 / 2;
+  align-self:start;
+  min-width:0;
+}
+.song .title{
+  margin:0;
+  font-weight:900;
+  letter-spacing:.01em;
+  color:#fff;
+  font-size:20px;
+  line-height:1.15;
+  display:-webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow:hidden;
+}
+.song.active .title{ font-size:24px; }
+.song .sub{
+  margin-top:8px;
+  font-size:13px;
+  color:#dff7ff;
+  opacity:.95;
+}
+.song .playbtn{
+  grid-column: 3 / 4;
+  grid-row: 2 / 3;
+  justify-self:end;
+  align-self:end;
+  width:64px; height:64px;
+  border-radius:16px;
+  background: transparent;
+  border:2px solid rgba(255,255,255,.35);
+  display:grid; place-items:center; cursor:pointer;
+  transition:.2s transform,.2s box-shadow,.2s border-color,.2s background;
+  box-shadow: inset 0 0 0 1px rgba(0,0,0,.06);
+}
+.song .playbtn:hover{
+  transform: translateY(-2px);
+  border-color: rgba(255,255,255,.6);
+  background: rgba(255,255,255,.06);
+}
+.song .playbtn svg{ width:22px; height:22px; fill:#fff }
+.viewport{ padding: 18px 22px; }
+@media (max-width:900px){
+  .song{ gap:16px; padding:16px 18px; }
+  .song .thumb{ width:78px; height:78px; margin-top:-4px; }
+  .song .title{ font-size:18px; }
+  .song.active .title{ font-size:22px; }
+  .song .playbtn{ width:58px; height:58px; border-radius:14px; }
+}
 </style>
 </head>
 <body>
@@ -486,7 +566,7 @@ const tracks=rows.map(r=>({ id:+r.dataset.id, title:r.dataset.title, src:r.datas
 
 let index=0,isPlaying=false,repeatOne=false;
 function setStarUI(){ $starIc.innerHTML = repeatOne
-  ? '<path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2l-2.81 6.63L2 9.24l5.46 4.73L5.82 21z" fill="#fff"/>'
+  ? '<path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" fill="#fff"/>'
   : '<path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" fill="none" stroke="#fff" stroke-width="2"/>'; }
 $starBtn.addEventListener('click',()=>{ repeatOne=!repeatOne; setStarUI(); }); setStarUI();
 
@@ -564,8 +644,44 @@ document.getElementById('obpMenuBtn').addEventListener('click',e=>{ e.stopPropag
 document.getElementById('stripShare').addEventListener('click',()=>{ const t=tracks[index]||{title:'Oceanbeats'}; const url=location.href.split('#')[0]+'#music'; shareSomething(`${t.title} — Oceanbeats`,url); closeStrip(); });
 document.getElementById('stripDownload').addEventListener('click',()=>{ const t=tracks[index]; if(!t) return; const a=document.createElement('a'); a.href=t.src; a.download=(t.title||'Oceanbeats').replace(/[^\w\s-]/g,'').replace(/\s+/g,'_')+'.mp3'; a.click(); closeStrip(); });
 
-/* Init first title/cover (player hidden until first play) */
-if(tracks.length){ $title.textContent=tracks[0].title; $cover.src=tracks[0].cover||''; }
+/* === Infinite/Looping scroll inside the music viewport (img1 friendly) === */
+(function setupInfiniteScroll(){
+  const vp = document.getElementById('musicViewport');
+  const list = document.getElementById('songList');
+  if(!vp || !list) return;
+
+  const original = Array.from(list.children);
+  if (list.dataset.loopReady === '1') return;
+
+  const cloneA = original.map(n=>n.cloneNode(true));
+  const cloneB = original.map(n=>n.cloneNode(true));
+  cloneA.forEach(n=>list.appendChild(n));
+  cloneB.forEach(n=>list.insertBefore(n, list.firstChild));
+  list.dataset.loopReady = '1';
+
+  const styles = getComputedStyle(document.documentElement);
+  const rowHVar = styles.getPropertyValue('--rowH').trim().replace('px','');
+  const rowH = (parseFloat(rowHVar)||136) + (parseFloat(getComputedStyle(list).gap)||16);
+
+  const blockCount = original.length;
+  const midOffset = blockCount * rowH;
+  vp.scrollTop = midOffset;
+
+  let ticking = false;
+  vp.addEventListener('scroll', ()=>{
+    if (ticking) return;
+    ticking = true;
+    requestAnimationFrame(()=>{
+      const t = vp.scrollTop;
+      if (t < rowH) {
+        vp.scrollTop = t + midOffset;
+      } else if (t > (midOffset*2)) {
+        vp.scrollTop = t - midOffset;
+      }
+      ticking = false;
+    });
+  }, {passive:true});
+})();
 </script>
 </body>
 </html>
