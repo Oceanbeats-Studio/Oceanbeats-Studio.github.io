@@ -5,15 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Music Box Test</title>
   <style>
-  /* --- local vars just for the box --- */
+  /* --- local variables --- */
   .ob-music{
-    --rowH: 136px;
+    --rowH: 136px;   /* <<< Music card height */
     --gap: 16px;
-    --glass1: rgba(255,255,255,.08);
-    --glass2: rgba(255,255,255,.04);
-    --stroke: rgba(255,255,255,.18);
-    --txt: #fff;
-    --txt-sub:#dff7ff;
     background:linear-gradient(135deg,#0f2027,#203a43,#2c5364);
     min-height:100vh; padding:30px;
     font-family: Inter, Arial, sans-serif;
@@ -33,7 +28,7 @@
     margin: 2px 0 12px;
   }
 
-  /* viewport */
+  /* viewport containing songs */
   .obm-viewport{
     height: calc(var(--rowH) * 3 + var(--gap) * 2);
     overflow:auto; border-radius:20px;
@@ -46,84 +41,71 @@
 
   .obm-list{ display:grid; gap: var(--gap); }
 
-  /* ===== IMG1-like card ===== */
+  /* ===== MUSIC CARD ===== */
   .obm-song{
-    position: relative;               /* keeps button inside */
-    overflow: hidden;                 /* hard clamp */
-    height: var(--rowH);
-
+    height: var(--rowH);       /* <<< Music card height */
     display: grid;
-    grid-template-columns: 86px 1fr 72px; /* Thumb | Text | Button area */
-    grid-template-rows: auto 1fr;         /* Text row on top, controls row below */
+    grid-template-columns: 86px 1fr 72px; /* Thumbnail | Text | Button */
+    grid-template-rows: auto 1fr;         /* Text row + button row */
     align-items: start;
     gap: 18px;
 
     padding: 18px 22px;
     border-radius: 28px;
-    color: var(--txt);
-    background: linear-gradient(180deg, var(--glass1), var(--glass2));
-    border: 1px solid var(--stroke);
+    color: #fff;
+    background: linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.04));
+    border: 1px solid rgba(255,255,255,.18);
     box-shadow: 0 14px 28px rgba(0,0,0,.35), 0 0 24px rgba(0,234,255,.12);
-    transform: none;
-    transition: transform .28s, box-shadow .28s, border-color .28s, background .28s;
   }
-  .obm-song.active{
-    transform: scale(1.08);
-    background: linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.05));
-    border-color: rgba(255,255,255,.24);
-    box-shadow: 0 22px 40px rgba(0,0,0,.45), 0 0 36px rgba(0,234,255,.20);
-  }
+  .obm-song.active{ transform: scale(1.08); }
 
-  /* thumb slightly up */
+  /* THUMBNAIL */
   .obm-thumb{
-    width: 80px; height: 80px; border-radius: 20px;
-    object-fit: cover; border:1px solid rgba(255,255,255,.28);
-    align-self: start; margin-top: -6px;
+    width: 86px;   /* <<< Thumbnail width */
+    height: 86px;  /* <<< Thumbnail height */
+    border-radius: 20px;
+    object-fit: cover;
+    margin-top: -6px; /* lift up slightly */
   }
 
-  /* text column */
-  .obm-meta{
-    grid-column: 2 / 3;
-    grid-row: 1 / 2;
-    min-width: 0;
-    align-self: start;
-  }
+  /* TEXT */
+  .obm-meta{ grid-column: 2 / 3; grid-row: 1 / 2; }
   .obm-name{
-    margin:0; font-weight:900; color:#fff;
-    font-size: 20px; line-height:1.15;
+    margin:0; font-weight:900; font-size:20px; line-height:1.15;
     display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;
     overflow: hidden;
   }
   .obm-song.active .obm-name{ font-size:24px; }
-  .obm-sub{ margin-top:8px; font-size:13px; color:var(--txt-sub); }
+  .obm-sub{ margin-top:8px; font-size:13px; color:#dff7ff; }
 
-  /* play button stays inside lower-right */
+  /* PLAY/PAUSE BUTTON */
   .obm-play{
     grid-column: 3 / 4; grid-row: 2 / 3;
     justify-self: end; align-self: end;
-
-    width: 55px; height: 55px;
+    width: 64px;   /* <<< Play button width */
+    height: 64px;  /* <<< Play button height */
     border-radius: 16px;
     border: 2px solid rgba(255,255,255,.35);
-    background: transparent;
-    color:#fff; cursor: pointer;
+    background: transparent; color:#fff;
     display:grid; place-items:center;
-    transition: transform .2s, border-color .2s, background .2s, box-shadow .2s;
-    box-sizing: border-box;
-  }
-  .obm-play:hover{
-    transform: translateY(-2px);
-    border-color: rgba(255,255,255,.6);
-    background: rgba(255,255,255,.06);
+    cursor: pointer;
   }
 
-  /* mobile */
+  /* --- MOBILE ADJUSTMENTS START HERE --- */
   @media (max-width: 600px){
     .obm-song{ gap:16px; padding:16px 18px; }
-    .obm-thumb{ width:78px; height:78px; margin-top:-4px; }
+    .obm-thumb{ 
+      width:60px;   /* <<< Mobile thumbnail width */
+      height:60px;  /* <<< Mobile thumbnail height */
+      margin-top:-4px; 
+    }
     .obm-name{ font-size:18px; }
     .obm-song.active .obm-name{ font-size:22px; }
-    .obm-play{ width:58px; height:58px; border-radius:14px; }
+    .obm-play{ 
+      width:47px;   /* <<< Mobile play button width */
+      height:47px;  /* <<< Mobile play button height */
+      border-radius:14px; 
+    }
   }
   </style>
 </head>
@@ -150,40 +132,9 @@
             </div>
             <button class="obm-play"><svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></button>
           </article>
-
-          <article class="obm-song">
-            <img class="obm-thumb" src="https://via.placeholder.com/150/555" alt="">
-            <div class="obm-meta">
-              <h4 class="obm-name">Young Hearts Collide</h4>
-              <div class="obm-sub">Oceanbeats original</div>
-            </div>
-            <button class="obm-play"><svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></button>
-          </article>
         </div>
       </div>
     </div>
   </section>
-
-<script>
-/* highlight center card */
-const vp = document.getElementById('obmViewport');
-const list = document.getElementById('obmList');
-function setActive(){
-  const rect = vp.getBoundingClientRect();
-  const mid = rect.top + vp.clientHeight/2;
-  let best=null, dist=1e9;
-  list.querySelectorAll('.obm-song').forEach(el=>{
-    const r=el.getBoundingClientRect();
-    const c=r.top + r.height/2;
-    const d=Math.abs(c-mid);
-    if(d<dist){ best=el; dist=d; }
-  });
-  list.querySelectorAll('.obm-song').forEach(el=>el.classList.toggle('active', el===best));
-}
-vp.addEventListener('scroll', ()=>requestAnimationFrame(setActive));
-window.addEventListener('resize', setActive);
-setActive();
-</script>
 </body>
 </html>
-
