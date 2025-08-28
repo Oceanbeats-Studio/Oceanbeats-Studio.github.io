@@ -83,7 +83,7 @@ section{padding:36px 10px}
 .share-btn:hover{ transform:translateY(-2px) }
 iframe{ width:100%; height:420px; border-radius:14px }
 
-/* Mobile flip (buttons styled like Share; moved slightly up) */
+/* Mobile flip */
 .mobile-only{ display:none }
 .mobile-flip-wrap{ max-width:980px; margin:0 auto 64px; perspective:1200px }
 .flipbox{ position:relative; width:100%; height:460px; transform-style:preserve-3d; transition: transform .75s ease; z-index:1 }
@@ -91,33 +91,24 @@ iframe{ width:100%; height:420px; border-radius:14px }
 .flipface.back{ transform: rotateY(180deg) }
 .flipbox.flipped{ transform: rotateY(180deg) }
 
-/* UPDATE: Flip/Share styling */
-.flip-controls{
-  display:flex; justify-content:center; gap:12px;
-  margin-top:12px;              /* nearer to the YT window, no overlap */
-  position:relative; z-index:5;
-}
+/* << UPDATED: square/transparent buttons & closer under YT window >> */
+.flip-controls{ display:flex; justify-content:center; gap:14px; margin-top:10px; position:relative; z-index:5 }
 .flip-controls .btn,
-.flip-controls .share-btn{
-  border:none;
-  border-radius:999px;          /* pill */
-  padding:10px 20px;
-  font-weight:800;
+.flip-controls #mobileShare{
+  border:1px solid rgba(255,255,255,.28);
+  background:rgba(255,255,255,.08);
+  color:#fff;
+  padding:10px 14px;
+  border-radius:12px;         /* square rectangle with rounded corners */
   cursor:pointer;
-  color:#0b1220;
-  background:
-    linear-gradient(135deg, rgba(255,255,255,.85), rgba(255,255,255,.65)) padding-box,
-    linear-gradient(135deg, var(--accentA), var(--accentB)) border-box;
-  border:1px solid transparent; /* gradient border via border-box layer */
-  backdrop-filter: blur(6px);
-  box-shadow: 0 8px 22px rgba(0,0,0,.28), 0 0 22px rgba(0,234,255,.18);
-  transition: transform .2s ease, box-shadow .2s ease, opacity .2s ease;
+  box-shadow:0 6px 18px rgba(0,0,0,.25);
+  backdrop-filter:blur(6px);
+  transition:.2s transform,.2s background,.2s box-shadow;
 }
 .flip-controls .btn:hover,
-.flip-controls .share-btn:hover{
-  transform: translateY(-2px);
-  box-shadow: 0 12px 26px rgba(0,0,0,.35), 0 0 28px rgba(138,43,226,.25);
-  opacity: .95;
+.flip-controls #mobileShare:hover{
+  background:rgba(255,255,255,.12);
+  transform:translateY(-1px);
 }
 
 /* Two blocks aligned to YT width */
@@ -616,7 +607,17 @@ function load(i,autoplay=false,skipScroll=false){
     if(nearest) nearest.scrollIntoView({block:'center', behavior:'smooth'});
   }
 
-  if(autoplay) setPlay(true); else setPlay(false);
+  // start reliably on first click
+  if (autoplay) {
+    if ($audio.readyState >= 2) {
+      setPlay(true);
+    } else {
+      const onCanPlay = () => { $audio.removeEventListener('canplay', onCanPlay); setPlay(true); };
+      $audio.addEventListener('canplay', onCanPlay, { once:true });
+    }
+  } else {
+    setPlay(false);
+  }
 }
 
 function setPlay(on){ if(on){ $audio.play().catch(()=>{});} else {$audio.pause();} }
@@ -626,13 +627,14 @@ $audio.addEventListener('durationchange',()=>{ $durT.textContent=fmt($audio.dura
 $audio.addEventListener('timeupdate',()=>{ if(!$audio.duration)return; const pct=$audio.currentTime/$audio.duration*100; $fill.style.width=pct+'%'; $curT.textContent=fmt($audio.currentTime||0); });
 $audio.addEventListener('ended',()=>{ if(repeatOne){ $audio.currentTime=0; $audio.play().catch(()=>{});} else { load(index+1,true); } });
 
+/* seek bar */
 $bar.addEventListener('click',e=>{ if(!$audio.duration) return; const r=$bar.getBoundingClientRect(); const x=e.clientX-r.left; const pct=Math.max(0,Math.min(1,x/r.width)); $audio.currentTime=$audio.duration*pct; });
 
 /* Delegated clicks on song rows (works for clones) */
 list.addEventListener('click',e=>{
   const row=e.target.closest('.song'); if(!row) return;
   const id=+row.dataset.id; const ri=tracks.findIndex(t=>t.id===id); if(ri<0) return;
-  if(index!==ri){ load(ri,true); } else { setPlay(!isPlaying); }
+  if(index!==ri){ load(ri,true); } else { setPlay($audio.paused); }    // sync with real state
 });
 
 /* Helpers to move exactly ONE visible row */
@@ -668,7 +670,7 @@ function rowStep(direction){ // +1 forward, -1 backward
 }
 
 /* Player buttons -> FLIPPED direction:
-   Next goes to the previous visible card (scrolls opposite), Prev goes forward */
+   Next goes to the previous visible card, Prev goes forward */
 document.getElementById('obpNext').addEventListener('click', ()=>{
   const target = rowStep(-1);
   if(!target) return;
@@ -685,17 +687,21 @@ document.getElementById('obpPrev').addEventListener('click', ()=>{
 });
 
 /* 3-dots transparent strip */
-function closeStrip(){ document.getElementById('obpStrip').classList.remove('show'); document.getElementById('obpMenuBtn').setAttribute('aria-expanded','false'); }
-function openStrip(){ document.getElementById('obpStrip').classList.add('show'); document.getElementById('obpMenuBtn').setAttribute('aria-expanded','true'); }
-document.addEventListener('click',e=>{ if(document.getElementById('obPlayer').contains(e.target) && (e.target.id==='obpMenuBtn' || document.getElementById('obpMenuBtn').contains(e.target) || document.getElementById('obpStrip').contains(e.target))) return; closeStrip(); });
-document.getElementById('obpMenuBtn').addEventListener('click',e=>{ e.stopPropagation(); document.getElementById('obpStrip').classList.contains('show')?closeStrip():openStrip(); });
+function closeStrip(){ $strip.classList.remove('show'); $menuBtn.setAttribute('aria-expanded','false'); }
+function openStrip(){ $strip.classList.add('show'); $menuBtn.setAttribute('aria-expanded','true'); }
+document.addEventListener('click',e=>{ if(document.getElementById('obPlayer').contains(e.target) && (e.target.id==='obpMenuBtn' || document.getElementById('obpMenuBtn').contains(e.target) || $strip.contains(e.target))) return; closeStrip(); });
+document.getElementById('obpMenuBtn').addEventListener('click',e=>{ e.stopPropagation(); $strip.classList.contains('show')?closeStrip():openStrip(); });
 document.getElementById('stripShare').addEventListener('click',()=>{ const t=tracks[index]||{title:'Oceanbeats'}; const url=location.href.split('#')[0]+'#music'; shareSomething(`${t.title} — Oceanbeats`,url); closeStrip(); });
 document.getElementById('stripDownload').addEventListener('click',()=>{ const t=tracks[index]; if(!t) return; const a=document.createElement('a'); a.href=t.src; a.download=(t.title||'Oceanbeats').replace(/[^\w\s-]/g,'').replace(/\s+/g,'_')+'.mp3'; a.click(); closeStrip(); });
+
+/* Player Play/Pause button: use real audio state */
+document.getElementById('obpPlay').addEventListener('click',()=>{ 
+  if(!$audio.src) load(index); 
+  setPlay($audio.paused);
+});
 
 /* Init display only (player hidden until play) */
 if(tracks.length){ $title.textContent=tracks[0].title; $cover.src=tracks[0].cover||''; }
 </script>
 </body>
 </html>
-
-
