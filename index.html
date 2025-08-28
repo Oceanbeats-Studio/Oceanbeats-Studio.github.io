@@ -91,29 +91,28 @@ iframe{ width:100%; height:420px; border-radius:14px }
 .flipface.back{ transform: rotateY(180deg) }
 .flipbox.flipped{ transform: rotateY(180deg) }
 
-/* UPDATED: flip controls — moved up & new glass-outline style (scoped to mobile flip area only) */
+/* UPDATE #1: prettier + higher (but not overlapping) Share/Flip */
 .flip-controls{
   display:flex; justify-content:center; gap:14px;
-  margin-top:10px; /* closer under the video, no overlap */
+  margin-top:10px; /* closer to YT, safe spacing */
   position:relative; z-index:5
 }
 .flip-controls .btn,
 .flip-controls .share-btn{
-  border:1px solid rgba(255,255,255,.22);
-  background: rgba(255,255,255,.08);
-  color:#eafcff;
-  border-radius:14px;
-  padding:10px 16px;
-  font-weight:800;
-  backdrop-filter: blur(6px);
-  box-shadow: 0 8px 22px rgba(0,0,0,.25), inset 0 0 0 1px rgba(255,255,255,.06);
-  transition:.2s transform,.2s box-shadow,.2s background;
+  border:none;
+  border-radius:18px;
+  padding:10px 20px;
+  font-weight:700;
+  cursor:pointer;
+  background:linear-gradient(135deg, var(--accentA), var(--accentB));
+  color:#111;
+  box-shadow:0 6px 16px rgba(0,0,0,.25);
+  transition:.25s transform,.25s box-shadow;
 }
 .flip-controls .btn:hover,
 .flip-controls .share-btn:hover{
-  background: rgba(255,255,255,.14);
-  transform: translateY(-2px);
-  box-shadow: 0 12px 28px rgba(0,0,0,.3);
+  transform:translateY(-2px) scale(1.02);
+  box-shadow:0 10px 22px rgba(0,0,0,.35);
 }
 
 /* Two blocks aligned to YT width */
@@ -179,7 +178,7 @@ iframe{ width:100%; height:420px; border-radius:14px }
   letter-spacing:.01em; color:#fff; white-space:nowrap; overflow:hidden; text-overflow:ellipsis
 }
 .song .title span{ display:inline-block } /* for marquee animation */
-.song .sub{ margin-top:6px; font-size:12px; color:#d7f7ff; opacity:.95 }
+song .sub{ margin-top:6px; font-size:12px; color:#d7f7ff; opacity:.95 }
 .song.active .title{ font-size:22px }         /* middle one pops */
 
 /* marquee: auto-run ONLY on active card */
@@ -566,9 +565,6 @@ function setStarUI(){ $starIc.innerHTML = repeatOne
   : '<path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" fill="none" stroke="#fff" stroke-width="2"/>'; }
 $starBtn.addEventListener('click',()=>{ repeatOne=!repeatOne; setStarUI(); }); setStarUI();
 
-/* Play/Pause sync note:
-   setRowPlaying() updates all clones of the current song AND the bottom player icon
-   via audio 'play'/'pause' events below, so both buttons always match */
 function setRowPlaying(id,playing){
   list.querySelectorAll(`.song[data-id="${id}"]`).forEach(row=>{
     const btn=row.querySelector('.playbtn svg');
@@ -619,13 +615,19 @@ function load(i,autoplay=false,skipScroll=false){
 }
 
 function setPlay(on){ if(on){ $audio.play().catch(()=>{});} else {$audio.pause();} }
+
+/* UPDATE #2: wire the bottom Play/Pause to actually toggle audio */
+$play.addEventListener('click', ()=>{
+  setPlay(!isPlaying);
+});
+
 $audio.addEventListener('play', ()=>{ isPlaying=true; $playIc.innerHTML='<path d="M6 5h4v14H6zM14 5h4v14h-4z"/>'; setRowPlaying(tracks[index].id,true); });
 $audio.addEventListener('pause',()=>{ isPlaying=false; $playIc.innerHTML='<path d="M8 5v14l11-7z"/>'; setRowPlaying(tracks[index].id,false); });
-$audio.addEventListener('durationchange',()=>{ $durT.textContent=fmt($audio.duration||0) });
-$audio.addEventListener('timeupdate',()=>{ if(!$audio.duration)return; const pct=$audio.currentTime/$audio.duration*100; $fill.style.width=pct+'%'; $curT.textContent=fmt($audio.currentTime||0); });
+$audio.addEventListener('durationchange',()=>{ document.getElementById('obpDur').textContent=fmt($audio.duration||0) });
+$audio.addEventListener('timeupdate',()=>{ if(!$audio.duration)return; const pct=$audio.currentTime/$audio.duration*100; document.getElementById('obpFill').style.width=pct+'%'; document.getElementById('obpCur').textContent=fmt($audio.currentTime||0); });
 $audio.addEventListener('ended',()=>{ if(repeatOne){ $audio.currentTime=0; $audio.play().catch(()=>{});} else { load(index+1,true); } });
 
-$bar.addEventListener('click',e=>{ if(!$audio.duration) return; const r=$bar.getBoundingClientRect(); const x=e.clientX-r.left; const pct=Math.max(0,Math.min(1,x/r.width)); $audio.currentTime=$audio.duration*pct; });
+document.getElementById('obpBar').addEventListener('click',e=>{ if(!$audio.duration) return; const r=document.getElementById('obpBar').getBoundingClientRect(); const x=e.clientX-r.left; const pct=Math.max(0,Math.min(1,x/r.width)); $audio.currentTime=$audio.duration*pct; });
 
 /* Delegated clicks on song rows (works for clones) */
 list.addEventListener('click',e=>{
@@ -666,7 +668,8 @@ function rowStep(direction){ // +1 forward, -1 backward
   return target;
 }
 
-/* Player buttons -> FLIPPED direction now */
+/* Player buttons -> FLIPPED direction:
+   Next goes to the previous visible card (scrolls opposite), Prev goes forward */
 document.getElementById('obpNext').addEventListener('click', ()=>{
   const target = rowStep(-1);
   if(!target) return;
@@ -682,10 +685,11 @@ document.getElementById('obpPrev').addEventListener('click', ()=>{
   if(ri>=0) load(ri, true, /*skipScroll*/ true);
 });
 
-function closeStrip(){ $strip.classList.remove('show'); $menuBtn.setAttribute('aria-expanded','false'); }
-function openStrip(){ $strip.classList.add('show'); $menuBtn.setAttribute('aria-expanded','true'); }
-document.addEventListener('click',e=>{ if(document.getElementById('obPlayer').contains(e.target) && (e.target.id==='obpMenuBtn' || document.getElementById('obpMenuBtn').contains(e.target) || $strip.contains(e.target))) return; closeStrip(); });
-document.getElementById('obpMenuBtn').addEventListener('click',e=>{ e.stopPropagation(); $strip.classList.contains('show')?closeStrip():openStrip(); });
+/* 3-dots transparent strip */
+function closeStrip(){ document.getElementById('obpStrip').classList.remove('show'); document.getElementById('obpMenuBtn').setAttribute('aria-expanded','false'); }
+function openStrip(){ document.getElementById('obpStrip').classList.add('show'); document.getElementById('obpMenuBtn').setAttribute('aria-expanded','true'); }
+document.addEventListener('click',e=>{ if(document.getElementById('obPlayer').contains(e.target) && (e.target.id==='obpMenuBtn' || document.getElementById('obpMenuBtn').contains(e.target) || document.getElementById('obpStrip').contains(e.target))) return; closeStrip(); });
+document.getElementById('obpMenuBtn').addEventListener('click',e=>{ e.stopPropagation(); document.getElementById('obpStrip').classList.contains('show')?closeStrip():openStrip(); });
 document.getElementById('stripShare').addEventListener('click',()=>{ const t=tracks[index]||{title:'Oceanbeats'}; const url=location.href.split('#')[0]+'#music'; shareSomething(`${t.title} — Oceanbeats`,url); closeStrip(); });
 document.getElementById('stripDownload').addEventListener('click',()=>{ const t=tracks[index]; if(!t) return; const a=document.createElement('a'); a.href=t.src; a.download=(t.title||'Oceanbeats').replace(/[^\w\s-]/g,'').replace(/\s+/g,'_')+'.mp3'; a.click(); closeStrip(); });
 
