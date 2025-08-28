@@ -90,7 +90,7 @@ iframe{ width:100%; height:420px; border-radius:14px }
 .flipface{ position:absolute; inset:0; background:rgba(255,255,255,.07); border:1px solid rgba(255,255,255,.12); border-radius:18px; padding:14px 14px 64px; box-shadow:var(--shadow); backface-visibility:hidden }
 .flipface.back{ transform: rotateY(180deg) }
 .flipbox.flipped{ transform: rotateY(180deg) }
-.flip-controls{ display:flex; justify-content:center; gap:20px; margin-top:20px; position:relative; z-index:5 }
+.flip-controls{ display:flex; justify-content:center; gap:20px; margin-top:32px; position:relative; z-index:5 }
 .flip-controls .btn{
   border:none; cursor:pointer; border-radius:12px; padding:10px 14px;
   background:var(--btn); color:#111; font-weight:800; box-shadow:0 0 16px rgba(0,234,255,.35);
@@ -128,7 +128,7 @@ iframe{ width:100%; height:420px; border-radius:14px }
   margin: 0 auto;
   display:grid;
   grid-template-columns: 70px 1fr 54px;   /* thumb | text | play */
-  align-items:center;
+  align-items:center;                     /* centres thumb & button vertically */
   gap:14px;
 
   height: var(--rowH);
@@ -160,7 +160,7 @@ iframe{ width:100%; height:420px; border-radius:14px }
   margin:0; font-weight:900; font-size:18px;  /* compact so names fit */
   letter-spacing:.01em; color:#fff; white-space:nowrap; overflow:hidden; text-overflow:ellipsis
 }
-.song .title span{ display:inline-block } /* needed for marquee animation */
+.song .title span{ display:inline-block } /* for marquee animation */
 .song .sub{ margin-top:6px; font-size:12px; color:#d7f7ff; opacity:.95 }
 .song.active .title{ font-size:22px }         /* middle one pops */
 
@@ -256,8 +256,9 @@ iframe{ width:100%; height:420px; border-radius:14px }
   iframe{ height:360px }
 
   .duo-grid{ grid-template-columns:1fr; gap:20px }
-  .viewport{ padding: 12px 14px }
+  .viewport{ padding: 12px 14px }          /* wider content on mobile */
 
+  /* song row: wider layout but centered vertical elements */
   .song{ width:100%; grid-template-columns:78px 1fr 58px; gap:12px; height:140px; padding:12px 14px }
   .song .thumb{ width:78px; height:78px; border-radius:16px; }
   .song .playbtn{ width:58px; height:58px; border-radius:16px; }
@@ -563,42 +564,13 @@ function updateMediaSession(t){
   navigator.mediaSession.metadata=new MediaMetadata({title:t.title,artist:'Oceanbeats Studio',album:'OB Originals',artwork:artworks});
   navigator.mediaSession.setActionHandler('play', ()=>setPlay(true));
   navigator.mediaSession.setActionHandler('pause', ()=>setPlay(false));
-  navigator.mediaSession.setActionHandler('previoustrack', ()=>load(index-1,true,'up'));
-  navigator.mediaSession.setActionHandler('nexttrack', ()=>load(index+1,true,'down'));
+  navigator.mediaSession.setActionHandler('previoustrack', ()=>load(index-1,true));
+  navigator.mediaSession.setActionHandler('nexttrack', ()=>load(index+1,true));
   navigator.mediaSession.setActionHandler('seekto', d=>{ if(d.seekTime!=null) $audio.currentTime=d.seekTime; });
 }
 
-/* Helper: scroll to a specific clone of id in a chosen direction */
-function scrollToCloneOf(id, direction){
-  const clones=[...list.querySelectorAll(`.song[data-id="${id}"]`)];
-  if(!clones.length) return;
-  const vpRect=viewport.getBoundingClientRect();
-  const centerY=vpRect.top + viewport.clientHeight/2;
-
-  const sorted = clones.map(el=>({el, top: el.getBoundingClientRect().top}));
-  let target=null;
-
-  if(direction==='down'){
-    target = sorted.filter(o=>o.top >= centerY+1).sort((a,b)=>a.top-b.top)[0]?.el;
-    if(!target){
-      viewport.scrollTop += cycle; // wrap down
-      const again=[...list.querySelectorAll(`.song[data-id="${id}"]`)].map(el=>({el, top: el.getBoundingClientRect().top}));
-      target = again.filter(o=>o.top >= (viewport.getBoundingClientRect().top + viewport.clientHeight/2)+1).sort((a,b)=>a.top-b.top)[0]?.el;
-    }
-  }else if(direction==='up'){
-    target = sorted.filter(o=>o.top <= centerY-1).sort((a,b)=>b.top-a.top)[0]?.el;
-    if(!target){
-      viewport.scrollTop -= cycle; // wrap up
-      const again=[...list.querySelectorAll(`.song[data-id="${id}"]`)].map(el=>({el, top: el.getBoundingClientRect().top}));
-      target = again.filter(o=>o.top <= (viewport.getBoundingClientRect().top + viewport.clientHeight/2)-1).sort((a,b)=>b.top-a.top)[0]?.el;
-    }
-  }
-
-  if(target) target.scrollIntoView({block:'center', behavior:'smooth'});
-}
-
-/* load + reset previous to 0; optional direction to control list motion */
-function load(i,autoplay=false,direction=null){
+/* ★ load + optional skipScroll to avoid double-centering when Next/Prev scrolls */
+function load(i,autoplay=false,skipScroll=false){
   const prevId = tracks[index]?.id;
   try { $audio.pause(); $audio.currentTime = 0; } catch(e){}
 
@@ -612,9 +584,8 @@ function load(i,autoplay=false,direction=null){
   $player.classList.add('show');
   updateMediaSession(t);
 
-  // Center a clone; if direction provided, bias scroll that way
-  if(direction){ scrollToCloneOf(t.id, direction); }
-  else{
+  // center nearest visible clone of this id unless we already scrolled
+  if(!skipScroll){
     const vpRect=viewport.getBoundingClientRect();
     const vpCenter=vpRect.top+viewport.clientHeight/2;
     const nearest=[...list.querySelectorAll(`.song[data-id="${t.id}"]`)]
@@ -631,7 +602,7 @@ $audio.addEventListener('play', ()=>{ isPlaying=true; $playIc.innerHTML='<path d
 $audio.addEventListener('pause',()=>{ isPlaying=false; $playIc.innerHTML='<path d="M8 5v14l11-7z"/>'; setRowPlaying(tracks[index].id,false); });
 $audio.addEventListener('durationchange',()=>{ $durT.textContent=fmt($audio.duration||0) });
 $audio.addEventListener('timeupdate',()=>{ if(!$audio.duration)return; const pct=$audio.currentTime/$audio.duration*100; $fill.style.width=pct+'%'; $curT.textContent=fmt($audio.currentTime||0); });
-$audio.addEventListener('ended',()=>{ if(repeatOne){ $audio.currentTime=0; $audio.play().catch(()=>{});} else { load(index+1,true,'down'); } });
+$audio.addEventListener('ended',()=>{ if(repeatOne){ $audio.currentTime=0; $audio.play().catch(()=>{});} else { load(index+1,true); } });
 
 $bar.addEventListener('click',e=>{ if(!$audio.duration) return; const r=$bar.getBoundingClientRect(); const x=e.clientX-r.left; const pct=Math.max(0,Math.min(1,x/r.width)); $audio.currentTime=$audio.duration*pct; });
 
@@ -639,13 +610,56 @@ $bar.addEventListener('click',e=>{ if(!$audio.duration) return; const r=$bar.get
 list.addEventListener('click',e=>{
   const row=e.target.closest('.song'); if(!row) return;
   const id=+row.dataset.id; const ri=tracks.findIndex(t=>t.id===id); if(ri<0) return;
-  if(index!==ri){ load(ri,true); } else { setPlay(!isPlaying); } // click keeps neutral centering
+  if(index!==ri){ load(ri,true); } else { setPlay(!isPlaying); }
 });
 
-/* Player buttons: NOW also control scroll direction */
-document.getElementById('obpPlay').addEventListener('click',()=>{ if(!$audio.src) load(index); setPlay(!isPlaying); });
-document.getElementById('obpNext').addEventListener('click',()=>load(index+1,true,'up'));
-document.getElementById('obpPrev').addEventListener('click',()=>load(index-1,true,'down'));
+/* ★ Helpers to move exactly ONE visible row */
+function getCenteredRow(){
+  const vpRect = viewport.getBoundingClientRect();
+  const center = vpRect.top + viewport.clientHeight/2;
+  let best=null, dist=1e9;
+  list.querySelectorAll('.song').forEach(r=>{
+    const rect=r.getBoundingClientRect();
+    const c=rect.top + rect.height/2;
+    const d=Math.abs(c-center);
+    if(d<dist){ best=r; dist=d; }
+  });
+  return best;
+}
+function centerRow(row){
+  if(!row) return;
+  row.scrollIntoView({ block: 'center', behavior: 'smooth' });
+}
+function rowStep(direction){ // +1 next, -1 prev
+  const cur = getCenteredRow();
+  if(!cur) return null;
+  let target = direction>0 ? cur.nextElementSibling : cur.previousElementSibling;
+
+  if(!target || !target.classList.contains('song')){
+    const gap = parseFloat(getComputedStyle(list).gap)||0;
+    const rowH = cur.offsetHeight + gap;
+    viewport.scrollTop += direction * rowH;
+    target = getCenteredRow();
+  }
+  centerRow(target);
+  return target;
+}
+
+/* ★ Player buttons -> move one row and play it, skipping extra scroll in load() */
+document.getElementById('obpNext').addEventListener('click', ()=>{
+  const target = rowStep(1);
+  if(!target) return;
+  const id = +target.dataset.id;
+  const ri = tracks.findIndex(t=>t.id===id);
+  if(ri>=0) load(ri, true, /*skipScroll*/ true);
+});
+document.getElementById('obpPrev').addEventListener('click', ()=>{
+  const target = rowStep(-1);
+  if(!target) return;
+  const id = +target.dataset.id;
+  const ri = tracks.findIndex(t=>t.id===id);
+  if(ri>=0) load(ri, true, /*skipScroll*/ true);
+});
 
 /* 3-dots transparent strip */
 function closeStrip(){ $strip.classList.remove('show'); $menuBtn.setAttribute('aria-expanded','false'); }
@@ -660,5 +674,3 @@ if(tracks.length){ $title.textContent=tracks[0].title; $cover.src=tracks[0].cove
 </script>
 </body>
 </html>
-
-
