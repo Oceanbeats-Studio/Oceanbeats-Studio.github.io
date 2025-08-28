@@ -90,13 +90,31 @@ iframe{ width:100%; height:420px; border-radius:14px }
 .flipface{ position:absolute; inset:0; background:rgba(255,255,255,.07); border:1px solid rgba(255,255,255,.12); border-radius:18px; padding:14px 14px 64px; box-shadow:var(--shadow); backface-visibility:hidden }
 .flipface.back{ transform: rotateY(180deg) }
 .flipbox.flipped{ transform: rotateY(180deg) }
-.flip-controls{ display:flex; justify-content:center; gap:20px; margin-top:18px; position:relative; z-index:5 } /* moved up */
-.flip-controls .btn{
-  border:none; cursor:pointer; border-radius:12px; padding:10px 14px;
-  background:var(--btn); color:#111; font-weight:800; box-shadow:0 0 16px rgba(0,234,255,.35);
-  transition:.2s transform,.2s box-shadow;
+
+/* UPDATED: flip controls — moved up & new glass-outline style (scoped to mobile flip area only) */
+.flip-controls{
+  display:flex; justify-content:center; gap:14px;
+  margin-top:10px; /* closer under the video, no overlap */
+  position:relative; z-index:5
 }
-.flip-controls .btn:hover{ transform:translateY(-2px) }
+.flip-controls .btn,
+.flip-controls .share-btn{
+  border:1px solid rgba(255,255,255,.22);
+  background: rgba(255,255,255,.08);
+  color:#eafcff;
+  border-radius:14px;
+  padding:10px 16px;
+  font-weight:800;
+  backdrop-filter: blur(6px);
+  box-shadow: 0 8px 22px rgba(0,0,0,.25), inset 0 0 0 1px rgba(255,255,255,.06);
+  transition:.2s transform,.2s box-shadow,.2s background;
+}
+.flip-controls .btn:hover,
+.flip-controls .share-btn:hover{
+  background: rgba(255,255,255,.14);
+  transform: translateY(-2px);
+  box-shadow: 0 12px 28px rgba(0,0,0,.3);
+}
 
 /* Two blocks aligned to YT width */
 .maxwrap{ max-width:1200px; margin:0 auto }
@@ -548,6 +566,9 @@ function setStarUI(){ $starIc.innerHTML = repeatOne
   : '<path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" fill="none" stroke="#fff" stroke-width="2"/>'; }
 $starBtn.addEventListener('click',()=>{ repeatOne=!repeatOne; setStarUI(); }); setStarUI();
 
+/* Play/Pause sync note:
+   setRowPlaying() updates all clones of the current song AND the bottom player icon
+   via audio 'play'/'pause' events below, so both buttons always match */
 function setRowPlaying(id,playing){
   list.querySelectorAll(`.song[data-id="${id}"]`).forEach(row=>{
     const btn=row.querySelector('.playbtn svg');
@@ -645,24 +666,22 @@ function rowStep(direction){ // +1 forward, -1 backward
   return target;
 }
 
-/* Player buttons -> FLIPPED direction now:
-   Next goes to the previous visible card (scrolls opposite), Prev goes forward */
+/* Player buttons -> FLIPPED direction now */
 document.getElementById('obpNext').addEventListener('click', ()=>{
-  const target = rowStep(-1);                // flipped
+  const target = rowStep(-1);
   if(!target) return;
   const id = +target.dataset.id;
   const ri = tracks.findIndex(t=>t.id===id);
   if(ri>=0) load(ri, true, /*skipScroll*/ true);
 });
 document.getElementById('obpPrev').addEventListener('click', ()=>{
-  const target = rowStep(1);                 // flipped
+  const target = rowStep(1);
   if(!target) return;
   const id = +target.dataset.id;
   const ri = tracks.findIndex(t=>t.id===id);
   if(ri>=0) load(ri, true, /*skipScroll*/ true);
 });
 
-/* 3-dots transparent strip */
 function closeStrip(){ $strip.classList.remove('show'); $menuBtn.setAttribute('aria-expanded','false'); }
 function openStrip(){ $strip.classList.add('show'); $menuBtn.setAttribute('aria-expanded','true'); }
 document.addEventListener('click',e=>{ if(document.getElementById('obPlayer').contains(e.target) && (e.target.id==='obpMenuBtn' || document.getElementById('obpMenuBtn').contains(e.target) || $strip.contains(e.target))) return; closeStrip(); });
