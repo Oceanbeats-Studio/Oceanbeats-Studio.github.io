@@ -644,8 +644,8 @@ list.addEventListener('click',e=>{
 
 /* Player buttons: NOW also control scroll direction */
 document.getElementById('obpPlay').addEventListener('click',()=>{ if(!$audio.src) load(index); setPlay(!isPlaying); });
-document.getElementById('obpNext').addEventListener('click',()=>load(index+1,true,'down'));
-document.getElementById('obpPrev').addEventListener('click',()=>load(index-1,true,'up'));
+document.getElementById('obpNext').addEventListener('click',()=>load(index+1,true,'up'));
+document.getElementById('obpPrev').addEventListener('click',()=>load(index-1,true,'down'));
 
 /* 3-dots transparent strip */
 function closeStrip(){ $strip.classList.remove('show'); $menuBtn.setAttribute('aria-expanded','false'); }
@@ -660,3 +660,4 @@ if(tracks.length){ $title.textContent=tracks[0].title; $cover.src=tracks[0].cove
 </script>
 </body>
 </html>
+
