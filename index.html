@@ -90,7 +90,7 @@ iframe{ width:100%; height:420px; border-radius:14px }
 .flipface{ position:absolute; inset:0; background:rgba(255,255,255,.07); border:1px solid rgba(255,255,255,.12); border-radius:18px; padding:14px 14px 64px; box-shadow:var(--shadow); backface-visibility:hidden }
 .flipface.back{ transform: rotateY(180deg) }
 .flipbox.flipped{ transform: rotateY(180deg) }
-.flip-controls{ display:flex; justify-content:center; gap:20px; margin-top:32px; position:relative; z-index:5 }
+.flip-controls{ display:flex; justify-content:center; gap:20px; margin-top:20px; position:relative; z-index:5 }
 .flip-controls .btn{
   border:none; cursor:pointer; border-radius:12px; padding:10px 14px;
   background:var(--btn); color:#111; font-weight:800; box-shadow:0 0 16px rgba(0,234,255,.35);
@@ -660,4 +660,5 @@ if(tracks.length){ $title.textContent=tracks[0].title; $cover.src=tracks[0].cove
 </script>
 </body>
 </html>
+
 
