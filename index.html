@@ -6,11 +6,8 @@
 <title>Oceanbeats Studio</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Cinzel+Decorative:wght@400;700&family=Great+Vibes&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
-<!-- PRELOAD FIRST TRACK -->
-<link rel="preload" as="audio" href="assets/audio/Young Hearts Collide.mp3">
 
 <style>
-/* (unchanged styles) */
 :root{
   --bg1:#0f2027; --bg2:#203a43; --bg3:#2c5364;
   --text:#fff; --sub:#c8f3ff;
@@ -458,6 +455,7 @@ footer{ text-align:center; color:#bcd; opacity:.8; padding:24px 10px; margin-top
         <svg viewBox="0 0 24 24"><path d="M5 10a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4z"/></svg>
       </button>
     </div>
+    <!-- SPEED: playsinline helps immediate mobile playback -->
     <audio id="obpAudio" preload="auto" playsinline></audio>
   </div>
 </div>
@@ -590,6 +588,21 @@ function updateMediaSession(t){
   navigator.mediaSession.setActionHandler('seekto', d=>{ if(d.seekTime!=null) $audio.currentTime=d.seekTime; });
 }
 
+/* ===== SPEED FIX: hint-preload the chosen audio for faster start ===== */
+function hintPreloadAudio(url){
+  try{
+    const old=document.getElementById('ob-audio-preload-hint');
+    if(old) old.remove();
+    const link=document.createElement('link');
+    link.id='ob-audio-preload-hint';
+    link.rel='preload';
+    link.as='audio';
+    link.href=url;
+    link.setAttribute('fetchpriority','high');
+    document.head.appendChild(link);
+  }catch(e){}
+}
+
 /* load + optional skipScroll to avoid double-centering when Next/Prev scrolls */
 function load(i,autoplay=false,skipScroll=false){
   const prevId = tracks[index]?.id;
@@ -600,7 +613,10 @@ function load(i,autoplay=false,skipScroll=false){
 
   if (prevId!=null) setRowPlaying(prevId,false);
 
-  $audio.src=t.src; /* keep .load() removed to avoid blocking */
+  /* SPEED FIX: trigger high-priority fetch and ensure eager buffering */
+  hintPreloadAudio(t.src);
+  $audio.preload='auto';
+  $audio.src=t.src;
 
   $title.textContent=t.title; $cover.src=t.cover||''; $cover.alt=t.title+' cover';
   $player.classList.add('show');
@@ -616,20 +632,17 @@ function load(i,autoplay=false,skipScroll=false){
     if(nearest) nearest.scrollIntoView({block:'center', behavior:'smooth'});
   }
 
-  /* FASTSTART: start muted instantly, then unmute as soon as data is ready */
   if(autoplay){
-    const unmuteOnce=()=>{ $audio.muted=false; $audio.removeEventListener('canplay',unmuteOnce); $audio.removeEventListener('timeupdate',unmuteOnce); };
-    $audio.muted=true;
-    const p=$audio.play();
-    if(p && p.catch) p.catch(()=>{ /* ignore policy/race errors */ });
-    $audio.addEventListener('canplay', unmuteOnce, { once:true });
-    $audio.addEventListener('timeupdate', unmuteOnce, { once:true });
-  }else{
+    const tryPlay=()=>{$audio.play().catch(()=>{});};
+    tryPlay();
+    const onCanPlay=()=>{ $audio.removeEventListener('canplay', onCanPlay); tryPlay(); };
+    $audio.addEventListener('canplay', onCanPlay, {once:true});
+  } else {
     setPlay(false);
   }
 }
 
-/* real toggle uses audio state */
+/* toggle: always read the real audio state; first click starts immediately */
 function setPlay(on){ if(on){ $audio.play().catch(()=>{});} else { $audio.pause();} }
 document.getElementById('obpPlay').addEventListener('click',()=>{
   if(!$audio.src){ load(index,true,true); return; }          // first click: load + play
@@ -651,8 +664,7 @@ list.addEventListener('click',e=>{
   if(index!==ri){ 
     load(ri,true); 
   } else { 
-    if(!$audio.src){ load(ri,true); }
-    else { $audio.paused ? setPlay(true) : setPlay(false); }
+    if(!$audio.src){ load(ri,true); } else { $audio.paused ? setPlay(true) : setPlay(false); }
   }
 });
 
@@ -688,7 +700,7 @@ function rowStep(direction){ // +1 forward, -1 backward
   return target;
 }
 
-/* Next/Prev (flipped scroll as before) */
+/* Next/Prev (flipped scroll as you wanted earlier) */
 document.getElementById('obpNext').addEventListener('click', ()=>{
   const target = rowStep(-1);
   if(!target) return;
