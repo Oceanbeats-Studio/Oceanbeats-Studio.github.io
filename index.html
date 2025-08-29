@@ -189,11 +189,11 @@ iframe{ width:100%; height:420px; border-radius:14px }
 .song.active .title{ font-size:22px }
 
 /* marquee */
+@keyframes marquee{ 0%{transform:translateX(0)} 100%{transform:translateX(-100%)} }
 .song.active .title span{
   padding-left:100%;
   animation:marquee 8s linear infinite;
 }
-@keyframes marquee{ 0%{transform:translateX(0)} 100%{transform:translateX(-100%)} }
 
 .song .playbtn{
   width:54px; height:54px;
@@ -293,6 +293,116 @@ iframe{ width:100%; height:420px; border-radius:14px }
 }
 
 footer{ text-align:center; color:#bcd; opacity:.8; padding:24px 10px; margin-top:10px; border-top:1px solid rgba(255,255,255,.08)}
+
+
+/* =========================
+   THEME-ONLY OVERRIDES
+   (No layout/JS changes)
+   ========================= */
+:root{
+  /* palette overrides: deeper darks + blue/red accents */
+  --bg1:#0b0c10; --bg2:#10141a; --bg3:#151c26;
+  --text:#ffffff;
+  --sub:#cfd8dc;
+
+  --blue:#2ea8ff; 
+  --blue-deep:#1268ff;
+  --red:#ff3b5c;  
+  --red-deep:#d41445;
+
+  /* keep your API, just change values */
+  --accentA: var(--blue);
+  --accentB: var(--blue-deep);
+
+  --shadow: 0 18px 40px rgba(0,0,0,.55);
+
+  /* player glass */
+  --ob-bg: rgba(255,255,255,.06);
+  --ob-border: rgba(255,255,255,.16);
+  --ob-shadow: 0 14px 36px rgba(0,0,0,.5);
+  --ob-radius: 22px;
+  --ob-muted: rgba(255,255,255,.85);
+  --cd-ring: rgba(0,0,0,.6);
+
+  /* progress */
+  --progress-bg: rgba(255,255,255,.18);
+  --progress-fill: linear-gradient(90deg, var(--blue) 0%, var(--red) 100%);
+
+  /* existing sizing stays */
+  --rowH: 136px;
+  --gap: 16px;
+
+  /* subtle glow */
+  --glow: 0 18px 42px rgba(0,0,0,.55), 0 0 24px rgba(46,168,255,.25);
+}
+
+/* headings & accent strips */
+.section-title{
+  background:linear-gradient(90deg,var(--blue),var(--red));
+  -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+  text-shadow:0 0 14px rgba(46,168,255,.35);
+}
+.subhead::after{ background:linear-gradient(90deg,var(--blue),var(--red)); }
+
+/* glassy surfaces (visual only) */
+.card,
+.block,
+.song,
+.note,
+.viewport{
+  background: rgba(255,255,255,.07) !important;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-color: rgba(255,255,255,.14) !important;
+  box-shadow: var(--shadow);
+}
+
+/* active song pop looks crisper, still same sizing */
+.song.active{
+  background: rgba(255,255,255,.12);
+  border-color: rgba(255,255,255,.28);
+  box-shadow:
+    0 18px 42px rgba(0,0,0,.6),
+    0 0 0 1px rgba(46,168,255,.25) inset,
+    0 0 32px rgba(46,168,255,.22);
+}
+
+/* buttons (desktop share already uses .share-btn) */
+.share-btn,
+.flip-controls .btn,
+.flip-controls #mobileShare,
+.obp-btn,
+.obp-menu-btn{
+  border:1px solid rgba(255,255,255,.28);
+  background: rgba(255,255,255,.08);
+  color:#fff;
+  border-radius:12px;
+  box-shadow:0 8px 24px rgba(0,0,0,.35);
+  transition:transform .15s ease, background .15s ease, box-shadow .15s ease;
+}
+.share-btn:hover,
+.flip-controls .btn:hover,
+.flip-controls #mobileShare:hover,
+.obp-btn:hover,
+.obp-menu-btn:hover{
+  background: rgba(255,255,255,.16);
+  transform: translateY(-2px);
+}
+
+/* nav active = blue→red pill (only visuals) */
+.nav-link.active{
+  color:#0b0c10;
+  background:linear-gradient(90deg,var(--blue),var(--red));
+  border-color:transparent;
+}
+
+/* player progress: blue→red sweep */
+.obp-bar{ background:var(--progress-bg); }
+.obp-bar .fill{ background:var(--progress-fill); }
+
+/* tiny polish */
+.brand img{ box-shadow:0 0 32px rgba(46,168,255,.35) }
+.title-logo{ text-shadow:0 0 18px rgba(46,168,255,.35) }
 </style>
 </head>
 <body>
@@ -718,4 +828,3 @@ if(tracks.length){ $title.textContent=tracks[0].title; $cover.src=tracks[0].cove
 </script>
 </body>
 </html>
-
