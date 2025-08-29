@@ -6,8 +6,11 @@
 <title>Oceanbeats Studio</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Cinzel+Decorative:wght@400;700&family=Great+Vibes&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+<!-- PRELOAD FIRST TRACK -->
+<link rel="preload" as="audio" href="assets/audio/Young Hearts Collide.mp3">
 
 <style>
+/* (unchanged styles) */
 :root{
   --bg1:#0f2027; --bg2:#203a43; --bg3:#2c5364;
   --text:#fff; --sub:#c8f3ff;
@@ -455,7 +458,6 @@ footer{ text-align:center; color:#bcd; opacity:.8; padding:24px 10px; margin-top
         <svg viewBox="0 0 24 24"><path d="M5 10a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4z"/></svg>
       </button>
     </div>
-    <!-- FIX #3: playsinline added -->
     <audio id="obpAudio" preload="auto" playsinline></audio>
   </div>
 </div>
@@ -598,7 +600,8 @@ function load(i,autoplay=false,skipScroll=false){
 
   if (prevId!=null) setRowPlaying(prevId,false);
 
-  $audio.src=t.src; /* FIX #2: removed $audio.load() to reduce mobile start delay */
+  $audio.src=t.src; /* keep .load() removed to avoid blocking */
+
   $title.textContent=t.title; $cover.src=t.cover||''; $cover.alt=t.title+' cover';
   $player.classList.add('show');
   updateMediaSession(t);
@@ -613,14 +616,24 @@ function load(i,autoplay=false,skipScroll=false){
     if(nearest) nearest.scrollIntoView({block:'center', behavior:'smooth'});
   }
 
-  if(autoplay) setPlay(true); else setPlay(false);
+  /* FASTSTART: start muted instantly, then unmute as soon as data is ready */
+  if(autoplay){
+    const unmuteOnce=()=>{ $audio.muted=false; $audio.removeEventListener('canplay',unmuteOnce); $audio.removeEventListener('timeupdate',unmuteOnce); };
+    $audio.muted=true;
+    const p=$audio.play();
+    if(p && p.catch) p.catch(()=>{ /* ignore policy/race errors */ });
+    $audio.addEventListener('canplay', unmuteOnce, { once:true });
+    $audio.addEventListener('timeupdate', unmuteOnce, { once:true });
+  }else{
+    setPlay(false);
+  }
 }
 
-/* ===== UPDATED toggle: always read the REAL audio state; first click starts immediately ===== */
+/* real toggle uses audio state */
 function setPlay(on){ if(on){ $audio.play().catch(()=>{});} else { $audio.pause();} }
 document.getElementById('obpPlay').addEventListener('click',()=>{
   if(!$audio.src){ load(index,true,true); return; }          // first click: load + play
-  if($audio.paused){ setPlay(true); } else { setPlay(false); } // true state from audio
+  if($audio.paused){ setPlay(true); } else { setPlay(false); }
 });
 
 $audio.addEventListener('play', ()=>{ isPlaying=true; $playIc.innerHTML='<path d="M6 5h4v14H6zM14 5h4v14h-4z"/>'; setRowPlaying(tracks[index].id,true); });
@@ -638,7 +651,6 @@ list.addEventListener('click',e=>{
   if(index!==ri){ 
     load(ri,true); 
   } else { 
-    /* FIX #1: first tap on current track should load+play if src not set */
     if(!$audio.src){ load(ri,true); }
     else { $audio.paused ? setPlay(true) : setPlay(false); }
   }
@@ -676,7 +688,7 @@ function rowStep(direction){ // +1 forward, -1 backward
   return target;
 }
 
-/* Next/Prev (flipped scroll as you wanted earlier) */
+/* Next/Prev (flipped scroll as before) */
 document.getElementById('obpNext').addEventListener('click', ()=>{
   const target = rowStep(-1);
   if(!target) return;
