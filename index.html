@@ -597,7 +597,7 @@ function load(i,autoplay=false,skipScroll=false){
 
   if (prevId!=null) setRowPlaying(prevId,false);
 
-  $audio.src=t.src; $audio.load();
+  $audio.src = encodeURI(t.src); $audio.load();
   $title.textContent=t.title; $cover.src=t.cover||''; $cover.alt=t.title+' cover';
   $player.classList.add('show');
   updateMediaSession(t);
@@ -698,3 +698,4 @@ if(tracks.length){ $title.textContent=tracks[0].title; $cover.src=tracks[0].cove
 </script>
 </body>
 </html>
+
