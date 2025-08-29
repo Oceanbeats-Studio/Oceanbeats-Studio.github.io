@@ -695,7 +695,21 @@ document.getElementById('stripDownload').addEventListener('click',()=>{ const t=
 
 /* Init display only (player hidden until play) */
 if(tracks.length){ $title.textContent=tracks[0].title; $cover.src=tracks[0].cover||''; }
+  (function(){
+  const audio = document.getElementById('obpAudio');
+  if (!audio) return;
+  function rs(n){return({0:'HAVE_NOTHING',1:'HAVE_METADATA',2:'HAVE_CURRENT_DATA',3:'HAVE_FUTURE_DATA',4:'HAVE_ENOUGH_DATA'})[n]||n}
+  audio.addEventListener('error', async () => {
+    const url = audio.currentSrc || audio.src;
+    let status = 'unknown';
+    try { const r = await fetch(url, {method:'HEAD', cache:'no-store'}); status = r.status+' '+r.statusText; }
+    catch(e){ status = 'fetch failed: ' + (e && e.message); }
+    alert('Audio failed:\n' + url + '\nStatus: ' + status + '\nreadyState: ' + rs(audio.readyState));
+    console.error('[AUDIO ERROR]', url, status, audio.networkState, audio.readyState);
+  });
+})();
 </script>
 </body>
 </html>
+
 
