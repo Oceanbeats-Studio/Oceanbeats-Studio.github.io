@@ -646,7 +646,7 @@ document.getElementById('obpBar').addEventListener('click',e=>{ if(!$audio.durat
 list.addEventListener('click',e=>{
   const row=e.target.closest('.song'); if(!row) return;
   const id=+row.dataset.id; const ri=tracks.findIndex(t=>t.id===id); if(ri<0) return;
-  if(index!==ri){ load(ri,true); } else { $audio.paused ? setPlay(true) : setPlay(false); }
+  if(index!==ri || !$audio.src){ load(ri,true); } else { $audio.paused ? setPlay(true) : setPlay(false); }
 });
 
 function getCenteredRow(){
@@ -718,3 +718,4 @@ if(tracks.length){ $title.textContent=tracks[0].title; $cover.src=tracks[0].cove
 </script>
 </body>
 </html>
+
