@@ -455,7 +455,8 @@ footer{ text-align:center; color:#bcd; opacity:.8; padding:24px 10px; margin-top
         <svg viewBox="0 0 24 24"><path d="M5 10a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4z"/></svg>
       </button>
     </div>
-    <audio id="obpAudio" preload="auto"></audio>
+    <!-- FIX #3: playsinline added -->
+    <audio id="obpAudio" preload="auto" playsinline></audio>
   </div>
 </div>
 
@@ -597,7 +598,7 @@ function load(i,autoplay=false,skipScroll=false){
 
   if (prevId!=null) setRowPlaying(prevId,false);
 
-  $audio.src=t.src; $audio.load();
+  $audio.src=t.src; /* FIX #2: removed $audio.load() to reduce mobile start delay */
   $title.textContent=t.title; $cover.src=t.cover||''; $cover.alt=t.title+' cover';
   $player.classList.add('show');
   updateMediaSession(t);
@@ -634,7 +635,13 @@ document.getElementById('obpBar').addEventListener('click',e=>{ if(!$audio.durat
 list.addEventListener('click',e=>{
   const row=e.target.closest('.song'); if(!row) return;
   const id=+row.dataset.id; const ri=tracks.findIndex(t=>t.id===id); if(ri<0) return;
-  if(index!==ri){ load(ri,true); } else { $audio.paused ? setPlay(true) : setPlay(false); }
+  if(index!==ri){ 
+    load(ri,true); 
+  } else { 
+    /* FIX #1: first tap on current track should load+play if src not set */
+    if(!$audio.src){ load(ri,true); }
+    else { $audio.paused ? setPlay(true) : setPlay(false); }
+  }
 });
 
 /* Helpers to move exactly ONE visible row (Prev/Next behavior) */
@@ -698,4 +705,3 @@ if(tracks.length){ $title.textContent=tracks[0].title; $cover.src=tracks[0].cove
 </script>
 </body>
 </html>
-
