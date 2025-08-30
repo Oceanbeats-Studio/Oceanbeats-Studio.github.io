@@ -41,10 +41,9 @@ nav{ position:sticky; top:108px; z-index:79; background:rgba(0,0,0,.45);
   border-top:1px solid rgba(255,255,255,.06); border-bottom:1px solid rgba(255,255,255,.06); backdrop-filter:blur(6px)}
 .nav-inner{ max-width:1200px;margin:0 auto;padding:8px 12px;display:flex;gap:12px;justify-content:center }
 .nav-link img {
-  width: 26px;   /* scale down your 500px PNG */
-  height: 26px;
+  width: 28px;   /* scale down your 500px PNG */
+  height: 28px;
   object-fit: contain;
-  filter: brightness(0) invert(1); /* makes them white on dark bg */
   transition: 0.2s transform, 0.2s filter;
 }
 
