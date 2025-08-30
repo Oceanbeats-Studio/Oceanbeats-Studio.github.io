@@ -36,17 +36,25 @@ body{
   font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial;
   color:var(--text);
 
-  /* Background image */
-  background:url("assets/web-bg.jpg") no-repeat center center fixed;
+  /* default (mobile-first) */
+  background:url("assets/web-bg-mobile.jpg") no-repeat center center fixed;
   background-size:cover;
 }
 
-/* Overlay for readability */
+/* Overlay */
 body::before{
   content:"";
   position:fixed; inset:0;
   background:rgba(0,0,0,.35);
   z-index:-1;
+}
+
+/* Desktop background */
+@media (min-width:900px){
+  body{
+    background:url("assets/web-bg-desktop.jpg") no-repeat center center fixed;
+    background-size:cover;
+  }
 }
   
 /* Header + nav */
@@ -729,5 +737,6 @@ if(tracks.length){ $title.textContent=tracks[0].title; $cover.src=tracks[0].cove
 </script>
 </body>
 </html>
+
 
 
