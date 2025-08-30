@@ -52,7 +52,7 @@ nav{ position:sticky; top:108px; z-index:79; background:rgba(0,0,0,.45);
   border: 1px solid rgba(255,255,255,.09);
   box-shadow: 0 4px 18px rgba(0,0,0,.25);
   transition: .2s transform, .2s box-shadow, .2s background, .2s color;
-
+}
 .nav-link:hover img {
   width: 24px;
   height: 24px;
