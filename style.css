@@ -45,7 +45,7 @@ nav{ position:sticky; top:108px; z-index:79; background:rgba(0,0,0,.45);
   height: 46px;
   display: grid;
   place-items: center;
-  border-radius: 12px; /* soft square/rectangle */
+  border-radius: 12px; /* rectangle with soft corners */
   text-decoration: none;
   color: #eafcff;
   background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.02));
@@ -54,8 +54,9 @@ nav{ position:sticky; top:108px; z-index:79; background:rgba(0,0,0,.45);
   transition: .2s transform, .2s box-shadow, .2s background, .2s color;
 }
 .nav-link:hover img {
-  width: 24px;
+ width: 24px;
   height: 24px;
+  object-fit: contain;
   display: block;
 }
 
