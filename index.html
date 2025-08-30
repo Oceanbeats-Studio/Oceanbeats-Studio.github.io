@@ -35,9 +35,20 @@ html{ scroll-behavior:smooth }
 body{
   font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial;
   color:var(--text);
-  background:linear-gradient(135deg,var(--bg1),var(--bg2),var(--bg3)) fixed;
+
+  /* Background image */
+  background:url("assets/web-bg.jpg") no-repeat center center fixed;
+  background-size:cover;
 }
 
+/* Overlay for readability */
+body::before{
+  content:"";
+  position:fixed; inset:0;
+  background:rgba(0,0,0,.35);
+  z-index:-1;
+}
+  
 /* Header + nav */
 .title-logo{ font-family:"Great Vibes",cursive }
 header{ padding:24px 18px 10px; text-align:center; position:sticky; top:0; z-index:80;
@@ -718,4 +729,5 @@ if(tracks.length){ $title.textContent=tracks[0].title; $cover.src=tracks[0].cove
 </script>
 </body>
 </html>
+
 
