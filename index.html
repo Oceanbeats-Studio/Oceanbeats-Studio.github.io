@@ -15,20 +15,19 @@
   --shadow: 0 12px 30px rgba(0,0,0,.45);
   --btn: radial-gradient(circle at 30% 30%, var(--accentA), var(--accentB));
 
-  /* Player transparent (no blur) */
-  --ob-bg: rgba(255,255,255,0.04);   /* very light transparent */
-  --ob-border: rgba(255,255,255,0.15);
-  --ob-shadow: 0 6px 18px rgba(0,0,0,0.2);  /* softer shadow */
-  --ob-radius: 22px;
-  --ob-muted: rgba(255,255,255,0.9);
-  --cd-ring: rgba(255,255,255,0.5);
-  --progress-bg: rgba(255,255,255,0.25);
+  /* Player glass */
+  --ob-bg: rgba(255,255,255,.06);
+  --ob-border: rgba(255,255,255,.14);
+  --ob-shadow: 0 10px 26px rgba(0,0,0,.25);
+  --ob-radius: 22px; --ob-muted: rgba(255,255,255,.85);
+  --cd-ring: rgba(0,0,0,.7);
+  --progress-bg: rgba(255,255,255,.22);
   --progress-fill: linear-gradient(90deg,#00eaff,#8a2be2);
 
   /* Music rows */
   --rowH: 136px;
   --gap: 16px;
-  --glow: 0 16px 36px rgba(0,0,0,.35), 0 0 18px rgba(0,234,255,.22);
+  --glow: 0 16px 36px rgba(0,0,0,.45), 0 0 18px rgba(0,234,255,.22);
 }
 *{box-sizing:border-box}
 html,body{margin:0;height:100%}
@@ -36,28 +35,9 @@ html{ scroll-behavior:smooth }
 body{
   font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial;
   color:var(--text);
-
-  /* default (mobile-first) */
-  background:url("assets/web-bg-mobile.jpg") no-repeat center center fixed;
-  background-size:cover;
+  background:linear-gradient(135deg,var(--bg1),var(--bg2),var(--bg3)) fixed;
 }
 
-/* Overlay */
-body::before{
-  content:"";
-  position:fixed; inset:0;
-  background:rgba(0,0,0,.35);
-  z-index:-1;
-}
-
-/* Desktop background */
-@media (min-width:900px){
-  body{
-    background:url("assets/web-bg-desktop.jpg") no-repeat center center fixed;
-    background-size:cover;
-  }
-}
-  
 /* Header + nav */
 .title-logo{ font-family:"Great Vibes",cursive }
 header{ padding:24px 18px 10px; text-align:center; position:sticky; top:0; z-index:80;
@@ -250,18 +230,12 @@ iframe{ width:100%; height:420px; border-radius:14px }
 /* Bottom Player */
 .ob-shell{ position:sticky; bottom:0; z-index:95; margin:20px auto 0; max-width:1200px; padding:0 12px 12px }
 .ob-player{
-  position: relative;
-  max-width: 920px;
-  margin: 0 auto;
-  background: var(--ob-bg);   /* transparent */
-  border: 1px solid var(--ob-border);
-  border-radius: var(--ob-radius);
-  box-shadow: var(--ob-shadow);
-  padding: 10px 12px;
-  display: none;
-  grid-template-columns: 80px 1fr auto;
-  align-items: center;
-  gap: 14px;
+  position:relative; max-width:920px; margin:0 auto;
+  background:var(--ob-bg); backdrop-filter:blur(8px);
+  border:1px solid var(--ob-border); border-radius:var(--ob-radius);
+  box-shadow:var(--ob-shadow); padding:10px 12px;
+  display:none; grid-template-columns:80px 1fr auto; align-items:center; gap:14px;
+}
 .ob-player.show{ display:grid }
 .obp-strip{
   position:absolute; left:12px; right:12px; bottom:100%; margin-bottom:10px;
@@ -744,8 +718,4 @@ if(tracks.length){ $title.textContent=tracks[0].title; $cover.src=tracks[0].cove
 </script>
 </body>
 </html>
-
-
-
-
 
