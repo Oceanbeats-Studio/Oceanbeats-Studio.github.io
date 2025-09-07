@@ -58,10 +58,10 @@
       </div>
       <div class="card">
         <h3 class="subhead title-sub">Videos</h3>
-        <iframe src="https://www.youtube.com/embed?listType=playlist&list=UUY8hfNmsry6kxG1_DPChxqw&rel=0" allowfullscreen></iframe>
+        <iframe src="https://www.youtube.com/embed?listType=playlist&list=UUSHY8hfNmsry6kxG1_DPChxqw&rel=0" allowfullscreen></iframe>
         <div class="yt-actions">
           <!-- ⬇️ CHANGED: added icon, same style as mobile -->
-          <button class="share-btn" data-share="https://www.youtube.com/playlist?list=UUY8hfNmsry6kxG1_DPChxqw" title="Share">
+          <button class="share-btn" data-share="https://www.youtube.com/playlist?list=UUSHY8hfNmsry6kxG1_DPChxqw" title="Share">
             <svg viewBox="0 0 24 24" width="18" height="18" style="fill:#fff"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7a3.27 3.27 0 0 0 0-1.39l7-4.11A3 3 0 1 0 14 5a2.99 2.99 0 0 0 .04 .49l-7 4.11a3 3 0 1 0 0 4.8l7.05 4.14c-.02 .15-.04 .31-.04 .46a3 3 0 1 0 3-3z"/></svg>
             Share
           </button>
@@ -75,7 +75,7 @@
         <div class="flipbox" id="ytFlipBox">
           <div class="flipface front">
             <h3 class="subhead title-sub">Videos</h3>
-            <iframe src="https://www.youtube.com/embed?listType=playlist&list=UUY8hfNmsry6kxG1_DPChxqw&rel=0" allowfullscreen></iframe>
+            <iframe src="https://www.youtube.com/embed?listType=playlist&list=UUSHY8hfNmsry6kxG1_DPChxqw&rel=0" allowfullscreen></iframe>
           </div>
           <div class="flipface back">
             <h3 class="subhead title-sub">Shorts</h3>
@@ -217,7 +217,7 @@ if(flipBtn&&flipBox){
 }
 const mobileShareBtn=document.getElementById('mobileShare');
 if(mobileShareBtn){
-  mobileShareBtn.addEventListener('click',()=>{ const shorts='https://www.youtube.com/playlist?list=UUSHY8hfNmsry6kxG1_DPChxqw'; const vids='https://www.youtube.com/playlist?list=UUY8hfNmsry6kxG1_DPChxqw'; const url=(flipBox&&flipBox.classList.contains('flipped'))?shorts:vids; const title=(flipBox&&flipBox.classList.contains('flipped'))?'Oceanbeats Shorts':'Oceanbeats Videos'; shareSomething(title,url); });
+  mobileShareBtn.addEventListener('click',()=>{ const shorts='https://www.youtube.com/playlist?list=UUSHY8hfNmsry6kxG1_DPChxqw'; const vids='https://www.youtube.com/playlist?list=UUSHY8hfNmsry6kxG1_DPChxqw'; const url=(flipBox&&flipBox.classList.contains('flipped'))?shorts:vids; const title=(flipBox&&flipBox.classList.contains('flipped'))?'Oceanbeats Shorts':'Oceanbeats Videos'; shareSomething(title,url); });
 }
 /* Desktop share buttons */
 document.querySelectorAll('#youtube .yt-grid .share-btn').forEach(btn=>btn.addEventListener('click',()=>shareSomething('Oceanbeats on YouTube',btn.dataset.share)));
@@ -424,26 +424,6 @@ document.getElementById('stripDownload').addEventListener('click',()=>{ const t=
 /* Init display only (player hidden until play) */
 if(tracks.length){ $title.textContent=tracks[0].title; $cover.src=tracks[0].cover||''; }
 
-/* (Optional) debug listener you used earlier — keep/remove as you like
-(function(){
-  const audio = document.getElementById('obpAudio');
-  if (!audio) return;
-  function rs(n){return({0:'HAVE_NOTHING',1:'HAVE_METADATA',2:'HAVE_CURRENT_DATA',3:'HAVE_FUTURE_DATA',4:'HAVE_ENOUGH_DATA'})[n]||n}
-  audio.addEventListener('error', async () => {
-    const url = audio.currentSrc || audio.src;
-    let status = 'unknown';
-    try { const r = await fetch(url, {method:'HEAD', cache:'no-store'}); status = r.status+' '+r.statusText; }
-    catch(e){ status = 'fetch failed: ' + (e && e.message); }
-    alert('Audio failed:\n' + url + '\nStatus: ' + status + '\nreadyState: ' + rs(audio.readyState));
-    console.error('[AUDIO ERROR]', url, status, audio.networkState, audio.readyState);
-  });
-})(); */
 </script>
 </body>
 </html>
-
-
-
-
-
-
